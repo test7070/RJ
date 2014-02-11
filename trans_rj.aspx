@@ -751,7 +751,11 @@
                             <input id="txtComp"  type="text" style="float:left;width:70%;"/>
                             <input id="txtNick" type="text" style="display:none;"/>
                         </td>
-                        
+                        <td style="display:none;"><span> </span><a id="lblTgg" class="lbl"> </a></td>
+                        <td colspan="3" style="display:none;">
+                            <input id="txtTggno"  type="text" style="float:left;width:30%;"/>
+                            <input id="txtTgg"  type="text" style="float:left;width:70%;"/>
+                        </td>
                     </tr>
                     <tr>
                         <td><span> </span><a id="lblStraddr_tb" class="lbl"> </a></td>

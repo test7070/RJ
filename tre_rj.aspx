@@ -574,6 +574,11 @@
                         <td><input id="txtTotal" type="text" class="txt c1 num" /></td>
                     </tr>
                     <tr>
+                        <td><span> </span><a id="lblTggno" class="lbl"> </a></td>
+                        <td colspan="3">
+                        <input id="txtTggno" type="text"  class="txt" style="width:35%;"/>
+                        <input id="txtTgg" type="text"  class="txt" style="width:65%;"/>
+                        </td>
                         <td><span> </span><a id="lblCheckno" class="lbl"> </a></td>
                         <td colspan="2">
                         <input id="txtCheckno" type="text" class="txt c1" />
