@@ -110,7 +110,7 @@
                         Lock(1, {
                             opacity : 0
                         });
-                        q_func('qtxt.query.tre', 'tre.txt,tre_tb,' + encodeURI(r_userno) + ';' + encodeURI(r_name) + ';' + encodeURI(q_getPara('sys.key_tre')) + ';' + encodeURI(t_datea) + ';' + encodeURI(t_bdate) + ';' + encodeURI(t_edate));
+                        q_func('qtxt.query.tre', 'tre.txt,tre_rj,' + encodeURI(r_userno) + ';' + encodeURI(r_name) + ';' + encodeURI(q_getPara('sys.key_tre')) + ';' + encodeURI(t_datea) + ';' + encodeURI(t_bdate) + ';' + encodeURI(t_edate));
                     } else
                         alert('請輸入日期。');
                 });
