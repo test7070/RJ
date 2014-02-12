@@ -574,7 +574,7 @@
                         <td><input id="txtTotal" type="text" class="txt c1 num" /></td>
                     </tr>
                     <tr>
-                        <td><span> </span><a id="lblTggno_rj" class="lbl"> </a></td>
+                        <td><span> </span><a id="lblTgg_rj" class="lbl"> </a></td>
                         <td colspan="3">
                         <input id="txtTggno" type="text"  class="txt" style="width:35%;"/>
                         <input id="txtTgg" type="text"  class="txt" style="width:65%;"/>

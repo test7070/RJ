@@ -14,7 +14,7 @@
             aPop = new Array(
             ['txtDriverno', 'lblDriver', 'driver', 'noa,namea', 'txtDriverno', 'driver_b.aspx'] 
              ,['txtCarno', 'lblCarno', 'car2', 'a.noa,driverno,driver', 'txtCarno', 'car2_b.aspx']
-             , ['txtTggno', 'lblTgg', 'tgg', 'noa,comp', 'txtTggno,txtTggcomp', 'tgg_b.aspx']);
+             , ['txtTggno', 'lblTggno_rj', 'tgg', 'noa,comp', 'txtTggno', 'tgg_b.aspx']);
         
             $(document).ready(function() {
                 main();
@@ -127,7 +127,7 @@
                     </td>
                 </tr>
                 <tr class='seek_tr'>
-                    <td class='seek'  style="width:20%;"><a id='lblTggno'></a></td>
+                    <td class='seek'  style="width:20%;"><a id='lblTggno_rj'></a></td>
                     <td>
                     <input class="txt" id="txtTggno" type="text" style="width:215px; font-size:medium;" />
                     </td>
