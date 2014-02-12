@@ -114,7 +114,7 @@
                 if(q_cur > 0 && q_cur < 4)// 1-3
                     return;
 
-                q_box('driver_s_ds.aspx', q_name + '_s', "550px", "400px", q_getMsg("popSeek"));
+                q_box('driver_rj_s.aspx', q_name + '_s', "550px", "400px", q_getMsg("popSeek"));
             }
 
             function btnIns() {
@@ -132,7 +132,7 @@
             }
 
             function btnPrint() {
-                q_box('z_driver_ds.aspx' + "?;;;;" + r_accy, '', "95%", "95%", q_getMsg("popPrint"));
+                q_box('z_driver_rj.aspx' + "?;;;;" + r_accy, '', "95%", "95%", q_getMsg("popPrint"));
             }
             function q_stPost() {
                 if (!(q_cur == 1 || q_cur == 2))
@@ -158,7 +158,7 @@
                 }else if(q_cur ==2){
                     $('#txtWorker2').val(r_name);
                 }else{
-                    alert("error: btnok!")
+                    alert("error: btnok!");
                 }
                 //------------------------------------
                 if(q_cur==1){
@@ -271,7 +271,7 @@
                     str = (parseInt(str.substring(0,3))+1911)+str.substring(3);
                     var regex = new RegExp("^(?:(?:([0-9]{4}(-|\/)(?:(?:0?[1,3-9]|1[0-2])(-|\/)(?:29|30)|((?:0?[13578]|1[02])(-|\/)31)))|([0-9]{4}(-|\/)(?:0?[1-9]|1[0-2])(-|\/)(?:0?[1-9]|1\\d|2[0-8]))|(((?:(\\d\\d(?:0[48]|[2468][048]|[13579][26]))|(?:0[48]00|[2468][048]00|[13579][26]00))(-|\/)0?2(-|\/)29))))$"); 
                     if(regex.test(str))
-                        return 4
+                        return 4;
                 }
                 return 0;//錯誤
             }

@@ -199,7 +199,7 @@
             function _btnSeek() {
                 if (q_cur > 0 && q_cur < 4)
                     return;
-                q_box('tre_tb_s.aspx', q_name + '_s', "530px", "530px", q_getMsg("popSeek"));
+                q_box('tre_rj_s.aspx', q_name + '_s', "530px", "530px", q_getMsg("popSeek"));
             }
             function bbsAssign() {
                 for (var j = 0; j < q_bbsCount; j++) {
@@ -574,7 +574,7 @@
                         <td><input id="txtTotal" type="text" class="txt c1 num" /></td>
                     </tr>
                     <tr>
-                        <td><span> </span><a id="lblTggno" class="lbl"> </a></td>
+                        <td><span> </span><a id="lblTggno_rj" class="lbl"> </a></td>
                         <td colspan="3">
                         <input id="txtTggno" type="text"  class="txt" style="width:35%;"/>
                         <input id="txtTgg" type="text"  class="txt" style="width:65%;"/>
