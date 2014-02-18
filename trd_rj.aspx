@@ -123,7 +123,7 @@
                     }
                     t_where = "where=^^" + t_where + "^^;order=^^a.trandate,a.noa^^";
                     //一次最多匯入500筆
-                    q_gt('trd_tran_tb', t_where, 500, 0, 0, "", r_accy);
+                    q_gt('trd_tran_rj', t_where, 500, 0, 0, "", r_accy);
                 });
                 $("#btnCustchg").click(function(e) {
                     Lock(1, {
@@ -230,7 +230,7 @@
                         sum();
                         Unlock(1);
                         break;
-                    case 'trd_tran_tb':
+                    case 'trd_tran_rj':
                         var as = _q_appendData("view_trans", "", true);
                         q_gridAddRow(bbsHtm, 'tbbs', 'txtTrandate,txtTranaccy,txtTranno,txtTrannoq,txtCarno,txtStraddr,txtEndaddr,txtTranmoney,txtCaseno,txtMount,txtPrice,txtTotal,txtCustorde,txtProduct', as.length, as, 'trandate,accy,noa,noq,carno,straddr,endaddr,custmoney,caseno,mount,custprice,custmoney,custorde,product', '', '');
                         for ( i = 0; i < q_bbsCount; i++) {
