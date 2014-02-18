@@ -100,22 +100,32 @@
                 isTre : null,
                 isoutside : null,            
                 refresh : function(){
-                    /*$('#lblPrice2').hide();
-                    $('#txtPrice2').hide();
-                    $('#lblPrice3').hide();
-                    $('#txtPrice3').hide();
+                    $('#lblDriverunit').hide();
+                    $('#combDriverunit').hide();
+                    $('#lblDriverunit2').hide();
+                    $('#combDriverunit2').hide();
                     for(var i in this.calctype){
                         if(this.calctype[i].noa == $('#cmbCalctype').val()){
+                            var t_unit2 = $('#txtUnit2').val();
                             if(this.calctype[i].isoutside){
-                                $('#lblPrice3').show();
-                                $('#txtPrice3').show();
+                                if($.trim(t_unit2).length>0)
+                                   if($('#combDriverunit2').find('[value]="'+t_unit2+'"').length>0)
+                                        $('#combDriverunit2').val(t_unit2);  
+                                else   
+                                    $('#combDriverunit2').val(" "); 
+                                $('#lblDriverunit2').show();
+                                $('#combDriverunit2').show();
                             }else{
-                                $('#lblPrice2').show();
-                                $('#txtPrice2').show();
+                                if($.trim(t_unit2).length>0)
+                                   if($('#combDriverunit').find('[value]="'+t_unit2+'"').length>0)
+                                        $('#combDriverunit').val(t_unit2);  
+                                else   
+                                    $('#combDriverunit').val(" ");
+                                $('#lblDriverunit').show();
+                                $('#combDriverunit').show();
                             }
                         }
-                    }*/
-                    
+                    }
                 },
                 calctypeChange : function(){
                     for(var i in this.calctype){
@@ -266,7 +276,14 @@
                 $('#txtTrandate').change(function(e){
                     trans.priceChange();
                 });
-           
+                $('#combDriverunit').change(function(e){
+                    if($(this).is(":visible"))
+                        $('#txtUnit2').val($(this).find(":selected").text());
+                });
+                $('#combDriverunit2').change(function(e){
+                    if($(this).is(":visible"))
+                        $('#txtUnit2').val($(this).find(":selected").text());
+                });    
                 q_xchgForm();
             }
 
@@ -356,7 +373,39 @@
                         }
                         if(abbm[q_recno]!=undefined)
                             $("#cmbCarteamno").val(abbm[q_recno].carteamno);  
-                            
+                        q_gt('custunit', '', 0, 0, 0, 'transInit3'); 
+                        break;
+                    case 'transInit3':
+                        var as = _q_appendData("custunit", "", true);
+                         if(as[0] != undefined){
+                            var t_item=" ";
+                            for ( i = 0; i < as.length; i++) {
+                                t_item = t_item + (t_item.length > 0 ? ',' : '') + as[i].noa;
+                            }
+                            q_cmbParse("cmbUnit", t_item);
+                        }
+                        q_gt('driverunit','', 0, 0, 0, "transInit4", r_accy);
+                        break;
+                    case 'transInit4':
+                        var as = _q_appendData("driverunit", "", true);
+                         if(as[0] != undefined){
+                            var t_item=" ";
+                            for ( i = 0; i < as.length; i++) {
+                                t_item = t_item + (t_item.length > 0 ? ',' : '') + as[i].noa;
+                            }
+                            q_cmbParse("combDriverunit", t_item);
+                        }
+                        q_gt('driverunit2','', 0, 0, 0, "transInit5", r_accy);
+                        break;
+                    case 'transInit5':
+                        var as = _q_appendData("driverunit2", "", true);
+                         if(as[0] != undefined){
+                            var t_item=" ";
+                            for ( i = 0; i < as.length; i++) {
+                                t_item = t_item + (t_item.length > 0 ? ',' : '') + as[i].noa;
+                            }
+                            q_cmbParse("combDriverunit2", t_item);
+                        }
                         q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
                         break;
                     case q_name:
@@ -419,6 +468,12 @@
             }
             function btnOk() {
                 Lock(1,{opacity:0});
+                if($('#combDriverunit').is(":visible")){
+                    $('#txtUnit2').val($('#combDriverunit').find(":selected").text());
+                }
+                else if($('#combDriverunit2').is(":visible")){
+                    $('#txtUnit2').val($('#combDriverunit2').find(":selected").text());
+                }
                 //日期檢查
                 if($('#txtDatea').val().length == 0 || !q_cd($('#txtDatea').val())){
                     alert(q_getMsg('lblDatea')+'錯誤。');
@@ -477,6 +532,14 @@
 
             function readonly(t_para, empty) {
                 _readonly(t_para, empty);
+                if(q_cur==1 || q_cur==2){
+                    $('#combDriverunit').removeAttr('disabled');
+                    $('#combDriverunit2').removeAttr('disabled');
+                }
+                else{
+                    $('#combDriverunit').attr('disabled','disabled');
+                    $('#combDriverunit2').attr('disabled','disabled');
+                }
             }
 
             function btnMinus(id) {
@@ -785,7 +848,7 @@
                             <input id="txtMount"  type="text" style="display:none;"/>
                         </td>
                         <td><span> </span><a id="lblUnit" class="lbl"> </a></td>
-                        <td><input id="txtUnit"  type="text" class="txt c1"/></td>
+                        <td><select id="cmbUnit" class="txt c1"> </select></td>
                         <td><span> </span><a id="lblPton" class="lbl"> </a></td>
                         <td><input id="txtPton"  type="text" class="txt c1 num"/></td>
                     </tr>
@@ -795,8 +858,15 @@
                             <input id="txtOutmount"  type="text" class="txt c1 num"/>
                             <input id="txtMount2"  type="text" style="display:none;"/>
                         </td>
-                        <td><span> </span><a id="lblUnit2" class="lbl"> </a></td>
-                        <td><input id="txtUnit2"  type="text" class="txt c1"/></td>
+                        <td><span> </span>
+                            <a id="lblDriverunit" class="lbl"> </a>
+                            <a id="lblDriverunit2" class="lbl"> </a>
+                        </td>
+                        <td>
+                            <select id="combDriverunit" class="txt c1"> </select>
+                            <select id="combDriverunit2" class="txt c1"> </select>
+                            <input id="txtUnit2"  type="text" style="display:none;"/>
+                        </td>
                         <td><span> </span><a id="lblPton2" class="lbl"> </a></td>
                         <td><input id="txtPton2"  type="text" class="txt c1 num"/></td>
                     </tr>

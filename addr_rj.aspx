@@ -42,7 +42,8 @@
                 bbmKey = ['noa'];
                 bbsKey = ['noa', 'noq'];
                 q_brwCount();
-                q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
+                q_gt('custunit','', 0, 0, 0, "custunit", r_accy);
+                
                 
             });
             function main() {
@@ -58,7 +59,7 @@
                 q_mask(bbmMask);
                 bbsMask = [['txtDatea', r_picd]];
                 
-                q_gt('custunit','', 0, 0, 0, "custunit", r_accy);
+                
                 
                 
                  //上方插入空白行
@@ -101,7 +102,7 @@
                     case 'custunit':
                         var as = _q_appendData("custunit", "", true);
                          if(as[0] != undefined){
-                            var t_item="";
+                            var t_item=" ";
                             for ( i = 0; i < as.length; i++) {
                                 t_item = t_item + (t_item.length > 0 ? ',' : '') + as[i].noa;
                             }
@@ -112,12 +113,35 @@
                     case 'tggunit':
                         var as = _q_appendData("tggunit", "", true);
                          if(as[0] != undefined){
-                            var t_item="";
+                            var t_item=" ";
                             for ( i = 0; i < as.length; i++) {
                                 t_item = t_item + (t_item.length > 0 ? ',' : '') + as[i].noa;
                             }
                             q_cmbParse("cmbTggunit", t_item,'s');
                         }
+                        q_gt('driverunit','', 0, 0, 0, "driverunit", r_accy);
+                        break;
+                    case 'driverunit':
+                        var as = _q_appendData("driverunit", "", true);
+                         if(as[0] != undefined){
+                            var t_item=" ";
+                            for ( i = 0; i < as.length; i++) {
+                                t_item = t_item + (t_item.length > 0 ? ',' : '') + as[i].noa;
+                            }
+                            q_cmbParse("cmbDriverunit", t_item,'s');
+                        }
+                        q_gt('driverunit2','', 0, 0, 0, "driverunit2", r_accy);
+                        break;
+                    case 'driverunit2':
+                        var as = _q_appendData("driverunit2", "", true);
+                         if(as[0] != undefined){
+                            var t_item=" ";
+                            for ( i = 0; i < as.length; i++) {
+                                t_item = t_item + (t_item.length > 0 ? ',' : '') + as[i].noa;
+                            }
+                            q_cmbParse("cmbDriverunit2", t_item,'s');
+                        }
+                        q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
                         break;
                     case 'z_addr':
                         var as = _q_appendData("authority", "", true);
@@ -504,13 +528,13 @@
                         <input type="text" id="txtCustno.*" style="width:40%;float:left;"/>
                         <input type="text" id="txtCust.*" style="width:40%;float:left;"/>
                     </td>
-                    <td><input type="text" id="txtDriverunit.*" style="width:95%;"/></td>
+                    <td><select id="cmbDriverunit.*" style="width:95%;"> </select></td>
                     <td><input type="text" id="txtDriverprice.*" style="width:95%;text-align:right;"/></td>
-                    <td><input type="text" id="txtDriverunit2.*" style="width:95%;"/></td>
+                    <td><select id="cmbDriverunit2.*" style="width:95%;"> </select></td>
                     <td><input type="text" id="txtDriverprice2.*" style="width:95%;text-align:right;"/></td>
-                    <td><select id="cmbCustunit" style="width:95%;"> </select></td>
+                    <td><select id="cmbCustunit.*" style="width:95%;"> </select></td>
                     <td><input type="text" id="txtCustprice.*" style="width:95%;text-align:right;"/></td>
-                    <td><input type="text" id="txtTggunit.*" style="width:95%;"/></td>
+                    <td><select id="cmbTggunit.*" style="width:95%;"> </select></td>
                     <td><input type="text" id="txtTggprice.*" style="width:95%;text-align:right;"/></td>
                     <td><input type="text" id="txtMemo.*" style="width:95%;"/></td>
                 </tr>
