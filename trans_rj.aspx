@@ -63,7 +63,7 @@
                 include : ['txtDatea', 'txtTrandate','txtCarno','txtDriverno','txtDriver'
                     ,'txtCustno','txtComp','txtNick','cmbCalctype','cmbCarteamno','txtStraddrno','txtStraddr','txtEndaddrno','txtEndaddr'
                     ,'txtUccno','txtProduct','txtInmount'
-                    ,'txtOutmount','txtPo','txtCustorde','txtUnit','txtUnit2'],
+                    ,'txtOutmount','txtPo','txtCustorde','cmbUnit','txtUnit2'],
                 /*記錄當前的資料*/
                 copy : function() {
                     this.data = new Array();
