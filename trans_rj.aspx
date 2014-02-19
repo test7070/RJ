@@ -232,9 +232,17 @@
                 });
                 //櫃號異常就變色
                 $('#txtCaseno').change(function(e){
+                    if( ($.trim($('#txtCaseno').val()).length>0 && !checkCaseno($.trim($('#txtCaseno').val()))) || ($.trim($('#txtCaseno2').val()).length>0 && !checkCaseno($.trim($('#txtCaseno2').val()))))
+                        $('#lblCasenoerrmsg').show();
+                    else
+                        $('#lblCasenoerrmsg').hide();
                     $(this).css('color',$.trim($(this).val()).length==0||checkCaseno($.trim($(this).val()))?'black':'darkred');
                 });
                 $('#txtCaseno2').change(function(e){
+                    if( ($.trim($('#txtCaseno').val()).length>0 && !checkCaseno($.trim($('#txtCaseno').val()))) || ($.trim($('#txtCaseno2').val()).length>0 && !checkCaseno($.trim($('#txtCaseno2').val()))))
+                        $('#lblCasenoerrmsg').show();
+                    else
+                        $('#lblCasenoerrmsg').hide();
                     $(this).css('color',$.trim($(this).val()).length==0||checkCaseno($.trim($(this).val()))?'black':'darkred');
                 });
                 $('#txtPrice').change(function(){
@@ -526,6 +534,10 @@
             function refresh(recno) {
                 _refresh(recno);
                 trans.refresh();
+                if( ($.trim($('#txtCaseno').val()).length>0 && !checkCaseno($.trim($('#txtCaseno').val()))) || ($.trim($('#txtCaseno2').val()).length>0 && !checkCaseno($.trim($('#txtCaseno2').val()))))
+                    $('#lblCasenoerrmsg').show();
+                else
+                    $('#lblCasenoerrmsg').hide();
                 $('#txtCaseno').css('color',$.trim($('#txtCaseno').val()).length==0||checkCaseno($.trim($('#txtCaseno').val()))?'black':'darkred');
                 $('#txtCaseno2').css('color',$.trim($('#txtCaseno2').val()).length==0||checkCaseno($.trim($('#txtCaseno2').val()))?'black':'darkred');
             }
@@ -876,6 +888,7 @@
                             <input id="txtCaseno"  type="text" style="float:left;width:50%;"/>
                             <input id="txtCaseno2"  type="text" style="float:left;width:50%;"/>
                         </td>
+                        <td colspan="2"><a id="lblCasenoerrmsg" style="display:none;color:darkred;">貨櫃編號錯誤。</a></td>
                     </tr>
                     <tr>
                         <td><span> </span><a id="lblBoat" class="lbl btn"> </a></td>

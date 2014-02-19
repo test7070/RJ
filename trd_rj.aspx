@@ -34,7 +34,11 @@
             q_desc = 1;
             q_xchg = 1;
             brwCount2 = 20;
-            aPop = new Array(['txtCustno', 'lblCust', 'cust', 'noa,comp,nick', 'txtCustno,txtComp,txtNick', 'cust_b.aspx'], ['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx'], ['txtStraddrno', '', 'addr', 'noa,addr', 'txtStraddrno,txtStraddr', 'addr_b2.aspx'], ['txtEndaddrno', '', 'addr', 'noa,addr', 'txtEndaddrno,txtEndaddr', 'addr_b2.aspx'], ['txtBoatno', 'lblBoat', 'boat', 'noa,boat', 'txtBoatno,txtBoat', 'boat_b.aspx']);
+            aPop = new Array(['txtCustno', 'lblCust', 'cust', 'noa,comp,nick', 'txtCustno,txtComp,txtNick', 'cust_b.aspx']
+            , ['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx']
+            , ['txtStraddrno', '', 'straddr_rj', 'noa,addr', 'txtStraddrno,txtStraddr', 'straddr_rj_b.aspx']
+            ,  ['txtEndaddrno', '', 'endaddr_rj', 'noa,addr', 'txtEndaddrno,txtEndaddr', 'endaddr_rj_b.aspx']
+            , ['txtBoatno', 'lblBoat', 'boat', 'noa,boat', 'txtBoatno,txtBoat', 'boat_b.aspx']);
             $(document).ready(function() {
                 q_bbsShow = -1;
                 bbmKey = ['noa'];
@@ -110,8 +114,8 @@
                     t_where += t_edate.length > 0 ? " and a.datea<='" + t_edate + "'" : "";
                     t_where += t_btrandate.length > 0 ? " and a.trandate>='" + t_btrandate + "'" : "";
                     t_where += t_etrandate.length > 0 ? " and a.trandate<='" + t_etrandate + "'" : "";
-                    t_where += t_baddrno.length > 0 ? " and a.straddrno>='" + t_baddrno + "'" : "";
-                    t_where += t_eaddrno.length > 0 ? " and a.straddrno<='" + t_eaddrno + "'" : "";
+                    t_where += t_baddrno.length > 0 ? " and a.straddrno='" + t_baddrno + "'" : "";
+                    t_where += t_eaddrno.length > 0 ? " and a.endaddrno='" + t_eaddrno + "'" : "";
                     var t_po = "";
                     if ($.trim($('#txtPo').val()).length > 0) {
                         var tmp = $.trim($('#txtPo').val()).split(',');
