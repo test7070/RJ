@@ -21,7 +21,7 @@
             q_tables = 's';
             var q_name = "trd";
             var q_readonly = ['txtTax', 'txtNoa', 'txtMoney', 'txtTotal', 'txtWorker2', 'txtWorker', 'txtStraddr', 'txtEndaddr', 'txtVccano', 'txtCustchgno', 'txtAccno', 'txtAccno2', 'txtYear2', 'txtYear1','txtPlusmoney','txtMinusmoney'];
-            var q_readonlys = ['txtTranno', 'txtTrannoq', 'txtTrandate', 'txtStraddr', 'txtEndaddr', 'txtProduct', 'txtCarno', 'txtCustorde', 'txtCaseno', 'txtMount','txtPrice', 'txtTotal', 'txtTranmoney','txtTranaccy'];
+            var q_readonlys = ['txtTranno', 'txtTrannoq', 'txtTrandate', 'txtStraddr', 'txtEndaddr', 'txtProduct', 'txtCarno', 'txtCustorde', 'txtCaseno', 'txtMount', 'txtTotal', 'txtTranmoney','txtTranaccy'];
             var bbmNum = [['txtMoney', 10, 0, 1], ['txtTax', 10, 0, 1], ['txtTotal', 10, 0, 1]];
             var bbsNum = [['txtTranmoney', 10, 0, 1], ['txtOverweightcost', 10, 0, 1], ['txtOthercost', 10, 0, 1], ['txtMount', 10, 3, 1], ['txtPrice', 10, 3, 1], ['txtTotal', 10, 0, 1]];
             var bbmMask = [];
@@ -57,10 +57,8 @@
                 q_modiDay = q_getPara('sys.modiday2');
                 /// 若未指定， d4=  q_getPara('sys.modiday');
                 q_getFormat();
-                bbmMask = [['txtDatea', r_picd], ['txtMon', r_picm], ['txtBdate', r_picd], ['txtEdate', r_picd], ['txtBtrandate', r_picd], ['txtEtrandate', r_picd], ['txtVccadate', r_picd]];
+                bbmMask = [['txtDatea', r_picd], ['txtMon', r_picm], ['txtBtrandate', r_picd], ['txtEtrandate', r_picd], ['txtVccadate', r_picd]];
                 q_mask(bbmMask);
-                $('#txtBdate').datepicker();
-                $('#txtEdate').datepicker();
                 $('#txtBtrandate').datepicker();
                 $('#txtEtrandate').datepicker();
                 $('#lblAccno').click(function() {
@@ -102,29 +100,16 @@
                     }
                     var t_noa = $.trim($('#txtNoa').val());
                     var t_custno = $.trim($('#txtCustno').val());
-                    var t_bdate = $.trim($('#txtBdate').val());
-                    var t_edate = $.trim($('#txtEdate').val());
                     var t_btrandate = $.trim($('#txtBtrandate').val());
                     var t_etrandate = $.trim($('#txtEtrandate').val());
                     var t_baddrno = $.trim($('#txtStraddrno').val());
                     var t_eaddrno = $.trim($('#txtEndaddrno').val());
                     var t_where = "(b.noa is null or b.noa='" + t_noa + "')";
                     t_where += " and a.custno='" + t_custno + "'";
-                    t_where += t_bdate.length > 0 ? " and a.datea>='" + t_bdate + "'" : "";
-                    t_where += t_edate.length > 0 ? " and a.datea<='" + t_edate + "'" : "";
                     t_where += t_btrandate.length > 0 ? " and a.trandate>='" + t_btrandate + "'" : "";
                     t_where += t_etrandate.length > 0 ? " and a.trandate<='" + t_etrandate + "'" : "";
                     t_where += t_baddrno.length > 0 ? " and a.straddrno='" + t_baddrno + "'" : "";
                     t_where += t_eaddrno.length > 0 ? " and a.endaddrno='" + t_eaddrno + "'" : "";
-                    var t_po = "";
-                    if ($.trim($('#txtPo').val()).length > 0) {
-                        var tmp = $.trim($('#txtPo').val()).split(',');
-                        t_po = ' and (';
-                        for (var i in tmp)
-                        t_po += (i == 0 ? '' : ' or ') + "a.po='" + tmp[i] + "'";
-                        t_po += ')';
-                        t_where += t_po;
-                    }
                     t_where = "where=^^" + t_where + "^^;order=^^a.trandate,a.noa^^";
                     //一次最多匯入500筆
                     q_gt('trd_tran_rj', t_where, 500, 0, 0, "", r_accy);
@@ -413,10 +398,9 @@
                     return;
                 var t_money = 0, t_moneys = 0, t_total = 0;
                 for ( i = 0; i < q_bbsCount; i++) {
-                   // t_money = round(q_mul(q_float('txtMount_'+i),q_float('txtPrice_'+i)),0);
-                    //$('#txtTotal_'+i).val(t_money);
-                    //$('#txtTranmoney_'+i).val(t_money);
-                    t_money = q_float('txtTotal_'+i);
+                    t_money = round(q_mul(q_float('txtMount_'+i),q_float('txtPrice_'+i)),0);
+                    $('#txtTotal_'+i).val(t_money);
+                    $('#txtTranmoney_'+i).val(t_money);
                     t_moneys += t_money;
                 }
                 t_plusmoney = q_float('txtPlusmoney');
@@ -667,11 +651,11 @@
                         </td>
                     </tr>
                     <tr class="trX">
-                        <td><span> </span><a id="lblDate2" class="lbl"> </a></td>
+                        <td><span> </span><a id="lblTrandate" class="lbl"> </a></td>
                         <td colspan="3">
-                        <input id="txtBdate" type="text" style="float:left; width:45%;"/>
+                        <input id="txtBtrandate" type="text" style="float:left; width:45%;"/>
                         <span style="float:left;display: block;width:3%;height:inherit;color:blue;font-size: 14px;text-align: center;">~</span>
-                        <input id="txtEdate" type="text" style="float:left; width:45%;"/>
+                        <input id="txtEtrandate" type="text" style="float:left; width:45%;"/>
                         </td>
                         <td><span> </span><a id="lblStraddr" class="lbl btn"> </a></td>
                         <td colspan="3">
@@ -680,19 +664,6 @@
                         <span style="float:left; display:block; width:3%;">~</span>
                         <input id="txtEndaddrno" type="text"  class="txt" style="float:left;width:25%;"/>
                         <input id="txtEndaddr" type="text"  class="txt" style="float:left;width:20%;"/>
-                        </td>
-                        <td class="tdZ"></td>
-                    </tr>
-                    <tr class="trX">
-                        <td><span> </span><a id="lblTrandate" class="lbl"> </a></td>
-                        <td colspan="3">
-                        <input id="txtBtrandate" type="text" style="float:left; width:45%;"/>
-                        <span style="float:left;display: block;width:3%;height:inherit;color:blue;font-size: 14px;text-align: center;">~</span>
-                        <input id="txtEtrandate" type="text" style="float:left; width:45%;"/>
-                        </td>
-                        <td><span> </span><a id="lblPo" class="lbl"> </a></td>
-                        <td colspan="3">
-                        <input id="txtPo" type="text"  class="txt c1"/>
                         </td>
                         <td class="tdZ"></td>
                     </tr>
