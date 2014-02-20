@@ -15,9 +15,6 @@
         <script src="css/jquery/ui/jquery.ui.widget.js"></script>
         <script src="css/jquery/ui/jquery.ui.datepicker_tw.js"></script>
         <script type="text/javascript">
-            if (location.href.indexOf('?') < 0) {
-                location.href = location.href + "?;;;;" + ((new Date()).getUTCFullYear() - 1911);
-            }
             $(document).ready(function() {
                 q_gf('', 'z_trd_rj');
                 q_getId();
@@ -25,16 +22,16 @@
             function q_gfPost() {
                 $('#q_report').q_report({
                     fileName : 'z_trd_rj',
-                    options : [{/*2*/
+                    options : [{/*1*/
                         type : '1',
                         name : 'xdate'
-                    }, {/*1*/
+                    }, {/*2*/
                         type : '2',
                         name : 'xcust',
                         dbf : 'cust',
                         index : 'noa,comp',
                         src : 'cust_b.aspx'
-                    }, {/*5*/
+                    }, {/*3*/
                         type : '6', 
                         name : 'xnoa'
                     }]

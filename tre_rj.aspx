@@ -238,7 +238,7 @@
                 sum();
             }
             function btnPrint() {
-                q_box('z_tre_tb.aspx' + "?;;;;" + r_accy + ";datea=" + abbm[q_recno].datea, '', "95%", "95%", q_getMsg("popPrint"));
+                q_box('z_tre_rj.aspx' + "?;;;;" + r_accy + ";noa=" + trim($('#txtNoa').val()), '', "95%", "95%", q_getMsg("popPrint"));
             }
             function wrServer(key_value) {
                 var i;
