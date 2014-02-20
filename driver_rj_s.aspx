@@ -46,7 +46,6 @@
                     + q_sqlPara2("datea", t_btakeofficedate, t_etakeofficedate) 
                     + q_sqlPara2("cartype", t_cartype)
                     + q_sqlPara2("tggno", t_tggno);
-
                 t_where = ' where=^^' + t_where + '^^ ';
                 return t_where;
             }
