@@ -129,6 +129,9 @@
                         type : '8',
                         name : 'xcalctypes',
                         value : t_data.data['calctypes'].split(',')
+                    }, {/*10-[15]交運月份*/
+                        type : '6',
+                        name : 'ymon'
                     }]
                 });
                 q_popAssign();
@@ -144,6 +147,7 @@
                 $('#txtXtrandate2').mask('999/99/99');
                 $('#txtXtrandate1').datepicker();
                 $('#txtXtrandate2').datepicker();
+                $('#txtYmon').mask('999/99');
                 
                 $('#chkXcarteam').children('input').attr('checked', 'checked');
                 $('#chkXcarkind').children('input').attr('checked', 'checked');
