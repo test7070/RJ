@@ -187,7 +187,7 @@
                 if (q_cur > 0 && q_cur < 4)
                     return;
 
-                q_box('addr_rj_s.aspx', q_name + '_s', "500px", "330px", q_getMsg("popSeek"));
+                q_box('addr_rj_s.aspx', q_name + '_s', "550px", "450px", q_getMsg("popSeek"));
             }
 
             function bbsAssign() {
@@ -227,11 +227,11 @@
             }
 
             function btnPrint() {
-                if(r_rank>8)
+                /*if(r_rank>8)
                     q_box("z_addr.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";;" + r_accy,'z_addr', "95%", "95%", q_getMsg("popPrint"));
                 else
                     q_gt('authority',"where=^^ a.noa='z_addr' and a.sssno='"+r_userno+"'^^", 0, 0, 0, "z_addr", r_accy);
-               
+               */
             }
 
             function wrServer(key_value) {
