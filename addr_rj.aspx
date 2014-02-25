@@ -227,6 +227,7 @@
             }
 
             function btnPrint() {
+                q_box('z_addr_rj.aspx' + "?;;;;" + r_accy, '', "95%", "95%", q_getMsg("popPrint"));
                 /*if(r_rank>8)
                     q_box("z_addr.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";;" + r_accy,'z_addr', "95%", "95%", q_getMsg("popPrint"));
                 else
