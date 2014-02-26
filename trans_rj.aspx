@@ -743,17 +743,9 @@
                         <td align="center" style="width:120px; color:black;"><a id="vewEndaddr_tb"> </a></td>
                         <td align="center" style="width:60px; color:black;"><a id="vewFill"> </a></td>
                         <td align="center" style="width:60px; color:black;"><a id="vewMount"> </a></td>
-                        <td align="center" style="width:60px; color:black;"><a id="vewPrice"> </a></td>
                         <td align="center" style="width:60px; color:black;"><a id="vewMount2"> </a></td>
-                        <td align="center" style="width:60px; color:black;"><a id="vewPrice2"> </a></td>
-                        <td align="center" style="width:60px; color:black;"><a id="vewPrice3"> </a></td>
-                        <td align="center" style="width:60px; color:black;"><a id="vewDiscount"> </a></td>
-                        <td align="center" style="width:120px; color:black;"><a id="vewBoat"> </a></td>
-                        <td align="center" style="width:120px; color:black;"><a id="vewShip"> </a></td>
-                        <td align="center" style="width:120px; color:black;"><a id="vewPo"> </a></td>
                         <td align="center" style="width:120px; color:black;"><a id="vewCaseno1"> </a></td>
                         <td align="center" style="width:120px; color:black;"><a id="vewCaseno2"> </a></td>
-                        <td align="center" style="width:120px; color:black;"><a id="vewCustorde"> </a></td>
                     </tr>
                     <tr>
                         <td ><input id="chkBrow.*" type="checkbox"/></td>
@@ -766,17 +758,9 @@
                         <td id="endaddr" style="text-align: center;">~endaddr</td>
                         <td id="fill" style="text-align: center;">~fill</td>
                         <td id="mount" style="text-align: right;">~mount</td>
-                        <td id="price" style="text-align: right;">~price</td>
                         <td id="mount2" style="text-align: right;">~mount2</td>
-                        <td id="price2" style="text-align: right;">~price2</td>
-                        <td id="price3" style="text-align: right;">~price3</td>
-                        <td id="discount" style="text-align: right;">~discount</td>
-                        <td id="boatname" style="text-align: left;">~boatname</td>
-                        <td id="ship" style="text-align: left;">~ship</td>
-                        <td id="po" style="text-align: left;">~po</td>
                         <td id="caseno" style="text-align: left;">~caseno</td>
                         <td id="caseno2" style="text-align: left;">~caseno2</td>
-                        <td id="custorde" style="text-align: left;">~custorde</td>
                     </tr>
                 </table>
             </div>
