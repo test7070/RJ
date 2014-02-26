@@ -854,8 +854,8 @@
                         </td>
                         <td><span> </span><a id="lblUnit" class="lbl"> </a></td>
                         <td><select id="cmbUnit" class="txt c1"> </select></td>
-                        <td><span> </span><a id="lblPton" class="lbl"> </a></td>
-                        <td><input id="txtPton"  type="text" class="txt c1 num"/></td>
+                        <td><span> </span><a id="lblPton" class="lbl" style="display:none;"> </a></td>
+                        <td><input id="txtPton"  type="text" class="txt c1 num" style="display:none;"/></td>
                     </tr>
                     <tr>
                         <td><span> </span><a id="lblOutmount" class="lbl"> </a></td>
@@ -872,8 +872,8 @@
                             <select id="combDriverunit2" class="txt c1"> </select>
                             <input id="txtUnit2"  type="text" style="display:none;"/>
                         </td>
-                        <td><span> </span><a id="lblPton2" class="lbl"> </a></td>
-                        <td><input id="txtPton2"  type="text" class="txt c1 num"/></td>
+                        <td><span> </span><a id="lblPton2" class="lbl" style="display:none;"> </a></td>
+                        <td><input id="txtPton2"  type="text" class="txt c1 num" style="display:none;"/></td>
                     </tr>
                     <tr>
                         <td><span> </span><a id="lblCaseno" class="lbl"> </a></td>
@@ -883,7 +883,7 @@
                         </td>
                         <td colspan="2"><a id="lblCasenoerrmsg" style="display:none;color:darkred;">貨櫃編號錯誤。</a></td>
                     </tr>
-                    <tr>
+                    <tr style="display:none;">
                         <td><span> </span><a id="lblBoat" class="lbl btn"> </a></td>
                         <td colspan="2">
                             <input id="txtBoatno"  type="text" style="float:left;width:50%;"/>
@@ -892,13 +892,13 @@
                         <td><span> </span><a id="lblShip" class="lbl"> </a></td>
                         <td colspan="2"><input id="txtShip" type="text" class="txt c1"/></td>
                     </tr>
-                    <tr>
+                    <tr style="display:none;">
                         <td><span> </span><a id="lblPo" class="lbl"> </a></td>
                         <td colspan="2"><input id="txtPo"  type="text" class="txt c1"/></td>
                         <td><span> </span><a id="lblCustorde" class="lbl"> </a></td>
                         <td colspan="2"><input id="txtCustorde" type="text" class="txt c1"/></td>
                     </tr>
-                    <tr>
+                    <tr style="display:none;">
                         <td><span> </span><a id="lblBmiles" class="lbl"> </a></td>
                         <td><input id="txtBmiles"  type="text" class="txt c1 num"/></td>
                         <td><span> </span><a id="lblEmiles" class="lbl"> </a></td>
