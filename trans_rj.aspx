@@ -750,11 +750,12 @@
                         <td align="center" style="width:80px; color:black;"><a id="vewNick"> </a></td>
                         <td align="center" style="width:120px; color:black;"><a id="vewStraddr_tb"> </a></td>
                         <td align="center" style="width:120px; color:black;"><a id="vewEndaddr_tb"> </a></td>
-                        <td align="center" style="width:60px; color:black;"><a id="vewFill"> </a></td>
-                        <td align="center" style="width:60px; color:black;"><a id="vewMount"> </a></td>
-                        <td align="center" style="width:60px; color:black;"><a id="vewMount2"> </a></td>
+                        <td align="center" style="width:60px; color:black;">台數</a></td>
+                        <td align="center" style="width:60px; color:black;">米數</a></td>
+                        <td align="center" style="width:60px; color:black;">噸數</a></td>
                         <td align="center" style="width:120px; color:black;"><a id="vewCaseno1"> </a></td>
                         <td align="center" style="width:120px; color:black;"><a id="vewCaseno2"> </a></td>
+                        <td align="center" style="width:60px; color:black;"><a id="vewFill"> </a></td>
                     </tr>
                     <tr>
                         <td ><input id="chkBrow.*" type="checkbox"/></td>
@@ -765,11 +766,12 @@
                         <td id="nick" style="text-align: center;">~nick</td>
                         <td id="straddr" style="text-align: center;">~straddr</td>
                         <td id="endaddr" style="text-align: center;">~endaddr</td>
-                        <td id="fill" style="text-align: center;">~fill</td>
-                        <td id="mount" style="text-align: right;">~mount</td>
-                        <td id="mount2" style="text-align: right;">~mount2</td>
+                        <td id="inmount" style="text-align: right;">~inmount</td>
+                        <td id="mount3" style="text-align: right;">~mount3</td>
+                        <td id="mount4" style="text-align: right;">~mount4</td>
                         <td id="caseno" style="text-align: left;">~caseno</td>
                         <td id="caseno2" style="text-align: left;">~caseno2</td>
+                        <td id="fill" style="text-align: center;">~fill</td>
                     </tr>
                 </table>
             </div>
