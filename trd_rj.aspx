@@ -798,6 +798,7 @@
                     <td align="center" style="width:200px;"><a id='lblEndaddr_s'> </a></td>
                     <td align="center" style="width:80px;"><a id='lblProduct_s'> </a></td>
                     <td align="center" style="width:80px;"><a id='lblMount_s'> </a></td>
+                    <td align="center" style="width:80px;">計價單位</a></td>
                     <td align="center" style="width:80px;"><a id='lblPrice_s'> </a></td>
                     <td align="center" style="width:80px;"><a id='lblTotal_s'> </a></td>
                     <td align="center" style="width:80px;"><a id='lblCarno_s'> </a></td>
@@ -828,6 +829,9 @@
                     </td>
                     <td >
                     <input type="text" id="txtMount.*" style="width:95%;text-align: right;" />
+                    </td>
+                    <td >
+                    <input type="text" id="txtUnit.*" style="width:95%;" />
                     </td>
                     <td >
                     <input type="text" id="txtPrice.*" style="width:95%;text-align: right;" />
