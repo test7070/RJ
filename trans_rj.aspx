@@ -21,7 +21,7 @@
 
             var q_name = "trans";
             var q_readonly = ['txtNoa','txtOrdeno','txtWorker','txtWorker2'];
-            var bbmNum = [['txtInmount',10,3,1],['txtPton',10,3,1],['txtOutmount',10,3,1],['txtPton2',10,3,1]];
+            var bbmNum = [['txtInmount',10,3,1],['txtMount3',10,3,1],['txtMount4',10,3,1],['txtPton',10,3,1],['txtOutmount',10,3,1],['txtPton2',10,3,1]];
             var bbmMask = [];
             q_sqlCount = 6;
             brwCount = 6;
@@ -156,6 +156,8 @@
                     $('#txtStraddrno').attr('readonly','readonly').css('color','green').css('background','rgb(237,237,237)');
                     $('#txtStraddr').attr('readonly','readonly').css('color','green').css('background','rgb(237,237,237)');
                     $('#txtInmount').attr('readonly','readonly').css('color','green').css('background','rgb(237,237,237)');
+                    $('#txtMount3').attr('readonly','readonly').css('color','green').css('background','rgb(237,237,237)');
+                    $('#txtMount4').attr('readonly','readonly').css('color','green').css('background','rgb(237,237,237)');
                     $('#txtPton').attr('readonly','readonly').css('color','green').css('background','rgb(237,237,237)');
                     $('#txtPrice').attr('readonly','readonly').css('color','green').css('background','rgb(237,237,237)');
                     
@@ -251,6 +253,12 @@
                     sum();
                 });
                 $('#txtInmount').change(function(){
+                    sum();
+                });
+                $('#txtMount3').change(function(){
+                    sum();
+                });
+                $('#txtMount4').change(function(){
                     sum();
                 });
                 $('#txtPton').change(function(){
@@ -374,9 +382,10 @@
                         }
                         if(abbm[q_recno]!=undefined)
                             $("#cmbCarteamno").val(abbm[q_recno].carteamno);  
-                        q_gt('custunit', '', 0, 0, 0, 'transInit3'); 
+                        q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
                         break;
-                    case 'transInit3':
+                    
+                    /*case 'transInit3':
                         var as = _q_appendData("custunit", "", true);
                          if(as[0] != undefined){
                             var t_item=" ";
@@ -407,8 +416,8 @@
                             }
                             q_cmbParse("combDriverunit2", t_item);
                         }
-                        q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
-                        break;
+                        
+                        break;*/
                     case q_name:
                         if (q_cur == 4)
                             q_Seek_gtPost();
@@ -827,21 +836,24 @@
                             <input id="txtUccno"  type="text" style="float:left;width:30%;"/>
                             <input id="txtProduct"  type="text" style="float:left;width:70%;"/>
                         </td>
-                        <td><span> </span><a id="lblFill" class="lbl"> </a></td>
-                        <td><input id="txtFill"  type="text" class="txt c1"/></td>
                     </tr>
                     <tr>
-                        <td><span> </span><a id="lblInmount" class="lbl"> </a></td>
+                        <td><span> </span><a class="lbl">台數</a></td>
                         <td>
                             <input id="txtInmount"  type="text" class="txt c1 num"/>
                             <input id="txtMount"  type="text" style="display:none;"/>
                         </td>
-                        <td><span> </span><a id="lblUnit" class="lbl"> </a></td>
-                        <td><select id="cmbUnit" class="txt c1"> </select></td>
+                        <td><span> </span><a class="lbl">米數</a></td>
+                        <td><input id="txtMount3"  type="text" class="txt c1 num"/></td>
+                        <td><span> </span><a class="lbl">噸數</a></td>
+                        <td><input id="txtMount4"  type="text" class="txt c1 num"/></td>
+                        
                         <td><span> </span><a id="lblPton" class="lbl" style="display:none;"> </a></td>
                         <td><input id="txtPton"  type="text" class="txt c1 num" style="display:none;"/></td>
                     </tr>
-                    <tr>
+                    <tr style="display:none;">
+                        <td><span> </span><a class="lbl">計價單位</a></td>
+                        <td><select id="cmbUnit" class="txt c1"> </select></td>
                         <td><span> </span><a id="lblOutmount" class="lbl"> </a></td>
                         <td>
                             <input id="txtOutmount"  type="text" class="txt c1 num"/>
@@ -865,6 +877,8 @@
                             <input id="txtCaseno"  type="text" style="float:left;width:50%;"/>
                             <input id="txtCaseno2"  type="text" style="float:left;width:50%;"/>
                         </td>
+                        <td><span> </span><a id="lblFill" class="lbl"> </a></td>
+                        <td><input id="txtFill"  type="text" class="txt c1"/></td>
                         <td colspan="2"><a id="lblCasenoerrmsg" style="display:none;color:darkred;">貨櫃編號錯誤。</a></td>
                     </tr>
                     <tr style="display:none;">
