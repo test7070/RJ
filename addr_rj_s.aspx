@@ -41,8 +41,8 @@
                 t_productno = $('#txtProductno').val();
                 t_product = $('#txtProduct').val();
                 var t_where = " 1=1 " + q_sqlPara2("noa", t_noa) 
-                    + q_sqlPara2("straddrno", t_productno)
-                    + q_sqlPara2("endaddrno", t_productno)
+                    + q_sqlPara2("straddrno", t_straddrno)
+                    + q_sqlPara2("endaddrno", t_endaddrno)
                     + q_sqlPara2("productno", t_productno);
                 if(t_straddr.length>0)
                     t_where += " and charindex('"+t_straddr+"',straddr)>0";
