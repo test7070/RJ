@@ -85,34 +85,19 @@
                 $('#btnTrans').click(function(e) {
                     if (!(q_cur == 1 || q_cur == 2))
                         return;
-                    Lock(1, {
-                        opacity : 0
-                    });
-                    if ($.trim($('#txtCustno').val()) == 0) {
-                        alert('請輸入客戶');
-                        Unlock(1);
-                        return false;
-                    }
-                    if ($.trim($('#txtDatea').val()) == 0) {
-                        alert('請輸入' + q_getMsg('lblDatea'));
-                        Unlock(1);
-                        return false;
-                    }
-                    var t_noa = $.trim($('#txtNoa').val());
-                    var t_custno = $.trim($('#txtCustno').val());
-                    var t_btrandate = $.trim($('#txtBtrandate').val());
-                    var t_etrandate = $.trim($('#txtEtrandate').val());
-                    var t_baddrno = $.trim($('#txtStraddrno').val());
-                    var t_eaddrno = $.trim($('#txtEndaddrno').val());
-                    var t_where = "(b.noa is null or b.noa='" + t_noa + "')";
-                    t_where += " and a.custno='" + t_custno + "'";
-                    t_where += t_btrandate.length > 0 ? " and a.trandate>='" + t_btrandate + "'" : "";
-                    t_where += t_etrandate.length > 0 ? " and a.trandate<='" + t_etrandate + "'" : "";
-                    t_where += t_baddrno.length > 0 ? " and a.straddrno='" + t_baddrno + "'" : "";
-                    t_where += t_eaddrno.length > 0 ? " and a.endaddrno='" + t_eaddrno + "'" : "";
-                    t_where = "where=^^" + t_where + "^^;order=^^a.trandate,a.noa^^";
-                    //一次最多匯入500筆
-                    q_gt('trd_tran_rj', t_where, 500, 0, 0, "", r_accy);
+                    var t_noa = $('#txtNoa').val();    
+                    var t_custno = $('#txtCustno').val();
+                    var t_bdate = $('#txtBtrandate').val();
+                    var t_edate = $('#txtEtrandate').val();
+                    var t_straddrno = $('#txtStraddrno').val();
+                    var t_endaddrno = $('#txtEndaddrno').val();
+                    if (t_custno.length > 0) {
+                        Lock(1, {
+                            opacity : 0
+                        });
+                        q_func('qtxt.query.trd', 'trd.txt,trd_rj,' + encodeURI(t_noa) + ';' + encodeURI(t_custno) + ';' + encodeURI(t_bdate) + ';' + encodeURI(t_edate)+ ';' + encodeURI(t_straddrno)+ ';' + encodeURI(t_endaddrno));
+                    } else
+                        alert('請輸入客戶。');
                 });
                 $("#btnCustchg").click(function(e) {
                     Lock(1, {
@@ -141,6 +126,29 @@
                     t_where = "  buyerno='" + $('#txtCustno').val() + "' and (trdno='" + $('#txtNoa').val() + "' or len(isnull(trdno,''))=0) ";
                     q_box("vcca_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where + ";;" + t_vccano + ";", 'vcca1', "95%", "650px", q_getMsg('popVcca'));
                 });
+            }
+            function q_funcPost(t_func, result) {
+                switch(t_func) {
+                    case 'qtxt.query.trd':
+                        var as = _q_appendData("tmp0", "", true, true);
+                        if (as[0] != undefined) {
+                            q_gridAddRow(bbsHtm, 'tbbs'
+                                ,'txtTrandate,txtTranaccy,txtTranno,txtTrannoq,txtCarno,txtStraddr,txtEndaddr,txtUnit'
+                                +',txtMount,txtPrice,txtProduct,txtTotal,txtTranmoney', as.length, as
+                                ,'trandate,accy,noa,noq,carno,straddr,endaddr,unit'
+                                +',mount,price,product,product,total,total', '', '');
+                            for ( i = 0; i < q_bbsCount; i++) {
+                                if (i < as.length) {
+                                } else {
+                                    _btnMinus("btnMinus_" + i);
+                                }
+                            }
+                            sum();
+                            Unlock(1);
+                            $('#txtCustno').focus();
+                        }
+                        break;
+                }
             }
             function q_gtPost(t_name) {
                 switch (t_name) {
@@ -350,7 +358,7 @@
                             e.preventDefault();
                             var n = $(this).attr('id').replace('txtTranno_', '');
                             var t_accy = $('#txtTranaccy_' + n).val();
-                            q_box("trans_tb.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa='" + $(this).val() + "';" + t_accy, 'trans', "95%", "95%", q_getMsg("popTrans"));
+                            q_box("trans_rj.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa='" + $(this).val() + "';" + t_accy, 'trans', "95%", "95%", q_getMsg("popTrans"));
                             
                         });
                         $('#txtPrice_'+j).change(function(e){
