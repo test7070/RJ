@@ -21,9 +21,9 @@
             q_tables = 's';
             var q_name = "tre";
             var q_readonly = ['txtAccno', 'txtNoa', 'txtMoney', 'txtTotal', 'txtCarchgno', 'txtWorker2', 'txtWorker', 'txtRc2ano', 'txtPaydate', 'txtPlusmoney', 'txtMinusmoney', 'txtAccno', 'txtAccno2', 'txtYear2', 'txtYear1'];
-            var q_readonlys = ['txtOrdeno', 'txtTranno', 'txtTrannoq', 'txtTranaccy','txtMount','txtPrice','txtDiscount','txtMoney'];
+            var q_readonlys = ['txtOrdeno', 'txtTranno', 'txtTrannoq', 'txtTranaccy','txtMount','txtPrice','txtMoney'];
             var bbmNum = [['txtMoney', 10, 0], ['txtTotal', 10, 0], ['txtPlusmoney', 10, 0], ['txtMinusmoney', 10, 0]];
-            var bbsNum = [['txtMount', 10, 3], ['txtPrice', 10, 3], ['txtDiscount', 10, 3], ['txtMoney', 10, 0]];
+            var bbsNum = [['txtMount', 10, 3], ['txtPrice', 10, 3], ['txtMoney', 10, 0]];
             var bbmMask = [];
             var bbsMask = [];
             q_sqlCount = 6;
@@ -210,8 +210,7 @@
                             e.preventDefault();
                             var n = $(this).attr('id').replace('txtTranno_', '');
                             var t_accy = $('#txtTranaccy_' + n).val();
-                            q_box("trans_tb.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa='" + $(this).val() + "';" + t_accy, 'trans', "95%", "95%", q_getMsg("popTrans"));
-                            
+                            q_box("trans_rj.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";noa='" + $(this).val() + "';" + t_accy, 'trans', "95%", "95%", q_getMsg("popTrans"));
                         });
                         $('#txtPrice_'+j).change(function(e){
                             sum();
@@ -257,9 +256,7 @@
                 if (!(q_cur == 1 || q_cur == 2))
                     return;
                 var t_money = 0, t_moneys = 0, t_total = 0;
-                for ( i = 0; i < q_bbsCount; i++) {
-                    //t_money = round(q_mul(q_mul(q_float('txtMount_'+i),q_float('txtPrice_'+i)),q_fload('txtDiscount')),0);
-                    //$('#txtMoney_'+i).val(t_money);
+                for ( i = 0; i < q_bbsCount; i++) {                  
                     t_money = q_float('txtMoney_'+i);
                     t_moneys += t_money;
                 }
@@ -633,18 +630,12 @@
                     <td align="center" style="width:200px;"><a id='lblStraddr_tb'> </a></td>
                     <td align="center" style="width:200px;"><a id='lblEndaddr_tb'> </a></td>
                     <td align="center" style="width:200px;"><a id='lblProduct_s'> </a></td>
+                    <td align="center" style="width:50px;">計價方式</td>
                     <td align="center" style="width:100px;"><a id='lblMount_s'> </a></td>
                     <td align="center" style="width:100px;"><a id='lblPrice_s'> </a></td>
-                    <td align="center" style="width:100px;"><a id='lblDiscount_s'> </a></td>
                     <td align="center" style="width:100px;"><a id='lblMoney_s'> </a></td>
                     <td align="center" style="width:100px;"><a id='lblMemo_s'> </a></td>
                     <td align="center" style="width:170px;"><a id='lblTranno_s'> </a></td>
-                    <td align="center" style="width:100px;"><a id='lblRs_s'> </a></td>
-                    <td align="center" style="width:100px;"><a id='lblPaymemo_s'> </a></td>
-                    <td align="center" style="width:100px;"><a id='lblFill_s'> </a></td>
-                    <td align="center" style="width:100px"><a id='lblCasetype_s'> </a></td>
-                    <td align="center" style="width:150px;"><a id='lblCaseno_s'> </a></td>
-                    <td align="center" style="width:150px;"><a id='lblCaseno2_s'> </a></td>
                 </tr>
                 <tr style='background:#cad3ff;'>
                     <td align="center">
@@ -670,13 +661,13 @@
                     <input type="text" id="txtProduct.*" style="width:95%;" />
                     </td>
                     <td>
+                    <input type="text" id="txtUnit.*" style="width:95%;" />
+                    </td>
+                    <td>
                     <input type="text" id="txtMount.*" style="width:95%;text-align: right;" />
                     </td>
                     <td>
                     <input type="text" id="txtPrice.*" style="width:95%;text-align: right;" />
-                    </td>
-                    <td>
-                    <input type="text" id="txtDiscount.*" style="width:95%;text-align: right;" />
                     </td>
                     <td>
                     <input type="text" id="txtMoney.*" style="width:95%;text-align: right;"/>
@@ -686,25 +677,7 @@
                     </td>
                     <td>
                     <input type="text" id="txtTranno.*" style="float:left;width: 95%;"/>
-                    </td>
-                    <td>
-                    <input type="text" id="txtRs.*" style="width:95%;"/>
-                    </td>
-                    <td>
-                    <input type="text" id="txtPaymemo.*" style="width:95%;"/>
-                    </td>
-                    <td>
-                    <input type="text" id="txtFill.*" style="width:95%;"/>
-                    </td>
-                    <td>
-                    <input type="text" id="txtCasetype.*" style="width:95%;"/>
-                    </td>
-                    <td>
-                    <input type="text" id="txtCaseno.*" style="width:95%;"/>
-                    </td>
-                    <td>
-                    <input type="text" id="txtCaseno2.*" style="width:95%;"/>
-                    </td>
+                    </td>                   
                 </tr>
             </table>
         </div>
