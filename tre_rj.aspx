@@ -630,7 +630,7 @@
                     <td align="center" style="width:200px;"><a id='lblStraddr_tb'> </a></td>
                     <td align="center" style="width:200px;"><a id='lblEndaddr_tb'> </a></td>
                     <td align="center" style="width:200px;"><a id='lblProduct_s'> </a></td>
-                    <td align="center" style="width:50px;">計價方式</td>
+                    <td align="center" style="width:80px;">計價方式</td>
                     <td align="center" style="width:100px;"><a id='lblMount_s'> </a></td>
                     <td align="center" style="width:100px;"><a id='lblPrice_s'> </a></td>
                     <td align="center" style="width:100px;"><a id='lblMoney_s'> </a></td>
