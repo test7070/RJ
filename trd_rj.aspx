@@ -144,9 +144,12 @@
                                 }
                             }
                             sum();
-                            Unlock(1);
-                            $('#txtCustno').focus();
                         }
+                        else{
+                            alert('無資料');
+                        }
+                        Unlock(1);
+                        $('#txtCustno').focus();
                         break;
                 }
             }
