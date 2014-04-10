@@ -21,7 +21,7 @@
 
             var q_name = "trans";
             var q_readonly = ['txtNoa','txtOrdeno','txtWorker','txtWorker2'];
-            var bbmNum = [['txtInmount',10,3,1],['txtMount3',10,3,1],['txtMount4',10,3,1],['txtPton',10,3,1],['txtOutmount',10,3,1],['txtPton2',10,3,1]];
+            var bbmNum = [['txtInmount',10,0,1],['txtMount3',10,3,1],['txtMount4',10,3,1],['txtMiles',10,0,1],['txtReserve',10,0,1]];
             var bbmMask = [];
             q_sqlCount = 6;
             brwCount = 6;
@@ -55,8 +55,7 @@
                 /*新增時複製的欄位*/
                 include : ['txtDatea', 'txtTrandate','txtCarno','txtDriverno','txtDriver'
                     ,'txtCustno','txtComp','txtNick','cmbCalctype','cmbCarteamno','txtStraddrno','txtStraddr','txtEndaddrno','txtEndaddr'
-                    ,'txtUccno','txtProduct','txtInmount'
-                    ,'txtOutmount','txtPo','txtCustorde','cmbUnit','txtUnit2'],
+                    ,'txtUccno','txtProduct'],
                 /*記錄當前的資料*/
                 copy : function() {
                     this.data = new Array();
@@ -292,7 +291,20 @@
                 $('#combDriverunit2').change(function(e){
                     if($(this).is(":visible"))
                         $('#txtUnit2').val($(this).find(":selected").text());
-                });    
+                }); 
+                $('#btnCopy').click(function(e){
+                    curData.copy();
+                    _btnIns();
+                    curData.paste();
+                    $('#txtNoa').val('AUTO');
+                    $('#txtNoq').val('001');
+                    if($('#cmbCalctype').val().length==0){
+                        $('#cmbCalctype').val(trans.calctype[0].noa);
+                    }
+                    trans.calctypeChange();
+                    trans.refresh();
+                    $('#txtDatea').focus();
+                });   
                 q_xchgForm();
             }
 
@@ -450,9 +462,9 @@
             }
 
             function btnIns() {
-                curData.copy();
+                //curData.copy();
                 _btnIns();
-                curData.paste();
+                //curData.paste();
                 $('#txtNoa').val('AUTO');
                 $('#txtNoq').val('001');
                 if($('#cmbCalctype').val().length==0){
@@ -549,10 +561,12 @@
                 if(q_cur==1 || q_cur==2){
                     $('#combDriverunit').removeAttr('disabled');
                     $('#combDriverunit2').removeAttr('disabled');
+                    $('#btnCopy').attr('disabled','disabled');
                 }
                 else{
                     $('#combDriverunit').attr('disabled','disabled');
                     $('#combDriverunit2').attr('disabled','disabled');
+                    $('#btnCopy').removeAttr('disabled');
                 }
             }
 
@@ -738,6 +752,7 @@
     ondrop="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();"
     >
         <!--#include file="../inc/toolbar.inc"-->
+        <input type="button" id="btnCopy" value="複製" style="width:100px;">
         <div id="dmain">
             <div class="dview" id="dview">
                 <table class="tview" id="tview">
@@ -753,7 +768,9 @@
                         <td align="center" style="width:100px; color:black;">品名</a></td>
                         <td align="center" style="width:60px; color:black;">台數</a></td>
                         <td align="center" style="width:60px; color:black;">米數</a></td>
-                        <td align="center" style="width:60px; color:black;">噸數</a></td>                       
+                        <td align="center" style="width:60px; color:black;">噸數</a></td> 
+                        <td align="center" style="width:60px; color:black;">油費</a></td>  
+                        <td align="center" style="width:60px; color:black;">里程數</a></td>                        
                     </tr>
                     <tr>
                         <td ><input id="chkBrow.*" type="checkbox"/></td>
@@ -765,9 +782,11 @@
                         <td id="straddr" style="text-align: center;">~straddr</td>
                         <td id="endaddr" style="text-align: center;">~endaddr</td>
                         <td id="product" style="text-align: center;">~product</td>
-                        <td id="inmount" style="text-align: right;">~inmount</td>
-                        <td id="mount3" style="text-align: right;">~mount3</td>
-                        <td id="mount4" style="text-align: right;">~mount4</td>
+                        <td id="inmount,0" style="text-align: right;">~inmount,0</td>
+                        <td id="mount3,3" style="text-align: right;">~mount3,3</td>
+                        <td id="mount4,3" style="text-align: right;">~mount4,3</td>
+                        <td id="reserve,0" style="text-align: right;">~reserve,0</td>
+                        <td id="miles,0" style="text-align: right;">~miles,0</td>
                     </tr>
                 </table>
             </div>
@@ -870,6 +889,12 @@
                         <td><input id="txtPton2"  type="text" class="txt c1 num" style="display:none;"/></td>
                     </tr>
                     <tr>
+                        <td><span> </span><a class="lbl">油費</a></td>
+                        <td><input id="txtReserve"  type="text" class="txt c1 num"/></td>
+                        <td><span> </span><a class="lbl">里程數</a></td>
+                        <td><input id="txtMiles"  type="text" class="txt c1 num"/></td>
+                    </tr>
+                    <tr style="display:none;">
                         <td><span> </span><a id="lblCaseno" class="lbl"> </a></td>
                         <td colspan="3">
                             <input id="txtCaseno"  type="text" style="float:left;width:50%;"/>
@@ -893,16 +918,6 @@
                         <td colspan="2"><input id="txtPo"  type="text" class="txt c1"/></td>
                         <td><span> </span><a id="lblCustorde" class="lbl"> </a></td>
                         <td colspan="2"><input id="txtCustorde" type="text" class="txt c1"/></td>
-                    </tr>
-                    <tr style="display:none;">
-                        <td><span> </span><a id="lblBmiles" class="lbl"> </a></td>
-                        <td><input id="txtBmiles"  type="text" class="txt c1 num"/></td>
-                        <td><span> </span><a id="lblEmiles" class="lbl"> </a></td>
-                        <td><input id="txtEmiles"  type="text" class="txt c1 num"/></td>
-                        <td><span> </span><a id="lblMiles" class="lbl"> </a></td>
-                        <td><input id="txtMiles"  type="text" class="txt c1 num"/></td>
-                        <td><span> </span><a id="lblGps" class="lbl"> </a></td>
-                        <td><input id="txtGps"  type="text" class="txt c1 num"/></td>
                     </tr>
                     <tr>
                         <td><span> </span><a id="lblMemo" class="lbl"> </a></td>
