@@ -122,7 +122,7 @@
             function q_funcPost(t_func, result) {
                 switch(t_func) {
                     case 'qtxt.query.tre':
-                        var as = _q_appendData("tmp0", "", true, true);
+                        /*var as = _q_appendData("tmp0", "", true, true);
                         if (as[0] != undefined) {
                             for (var i = 0; i < as.length; i++) {
                                 q_func('tre_post.post', as[i].noa.substring(2, 5) + ',' + as[i].noa + ',0');
@@ -130,7 +130,7 @@
                                 q_func('tre_post.post', as[i].noa.substring(2, 5) + ',' + as[i].noa + ',1');
                                 // post 1
                             }
-                        }
+                        }*/
                         location.reload();
                         break;
                 }

@@ -21,7 +21,7 @@
 
             var q_name = "trans";
             var q_readonly = ['txtNoa','txtOrdeno','txtWorker','txtWorker2'];
-            var bbmNum = [['txtInmount',10,0,1],['txtMount3',10,3,1],['txtMount4',10,3,1],['txtMiles',10,0,1],['txtReserve',10,0,1]];
+            var bbmNum = [['txtInmount',10,0,1],['txtMount3',10,3,1],['txtMount4',10,3,1],['txtTolls',10,3,1],['txtMiles',10,0,1],['txtReserve',10,0,1]];
             var bbmMask = [];
             q_sqlCount = 6;
             brwCount = 6;
@@ -472,6 +472,7 @@
                 }
                 trans.calctypeChange();
                 trans.refresh();
+                $('#txtDatea').val(q_date);
                 $('#txtDatea').focus();
             }
             function btnModi() {
@@ -769,6 +770,7 @@
                         <td align="center" style="width:60px; color:black;">台數</a></td>
                         <td align="center" style="width:60px; color:black;">米數</a></td>
                         <td align="center" style="width:60px; color:black;">噸數</a></td> 
+                        <td align="center" style="width:60px; color:black;">公升</a></td> 
                         <td align="center" style="width:60px; color:black;">油費</a></td>  
                         <td align="center" style="width:60px; color:black;">里程數</a></td>                        
                     </tr>
@@ -785,6 +787,7 @@
                         <td id="inmount,0" style="text-align: right;">~inmount,0</td>
                         <td id="mount3,3" style="text-align: right;">~mount3,3</td>
                         <td id="mount4,3" style="text-align: right;">~mount4,3</td>
+                        <td id="tolls,3" style="text-align: right;">~tolls,3</td>
                         <td id="reserve,0" style="text-align: right;">~reserve,0</td>
                         <td id="miles,0" style="text-align: right;">~miles,0</td>
                     </tr>
@@ -808,6 +811,8 @@
                         <td><input id="txtDatea"  type="text" class="txt c1"/></td>
                         <td><span> </span><a id="lblTrandate" class="lbl"> </a></td>
                         <td><input id="txtTrandate"  type="text" class="txt c1"/></td>
+                    </tr>
+                    <tr style="display:none;">
                         <td><span> </span><a id="lblCalctype" class="lbl"> </a></td>
                         <td><select id="cmbCalctype" class="txt c1"> </select></td>
                         <td><span> </span><a id="lblCarteam" class="lbl"> </a></td>
@@ -841,6 +846,8 @@
                             <input id="txtStraddrno"  type="text" style="float:left;width:30%;"/>
                             <input id="txtStraddr"  type="text" style="float:left;width:70%;"/>
                         </td>
+                    </tr>
+                    <tr>
                         <td><span> </span><a id="lblEndaddr_tb" class="lbl btn"> </a></td>
                         <td colspan="3">
                             <input id="txtEndaddrno"  type="text" style="float:left;width:30%;"/>
@@ -889,6 +896,8 @@
                         <td><input id="txtPton2"  type="text" class="txt c1 num" style="display:none;"/></td>
                     </tr>
                     <tr>
+                        <td><span> </span><a class="lbl">公升</a></td>
+                        <td><input id="txtTolls"  type="text" class="txt c1 num"/></td>
                         <td><span> </span><a class="lbl">油費</a></td>
                         <td><input id="txtReserve"  type="text" class="txt c1 num"/></td>
                         <td><span> </span><a class="lbl">里程數</a></td>
