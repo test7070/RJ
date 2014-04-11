@@ -37,7 +37,7 @@
                              ['txtEndaddrno', 'lblEndaddr', 'endaddr_rj', 'noa,addr', 'txtEndaddrno,txtEndaddr', 'endaddr_rj_b.aspx'],
                              ['txtProductno', 'lblProductno', 'ucc', 'noa,product', 'txtProductno,txtProduct', 'ucc_b.aspx'],
                              ['txtSalesno_', '', 'sss', 'noa,namea', 'txtSalesno_,txtSales_', 'sss_b.aspx'],
-                             ['txtCustno_', 'btnCust_', 'cust', 'noa,nick', 'txtCustno_,txtCust_', 'cust_b.aspx']);
+                             ['txtCustno', 'lblCustno', 'cust', 'noa,comp,nick', 'txtCustno,txtCust', 'cust_b.aspx']);
             $(document).ready(function() {
                 bbmKey = ['noa'];
                 bbsKey = ['noa', 'noq'];
@@ -227,12 +227,7 @@
             }
 
             function btnPrint() {
-                //q_box('z_addr_rj.aspx' + "?;;;;" + r_accy, '', "95%", "95%", q_getMsg("popPrint"));
-                /*if(r_rank>8)
-                    q_box("z_addr.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";;" + r_accy,'z_addr', "95%", "95%", q_getMsg("popPrint"));
-                else
-                    q_gt('authority',"where=^^ a.noa='z_addr' and a.sssno='"+r_userno+"'^^", 0, 0, 0, "z_addr", r_accy);
-               */
+                q_box('z_addr_rj.aspx' + "?;;;;" + r_accy + ";noa=" + trim($('#txtNoa').val()), '', "95%", "95%", q_getMsg("popPrint"));
             }
 
             function wrServer(key_value) {
@@ -445,9 +440,10 @@
                     <tr>
                         <td align="center" style="width:20px; color:black;"><a id='vewChk'> </a></td>
                         <td align="center" style="width:100px; color:black;"><a id='vewNoa'> </a></td>
-                        <td align="center" style="width:200px; color:black;"><a id='vewStraddr'> </a></td>
-                        <td align="center" style="width:200px; color:black;"><a id='vewEndaddr'> </a></td>
+                        <td align="center" style="width:150px; color:black;"><a id='vewStraddr'> </a></td>
+                        <td align="center" style="width:150px; color:black;"><a id='vewEndaddr'> </a></td>
                         <td align="center" style="width:150px; color:black;"><a id='vewProductno'> </a></td>
+                        <td align="center" style="width:120px; color:black;">客戶</td>
                     </tr>
                     <tr>
                         <td><input id="chkBrow.*" type="checkbox" /></td>
@@ -455,6 +451,7 @@
                         <td style="text-align: left;" id='straddr'>~straddr</td>
                         <td style="text-align: left;" id='endaddr'>~endaddr</td>
                         <td style="text-align: left;" id='product'>~product</td>
+                        <td style="text-align: left;" id='nick'>~nick</td>
                     </tr>
                 </table>
             </div>
@@ -496,7 +493,14 @@
                             <input id="txtProduct" type="text" style="float:left; width:60%;"/>
                         </td>
                     </tr>
-                    
+                    <tr>
+                        <td><span> </span><a id='lblCustno' class="lbl btn"> </a></td>
+                        <td colspan="3">
+                            <input id="txtCustno" type="text" style="float:left; width:40%;"/>
+                            <input id="txtCust" type="text" style="float:left; width:60%;"/>
+                            <input id="txtNick" type="text" style="display:none;"/>                            
+                        </td>
+                    </tr>
                 </table>
             </div>
         </div>
@@ -507,7 +511,6 @@
                     <input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  />
                     </td>
                     <td align="center" style="width:80px;"><a id='lblDatea_s'> </a></td>
-                    <td align="center" style="width:140px;"><a id='lblCust_tb'> </a></td>
                     <td align="center" style="width:80px;"><a id='lblDriverunit_tb'> </a><br>計價方式</td>
                     <td align="center" style="width:80px;"><a id='lblDriverprice_tb'> </a></td>
                     <td align="center" style="width:80px;"><a id='lblDriverunit2_tb'> </a><br>計價方式</td>
@@ -524,11 +527,6 @@
                     <input id="txtNoq.*" type="text" style="display: none;" />
                     </td>
                     <td><input type="text" id="txtDatea.*" style="width:95%;"/></td>
-                    <td>
-                        <input type="button" id="btnCust.*" style="width:1%;float:left;"/>
-                        <input type="text" id="txtCustno.*" style="width:40%;float:left;"/>
-                        <input type="text" id="txtCust.*" style="width:40%;float:left;"/>
-                    </td>
                     <td><select id="cmbDriverunit.*" style="width:95%;"> </select></td>
                     <td><input type="text" id="txtDriverprice.*" style="width:95%;text-align:right;"/></td>
                     <td><select id="cmbDriverunit2.*" style="width:95%;"> </select></td>
