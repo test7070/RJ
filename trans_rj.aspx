@@ -129,14 +129,11 @@
                     this.priceChange();
                 },
                 priceChange : function(){
-                   /*var t_straddrno = $.trim($('#txtStraddrno').val());
+                    var t_straddrno = $.trim($('#txtStraddrno').val());
                     var t_endaddrno = $.trim($('#txtEndaddrno').val());
-                    var t_productno = $.trim($('#txtUccno').val());
-                    var t_date = $.trim($('#txtTrandate').val());
-                    var t_unit = $.trim($('#txtUnit').val());
                     
-                    t_where = "b.straddrno='"+t_straddrno+"' and b.endaddrno='"+t_endaddrno+"' and b.productno='"+t_productno+"' and a.datea<='"+t_date+"' and a.custunit='"+t_unit+"'";
-                    q_gt('addr_tb', "where=^^"+t_where+"^^", 0, 0, 0, 'getPrice_cust');*/
+                    t_where = "straddrno='"+t_straddrno+"' and endaddrno='"+t_endaddrno+"'";
+                    q_gt('addr', "where=^^"+t_where+"^^", 0, 0, 0, 'getCust');
                 },
                 checkData : function(){
                     this.isTrd = false;
@@ -319,47 +316,12 @@
 
             function q_gtPost(t_name) {
                 switch (t_name) { 
-                    case 'getPrice_driver':
-                        var t_price = 0;
-                        var as = _q_appendData("addrs", "", true);
+                    case 'getCust':
+                        var as = _q_appendData("addr", "", true);
                         if(as[0]!=undefined){
-                            t_price = as[0].driverprice;
-                        }
-                        $('#txtPrice2').val(t_price);
-                        $('#txtPrice3').val(0);
-                        
-                        sum();
-                        break; 
-                    case 'getPrice_driver2':
-                        var t_price = 0;
-                        var as = _q_appendData("addrs", "", true);
-                        if(as[0]!=undefined){
-                            t_price = as[0].driverprice2;
-                        }
-                        $('#txtPrice2').val(0);
-                        $('#txtPrice3').val(t_price);
-                        
-                        sum();
-                        break;    
-                    case 'getPrice_cust':
-                        var t_price = 0;
-                        var as = _q_appendData("addrs", "", true);
-                        if(as[0]!=undefined){
-                            t_price = as[0].custprice;
-                        }
-                        $('#txtPrice').val(t_price);
-                        
-                        var t_straddrno = $.trim($('#txtStraddrno').val());
-                        var t_endaddrno = $.trim($('#txtEndaddrno').val());
-                        var t_productno = $.trim($('#txtUccno').val());
-                        var t_date = $.trim($('#txtTrandate').val());
-                        var t_unit = $.trim($('#txtUnit2').val());
-                        if(trans.isoutside){
-                            t_where = "b.straddrno='"+t_straddrno+"' and b.endaddrno='"+t_endaddrno+"' and b.productno='"+t_productno+"' and a.datea<='"+t_date+"' and a.driverunit2='"+t_unit+"'";
-                            q_gt('addr_tb', "where=^^"+t_where+"^^", 0, 0, 0, 'getPrice_driver2');
-                        }else{
-                            t_where = "b.straddrno='"+t_straddrno+"' and b.endaddrno='"+t_endaddrno+"' and b.productno='"+t_productno+"' and a.datea<='"+t_date+"' and a.driverunit='"+t_unit+"'";
-                            q_gt('addr_tb', "where=^^"+t_where+"^^", 0, 0, 0, 'getPrice_driver');
+                            $('#txtCustno').val(as[0].custno);
+                            $('#txtComp').val(as[0].cust);
+                            $('#txtNick').val(as[0].nick);
                         }
                         break;
                     case 'transInit1':
@@ -828,19 +790,6 @@
                         </td>
                     </tr>
                     <tr>
-                        <td><span> </span><a id="lblCust" class="lbl btn"> </a></td>
-                        <td colspan="3">
-                            <input id="txtCustno"  type="text" style="float:left;width:30%;"/>
-                            <input id="txtComp"  type="text" style="float:left;width:70%;"/>
-                            <input id="txtNick" type="text" style="display:none;"/>
-                        </td>
-                        <td style="display:none;"><span> </span><a id="lblTgg btn" class="lbl"> </a></td>
-                        <td colspan="3" style="display:none;">
-                            <input id="txtTggno"  type="text" style="float:left;width:30%;"/>
-                            <input id="txtTgg"  type="text" style="float:left;width:70%;"/>
-                        </td>
-                    </tr>
-                    <tr>
                         <td><span> </span><a id="lblStraddr_tb" class="lbl btn"> </a></td>
                         <td colspan="3">
                             <input id="txtStraddrno"  type="text" style="float:left;width:30%;"/>
@@ -852,6 +801,19 @@
                         <td colspan="3">
                             <input id="txtEndaddrno"  type="text" style="float:left;width:30%;"/>
                             <input id="txtEndaddr"  type="text" style="float:left;width:70%;"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span> </span><a id="lblCust" class="lbl btn"> </a></td>
+                        <td colspan="3">
+                            <input id="txtCustno"  type="text" style="float:left;width:30%;"/>
+                            <input id="txtComp"  type="text" style="float:left;width:70%;"/>
+                            <input id="txtNick" type="text" style="display:none;"/>
+                        </td>
+                        <td style="display:none;"><span> </span><a id="lblTgg btn" class="lbl"> </a></td>
+                        <td colspan="3" style="display:none;">
+                            <input id="txtTggno"  type="text" style="float:left;width:30%;"/>
+                            <input id="txtTgg"  type="text" style="float:left;width:70%;"/>
                         </td>
                     </tr>
                     <tr>
