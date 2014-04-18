@@ -16,9 +16,12 @@
         <script type="text/javascript">
             var q_name = "trans_s";
             aPop = new Array(['txtCustno', 'lblCust', 'cust', 'noa,nick', 'txtCustno', 'cust_b.aspx'],
+            ['txtTggno', 'lblTggno_rj', 'tgg', 'noa,nick', 'txTggno', 'tgg_b.aspx'],
+            ['txtProductno', 'lblProductno_rj', 'ucc', 'noa,product', 'txProductno', 'ucc_b.aspx'],
             ['txtDriverno', 'lblDriver', 'driver', 'noa,namea', 'txtDriverno', 'driver_b.aspx'], 
-            ['txtStraddrno', 'lblStraddr', 'addr', 'noa,addr', 'txtStraddrno', 'addr_b.aspx'],
-            ['txtCarno', 'lblCarno', 'car2', 'a.noa,driverno,driver', 'txtCarno', 'car2_b.aspx']);
+            ['txtCarno', 'lblCarno', 'car2', 'a.noa,driverno,driver', 'txtCarno', 'car2_b.aspx'],
+            ['txtStraddrno', 'lblStraddrno_rj', 'straddr_rj', 'noa,addr', 'txtStraddrno', 'straddr_rj_b.aspx'],
+            ['txtEndaddrno', 'lblEndaddrno_rj', 'endaddr_rj', 'noa,addr', 'txtEndaddrno', 'endaddr_rj_b.aspx']);
             $(document).ready(function() {
                 main();
             });
@@ -65,30 +68,64 @@
 
             function q_seekStr() {
                 t_noa = $.trim($('#txtNoa').val());
-                t_driverno = $.trim($('#txtDriverno').val());
-                t_driver = $.trim($('#txtDriver').val());
-                t_custno = $.trim($('#txtCustno').val());
-                t_comp = $.trim($('#txtComp').val());
-                t_carno = $.trim($('#txtCarno').val());
-                t_straddrno = $.trim($('#txtStraddrno').val());
-
                 t_bdate = $('#txtBdate').val();
                 t_edate = $('#txtEdate').val();
                 t_btrandate = $('#txtBtrandate').val();
                 t_etrandate = $('#txtEtrandate').val();
-
+                t_carno = $.trim($('#txtCarno').val());
+                t_driverno = $.trim($('#txtDriverno').val());
+                t_driver = $.trim($('#txtDriver').val());
+                t_custno = $.trim($('#txtCustno').val());
+                t_comp = $.trim($('#txtComp').val());
+                t_productno = $.trim($('#txtProductno').val());
+                t_product = $.trim($('#txtProduct').val());
+                t_straddrno = $.trim($('#txtStraddrno').val());
+                t_endaddrno = $.trim($('#txtEndaddrno').val());
+                t_tggno = $.trim($('#txtTggno').val());
+                t_tgg = $.trim($('#txtTgg').val());
+                t_inmount = q_float('txtInmount');
+                t_mount3 = q_float('txtMount3');
+                t_mount4 = q_float('txtMount4');
+                t_tolls = q_float('txtTolls');
+                t_reserve = q_float('txtReserve');
+                t_miles = q_float('txtMiles');                
+                t_memo = $.trim($('#txtMemo').val());
+                    
                 var t_where = " 1=1 " 
                 + q_sqlPara2("noa", t_noa) 
                 + q_sqlPara2("datea", t_bdate, t_edate) 
                 + q_sqlPara2("Trandate", t_btrandate, t_etrandate) 
                 + q_sqlPara2("driverno", t_driverno) 
                 + q_sqlPara2("custno", t_custno) 
+                + q_sqlPara2("tggno", t_tggno) 
                 + q_sqlPara2("straddrno", t_straddrno) 
-                + q_sqlPara2("carno", t_carno) ;
+                + q_sqlPara2("carno", t_carno)
+                + q_sqlPara2("uccno", t_productno) ;
+                
+                
                 if (t_comp.length>0)
                     t_where += " and charindex('" + t_comp + "',comp)>0";
+                if (t_tgg.length>0)
+                    t_where += " and charindex('" + t_tgg + "',tgg)>0";
+                if (t_product.length>0)
+                    t_where += " and charindex('" + t_product + "',product)>0"; 
+                if (t_memo.length>0)
+                    t_where += " and charindex('" + t_memo + "',memo)>0";       
                 if (t_driver.length>0)
                     t_where += " and charindex('" + t_driver + "',driver)>0";
+                    
+                if(t_inmount!=0)
+                     t_where += " and inmount="+t_inmount;
+                 if(t_mount3!=0)
+                     t_where += " and mount="+t_mount3;
+                if(t_mount4!=0)
+                     t_where += " and mount4="+t_mount4;
+                if(t_tolls!=0)
+                     t_where += " and tolls="+t_tolls;
+                if(t_reserve!=0)
+                     t_where += " and reserve="+t_reserve;    
+                if(t_miles!=0)
+                     t_where += " and miles="+t_miles;              
                 t_where = ' where=^^' + t_where + '^^ ';
                 return t_where;
             }
@@ -173,14 +210,14 @@
                     <input class="txt" id="txtComp" type="text" style="width:215px; font-size:medium;" />
                     </td>
                 </tr>
-                <tr class='seek_tr' style="display:none;">
-                    <td class='seek'  style="width:20%;"><a id='lblProductno'></a></td>
+                <tr class='seek_tr'>
+                    <td class='seek'  style="width:20%;"><a id='lblProductno_rj'>物品編號</a></td>
                     <td>
                     <input class="txt" id="txtProductno" type="text" style="width:215px; font-size:medium;" />
                     </td>
                 </tr>
-                <tr class='seek_tr' style="display:none;">
-                    <td class='seek'  style="width:20%;"><a id='lblProduct'></a></td>
+                <tr class='seek_tr'>
+                    <td class='seek'  style="width:20%;"><a id='lblProduct_rj'>物品名稱</a></td>
                     <td>
                     <input class="txt" id="txtProduct" type="text" style="width:215px; font-size:medium;" />
                     </td>
