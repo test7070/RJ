@@ -29,12 +29,13 @@
             brwNowPage = 0;
             brwKey = 'noa';
             q_desc = 1;
-            q_xchg = 1;
-            brwCount2 = 15;
+            //q_xchg = 1;
+            brwCount2 = 10;
             aPop = new Array(['txtStraddrno', 'lblStraddr_tb', 'straddr_rj', 'noa,addr', 'txtStraddrno,txtStraddr', 'straddr_rj_b.aspx'],
                              ['txtEndaddrno', 'lblEndaddr_tb', 'endaddr_rj', 'noa,addr', 'txtEndaddrno,txtEndaddr', 'endaddr_rj_b.aspx']
                 ,['txtUccno','lblUcc','ucc','noa,product','txtUccno,txtProduct','ucc_b.aspx']
                 ,['txtCustno', 'lblCust', 'cust', 'noa,comp,nick', 'txtCustno,txtComp,txtNick', 'cust_b.aspx']
+                ,['txtTggno', 'lblTgg_rj', 'tgg', 'noa,comp', 'txtTggno,txtTgg', 'tgg_b.aspx']
                 ,['txtDriverno', 'lblDriver', 'driver', 'noa,namea', 'txtDriverno,txtDriver', 'driver_b.aspx']
                 ,['txtCarno', 'lblCarno', 'car2', 'a.noa,driver,driverno', 'txtCarno,txtDriver,txtDriverno', 'car2_b.aspx']
                 ,['txtBoatno', 'lblBoat', 'boat', 'noa,boat', 'txtBoatno,txtBoat', 'boat_b.aspx']);
@@ -302,7 +303,7 @@
                     trans.refresh();
                     $('#txtDatea').focus();
                 });   
-                q_xchgForm();
+             //   q_xchgForm();
             }
 
             function q_boxClose(s2) {
@@ -420,7 +421,7 @@
             function _btnSeek() {
                 if (q_cur > 0 && q_cur < 4)
                     return;
-                q_box('trans_tb_s.aspx', q_name + '_s', "550px", "95%", q_getMsg("popSeek"));
+                q_box('trans_rj_s.aspx', q_name + '_s', "550px", "95%", q_getMsg("popSeek"));
             }
 
             function btnIns() {
@@ -764,8 +765,6 @@
                         <td> </td>
                         <td> </td>
                         <td> </td>
-                        <td> </td>
-                        <td> </td>
                         <td class="tdZ"> </td>
                     </tr>
                     <tr>
@@ -810,17 +809,19 @@
                             <input id="txtComp"  type="text" style="float:left;width:70%;"/>
                             <input id="txtNick" type="text" style="display:none;"/>
                         </td>
-                        <td style="display:none;"><span> </span><a id="lblTgg btn" class="lbl"> </a></td>
-                        <td colspan="3" style="display:none;">
-                            <input id="txtTggno"  type="text" style="float:left;width:30%;"/>
-                            <input id="txtTgg"  type="text" style="float:left;width:70%;"/>
-                        </td>
                     </tr>
                     <tr>
                         <td><span> </span><a id="lblUcc" class="lbl btn"> </a></td>
                         <td colspan="3">
                             <input id="txtUccno"  type="text" style="float:left;width:30%;"/>
                             <input id="txtProduct"  type="text" style="float:left;width:70%;"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span> </span><a id="lblTgg_rj" class="lbl  btn"> </a></td>
+                        <td colspan="3">
+                            <input id="txtTggno"  type="text" style="float:left;width:30%;"/>
+                            <input id="txtTgg"  type="text" style="float:left;width:70%;"/>
                         </td>
                     </tr>
                     <tr>
@@ -833,9 +834,6 @@
                         <td><input id="txtMount3"  type="text" class="txt c1 num"/></td>
                         <td><span> </span><a class="lbl">噸數</a></td>
                         <td><input id="txtMount4"  type="text" class="txt c1 num"/></td>
-                        
-                        <td><span> </span><a id="lblPton" class="lbl" style="display:none;"> </a></td>
-                        <td><input id="txtPton"  type="text" class="txt c1 num" style="display:none;"/></td>
                     </tr>
                     <tr style="display:none;">
                         <td><span> </span><a class="lbl">計價單位</a></td>
@@ -854,8 +852,6 @@
                             <select id="combDriverunit2" class="txt c1"> </select>
                             <input id="txtUnit2"  type="text" style="display:none;"/>
                         </td>
-                        <td><span> </span><a id="lblPton2" class="lbl" style="display:none;"> </a></td>
-                        <td><input id="txtPton2"  type="text" class="txt c1 num" style="display:none;"/></td>
                     </tr>
                     <tr>
                         <td><span> </span><a class="lbl">公升</a></td>
@@ -871,8 +867,6 @@
                             <input id="txtCaseno"  type="text" style="float:left;width:50%;"/>
                             <input id="txtCaseno2"  type="text" style="float:left;width:50%;"/>
                         </td>
-                        <td><span> </span><a id="lblFill" class="lbl"> </a></td>
-                        <td><input id="txtFill"  type="text" class="txt c1"/></td>
                         <td colspan="2"><a id="lblCasenoerrmsg" style="display:none;color:darkred;">貨櫃編號錯誤。</a></td>
                     </tr>
                     <tr style="display:none;">
@@ -889,25 +883,33 @@
                         <td colspan="2"><input id="txtPo"  type="text" class="txt c1"/></td>
                         <td><span> </span><a id="lblCustorde" class="lbl"> </a></td>
                         <td colspan="2"><input id="txtCustorde" type="text" class="txt c1"/></td>
+                        
                     </tr>
                     <tr>
                         <td><span> </span><a id="lblMemo" class="lbl"> </a></td>
-                        <td colspan="7"><input id="txtMemo"  type="text" class="txt c1"/></td>
+                        <td colspan="5"><input id="txtMemo"  type="text" class="txt c1"/></td>
                     </tr>
-                    <tr>
-                        <td><span> </span><a id="lblNoa" class="lbl"> </a></td>
+                    <tr><td><span> </span><a id="lblNoa" class="lbl"> </a></td>
                         <td>
                             <input id="txtNoa"  type="text" class="txt c1"/>
                             <input id="txtNoq"  type="text" style="display:none;"/>
                         </td>
-                        <td><span> </span><a id="lblOrdeno" class="lbl"> </a></td>
-                        <td colspan="2"><input id="txtOrdeno"  type="text" class="txt c1"/></td>
-                    </tr>
-                    <tr>
                         <td><span> </span><a id="lblWorker" class="lbl"> </a></td>
                         <td><input id="txtWorker" type="text" class="txt c1"/></td>
                         <td><span> </span><a id="lblWorker2" class="lbl"> </a></td>
                         <td><input id="txtWorker2" type="text" class="txt c1"/></td>
+                    </tr>
+                    <tr style="display:none;">
+                        <td><span> </span><a id="lblPton" class="lbl" style="display:none;"> </a></td>
+                        <td><input id="txtPton"  type="text" class="txt c1 num" style="display:none;"/></td>
+                        <td><span> </span><a id="lblPton2" class="lbl" style="display:none;"> </a></td>
+                        <td><input id="txtPton2"  type="text" class="txt c1 num" style="display:none;"/></td>
+                        <td><span> </span><a id="lblOrdeno" class="lbl"> </a></td>
+                        <td colspan="2"><input id="txtOrdeno"  type="text" class="txt c1"/></td>
+                    </tr>
+                    <tr style="display:none;">
+                        <td><span> </span><a id="lblFill" class="lbl"> </a></td>
+                        <td><input id="txtFill"  type="text" class="txt c1"/></td>
                     </tr>
                 </table>
             </div>
