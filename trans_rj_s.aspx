@@ -181,7 +181,6 @@
                     <input class="txt" id="txtComp" type="text" style="width:215px; font-size:medium;" />
                     </td>
                 </tr>
-                
                 <tr class='seek_tr' style="display:none;">
                     <td class='seek'  style="width:20%;"><a id='lblProductno'></a></td>
                     <td>
@@ -192,6 +191,54 @@
                     <td class='seek'  style="width:20%;"><a id='lblProduct'></a></td>
                     <td>
                     <input class="txt" id="txtProduct" type="text" style="width:215px; font-size:medium;" />
+                    </td>
+                </tr>
+                <tr class='seek_tr'>
+                    <td class='seek'  style="width:20%;"><a id='lblTggno'></a></td>
+                    <td>
+                    <input class="txt" id="txtTggno" type="text" style="width:215px; font-size:medium;" />
+                    </td>
+                </tr>
+                <tr class='seek_tr'>
+                    <td class='seek'  style="width:20%;"><a id='lblTgg'></a></td>
+                    <td>
+                    <input class="txt" id="txtTgg" type="text" style="width:215px; font-size:medium;" />
+                    </td>
+                </tr>
+                <tr class='seek_tr'>
+                    <td class='seek'  style="width:20%;"><a id='lblInmount'></a></td>
+                    <td>
+                    <input class="txt" id="txtInmount" type="text" style="width:215px; font-size:medium;" />
+                    </td>
+                </tr>
+                <tr class='seek_tr'>
+                    <td class='seek'  style="width:20%;"><a id='lblMount3'></a></td>
+                    <td>
+                    <input class="txt" id="txtMount3" type="text" style="width:215px; font-size:medium;" />
+                    </td>
+                </tr>
+                <tr class='seek_tr'>
+                    <td class='seek'  style="width:20%;"><a id='lblMount4'></a></td>
+                    <td>
+                    <input class="txt" id="txtMount4" type="text" style="width:215px; font-size:medium;" />
+                    </td>
+                </tr>
+                <tr class='seek_tr'>
+                    <td class='seek'  style="width:20%;"><a id='lblTolls'></a></td>
+                    <td>
+                    <input class="txt" id="txtTolls" type="text" style="width:215px; font-size:medium;" />
+                    </td>
+                </tr>
+                <tr class='seek_tr'>
+                    <td class='seek'  style="width:20%;"><a id='lblReserve'></a></td>
+                    <td>
+                    <input class="txt" id="txtReserve" type="text" style="width:215px; font-size:medium;" />
+                    </td>
+                </tr>
+                <tr class='seek_tr'>
+                    <td class='seek'  style="width:20%;"><a id='lblMiles'></a></td>
+                    <td>
+                    <input class="txt" id="txtMiles" type="text" style="width:215px; font-size:medium;" />
                     </td>
                 </tr>
             </table>
