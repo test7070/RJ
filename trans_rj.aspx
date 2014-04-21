@@ -30,7 +30,7 @@
             brwKey = 'noa';
             q_desc = 1;
             //q_xchg = 1;
-            brwCount2 = 10;
+            brwCount2 = 5;
             aPop = new Array(['txtStraddrno', 'lblStraddr_tb', 'straddr_rj', 'noa,addr', 'txtStraddrno,txtStraddr', 'straddr_rj_b.aspx'],
                              ['txtEndaddrno', 'lblEndaddr_tb', 'endaddr_rj', 'noa,addr', 'txtEndaddrno,txtEndaddr', 'endaddr_rj_b.aspx']
                 ,['txtUccno','lblUcc','ucc','noa,product','txtUccno,txtProduct','ucc_b.aspx']
@@ -299,6 +299,8 @@
                     if($('#cmbCalctype').val().length==0){
                         $('#cmbCalctype').val(trans.calctype[0].noa);
                     }
+                    $('#txtDatea').val(q_date);
+                    $('#txtTrandate').focus();
                     trans.calctypeChange();
                     trans.refresh();
                     $('#txtDatea').focus();
@@ -436,7 +438,7 @@
                 trans.calctypeChange();
                 trans.refresh();
                 $('#txtDatea').val(q_date);
-                $('#txtDatea').focus();
+                $('#txtTrandate').focus();
             }
             function btnModi() {
                 if (emp($('#txtNoa').val()))
@@ -727,15 +729,16 @@
                         <td align="center" style="width:80px; color:black;"><a id="vewCarno"> </a></td>
                         <td align="center" style="width:80px; color:black;"><a id="vewDriver"> </a></td>
                         <td align="center" style="width:80px; color:black;"><a id="vewNick"> </a></td>
+                        <td align="center" style="width:80px; color:black;">廠商</td>
                         <td align="center" style="width:120px; color:black;"><a id="vewStraddr_tb"> </a></td>
                         <td align="center" style="width:120px; color:black;"><a id="vewEndaddr_tb"> </a></td>
-                        <td align="center" style="width:100px; color:black;">品名</a></td>
-                        <td align="center" style="width:60px; color:black;">台數</a></td>
-                        <td align="center" style="width:60px; color:black;">米數</a></td>
-                        <td align="center" style="width:60px; color:black;">噸數</a></td> 
-                        <td align="center" style="width:60px; color:black;">公升</a></td> 
-                        <td align="center" style="width:60px; color:black;">油費</a></td>  
-                        <td align="center" style="width:60px; color:black;">里程數</a></td>                        
+                        <td align="center" style="width:100px; color:black;">品名</td>
+                        <td align="center" style="width:60px; color:black;">台數</td>
+                        <td align="center" style="width:60px; color:black;">米數</td>
+                        <td align="center" style="width:60px; color:black;">噸數</td> 
+                        <td align="center" style="width:60px; color:black;">公升</td> 
+                        <td align="center" style="width:60px; color:black;">油費</td>  
+                        <td align="center" style="width:60px; color:black;">里程數</td>                        
                     </tr>
                     <tr>
                         <td ><input id="chkBrow.*" type="checkbox"/></td>
@@ -744,6 +747,7 @@
                         <td id="carno" style="text-align: center;">~carno</td>
                         <td id="driver" style="text-align: center;">~driver</td>
                         <td id="nick" style="text-align: center;">~nick</td>
+                        <td id="tgg,4" style="text-align: center;">~tgg,4</td>
                         <td id="straddr" style="text-align: center;">~straddr</td>
                         <td id="endaddr" style="text-align: center;">~endaddr</td>
                         <td id="product" style="text-align: center;">~product</td>
@@ -767,9 +771,11 @@
                         <td> </td>
                         <td class="tdZ"> </td>
                     </tr>
-                    <tr>
-                        <td><span> </span><a id="lblDatea" class="lbl"> </a></td>
-                        <td><input id="txtDatea"  type="text" class="txt c1"/></td>
+                    <tr><td><span> </span><a id="lblNoa" class="lbl"> </a></td>
+                        <td>
+                            <input id="txtNoa"  type="text" class="txt c1"/>
+                            <input id="txtNoq"  type="text" style="display:none;"/>
+                        </td>
                         <td><span> </span><a id="lblTrandate" class="lbl"> </a></td>
                         <td><input id="txtTrandate"  type="text" class="txt c1"/></td>
                     </tr>
@@ -803,25 +809,10 @@
                         </td>
                     </tr>
                     <tr>
-                        <td><span> </span><a id="lblCust" class="lbl btn"> </a></td>
-                        <td colspan="3">
-                            <input id="txtCustno"  type="text" style="float:left;width:30%;"/>
-                            <input id="txtComp"  type="text" style="float:left;width:70%;"/>
-                            <input id="txtNick" type="text" style="display:none;"/>
-                        </td>
-                    </tr>
-                    <tr>
                         <td><span> </span><a id="lblUcc" class="lbl btn"> </a></td>
                         <td colspan="3">
                             <input id="txtUccno"  type="text" style="float:left;width:30%;"/>
                             <input id="txtProduct"  type="text" style="float:left;width:70%;"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><span> </span><a id="lblTgg_rj" class="lbl  btn"> </a></td>
-                        <td colspan="3">
-                            <input id="txtTggno"  type="text" style="float:left;width:30%;"/>
-                            <input id="txtTgg"  type="text" style="float:left;width:70%;"/>
                         </td>
                     </tr>
                     <tr>
@@ -834,6 +825,19 @@
                         <td><input id="txtMount3"  type="text" class="txt c1 num"/></td>
                         <td><span> </span><a class="lbl">噸數</a></td>
                         <td><input id="txtMount4"  type="text" class="txt c1 num"/></td>
+                    </tr>
+                    <tr>
+                        <td><span> </span><a id="lblCust_rj" class="lbl btn"> </a></td>
+                        <td colspan="2">
+                            <input id="txtCustno"  type="text" style="float:left;width:50%;"/>
+                            <input id="txtComp"  type="text" style="float:left;width:50%;"/>
+                            <input id="txtNick" type="text" style="display:none;"/>
+                        </td>
+                        <td><span> </span><a id="lblTgg_rj" class="lbl  btn"> </a></td>
+                        <td colspan="2">
+                            <input id="txtTggno"  type="text" style="float:left;width:50%;"/>
+                            <input id="txtTgg"  type="text" style="float:left;width:50%;"/>
+                        </td>
                     </tr>
                     <tr style="display:none;">
                         <td><span> </span><a class="lbl">計價單位</a></td>
@@ -889,11 +893,9 @@
                         <td><span> </span><a id="lblMemo" class="lbl"> </a></td>
                         <td colspan="5"><input id="txtMemo"  type="text" class="txt c1"/></td>
                     </tr>
-                    <tr><td><span> </span><a id="lblNoa" class="lbl"> </a></td>
-                        <td>
-                            <input id="txtNoa"  type="text" class="txt c1"/>
-                            <input id="txtNoq"  type="text" style="display:none;"/>
-                        </td>
+                    <tr>
+                        <td><span> </span><a id="lblDatea" class="lbl"> </a></td>
+                        <td><input id="txtDatea"  type="text" class="txt c1"/></td>
                         <td><span> </span><a id="lblWorker" class="lbl"> </a></td>
                         <td><input id="txtWorker" type="text" class="txt c1"/></td>
                         <td><span> </span><a id="lblWorker2" class="lbl"> </a></td>
