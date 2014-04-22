@@ -27,14 +27,10 @@
 
                 $('#q_report').q_report({
                     fileName : 'z_ummtran_rj',
-                    options : [{/*[1]*/
-                        type : '0',
-                        name : 'accy',
-                        value : q_getId()[4]
-                    }, {/*1-[2][3]*/
+                    options : [{/*1-[2][3]*/
                         type : '1',
                         name : 'xdate'
-                    }, {/*3[6][7]-客戶*/
+                    }, {/*2[4][5]-客戶*/
                         type : '2',
                         name : 'xcust',
                         dbf : 'cust',
