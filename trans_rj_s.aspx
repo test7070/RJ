@@ -93,39 +93,15 @@
                     
                 var t_where = " 1=1 " 
                 + q_sqlPara2("noa", t_noa) 
-                + q_sqlPara2("datea", t_bdate, t_edate) 
                 + q_sqlPara2("Trandate", t_btrandate, t_etrandate) 
-                + q_sqlPara2("driverno", t_driverno) 
-                + q_sqlPara2("custno", t_custno) 
-                + q_sqlPara2("tggno", t_tggno) 
                 + q_sqlPara2("straddrno", t_straddrno) 
+                + q_sqlPara2("endaddrno", t_endaddrno) 
                 + q_sqlPara2("carno", t_carno)
                 + q_sqlPara2("uccno", t_productno) ;
-                
-                
-                if (t_comp.length>0)
-                    t_where += " and charindex('" + t_comp + "',comp)>0";
-                if (t_tgg.length>0)
-                    t_where += " and charindex('" + t_tgg + "',tgg)>0";
+
                 if (t_product.length>0)
                     t_where += " and charindex('" + t_product + "',product)>0"; 
-                if (t_memo.length>0)
-                    t_where += " and charindex('" + t_memo + "',memo)>0";       
-                if (t_driver.length>0)
-                    t_where += " and charindex('" + t_driver + "',driver)>0";
-                    
-                if(t_inmount!=0)
-                     t_where += " and inmount="+t_inmount;
-                 if(t_mount3!=0)
-                     t_where += " and mount="+t_mount3;
-                if(t_mount4!=0)
-                     t_where += " and mount4="+t_mount4;
-                if(t_tolls!=0)
-                     t_where += " and tolls="+t_tolls;
-                if(t_reserve!=0)
-                     t_where += " and reserve="+t_reserve;    
-                if(t_miles!=0)
-                     t_where += " and miles="+t_miles;              
+         
                 t_where = ' where=^^' + t_where + '^^ ';
                 return t_where;
             }
@@ -153,14 +129,6 @@
                     </td>
                 </tr>
                 <tr class='seek_tr'>
-                    <td   style="width:35%;" ><a id='lblDatea'></a></td>
-                    <td style="width:65%;  ">
-                    <input class="txt" id="txtBdate" type="text" style="width:90px; font-size:medium;" />
-                    <span style="display:inline-block; vertical-align:middle">&sim;</span>
-                    <input class="txt" id="txtEdate" type="text" style="width:93px; font-size:medium;" />
-                    </td>
-                </tr>
-                <tr class='seek_tr'>
                     <td   style="width:35%;" ><a id='lblTrandate'></a></td>
                     <td style="width:65%;  ">
                     <input class="txt" id="txtBtrandate" type="text" style="width:90px; font-size:medium;" />
@@ -175,105 +143,27 @@
                     </td>
                 </tr>
                 <tr class='seek_tr'>
-                    <td class='seek'  style="width:20%;"><a id='lblDriverno'></a></td>
-                    <td>
-                    <input class="txt" id="txtDriverno" type="text" style="width:215px; font-size:medium;" />
-                    </td>
-                </tr>
-                <tr class='seek_tr'>
-                    <td class='seek'  style="width:20%;"><a id='lblDriver'></a></td>
-                    <td>
-                    <input class="txt" id="txtDriver" type="text" style="width:215px; font-size:medium;" />
-                    </td>
-                </tr>
-                <tr class='seek_tr' style="display:none;">
-                    <td class='seek'  style="width:20%;"><a id='lblStraddrno'></a></td>
+                    <td class='seek'  style="width:20%;"><a id='lblStraddrno_rj'>起點</a></td>
                     <td>
                     <input class="txt" id="txtStraddrno" type="text" style="width:215px; font-size:medium;" />
                     </td>
                 </tr>
-                <tr class='seek_tr' style="display:none;">
-                    <td class='seek'  style="width:20%;"><a id='lblEndaddrno'></a></td>
+                <tr class='seek_tr'>
+                    <td class='seek'  style="width:20%;"><a id='lblEndaddrno_rj'>迄點</a></td>
                     <td>
                     <input class="txt" id="txtEndaddrno" type="text" style="width:215px; font-size:medium;" />
                     </td>
                 </tr>
                 <tr class='seek_tr'>
-                    <td class='seek'  style="width:20%;"><a id='lblCustno'></a></td>
-                    <td>
-                    <input class="txt" id="txtCustno" type="text" style="width:215px; font-size:medium;" />
-                    </td>
-                </tr>
-                <tr class='seek_tr'>
-                    <td class='seek'  style="width:20%;"><a id='lblComp'></a></td>
-                    <td>
-                    <input class="txt" id="txtComp" type="text" style="width:215px; font-size:medium;" />
-                    </td>
-                </tr>
-                <tr class='seek_tr'>
-                    <td class='seek'  style="width:20%;"><a id='lblProductno_rj'>物品編號</a></td>
+                    <td class='seek'  style="width:20%;"><a id='lblProductno_rj'>品名編號</a></td>
                     <td>
                     <input class="txt" id="txtProductno" type="text" style="width:215px; font-size:medium;" />
                     </td>
                 </tr>
                 <tr class='seek_tr'>
-                    <td class='seek'  style="width:20%;"><a id='lblProduct_rj'>物品名稱</a></td>
+                    <td class='seek'  style="width:20%;"><a id='lblProduct_rj'>品名</a></td>
                     <td>
                     <input class="txt" id="txtProduct" type="text" style="width:215px; font-size:medium;" />
-                    </td>
-                </tr>
-                <tr class='seek_tr'>
-                    <td class='seek'  style="width:20%;"><a id='lblTggno_rj'>廠商編號</a></td>
-                    <td>
-                    <input class="txt" id="txtTggno" type="text" style="width:215px; font-size:medium;" />
-                    </td>
-                </tr>
-                <tr class='seek_tr'>
-                    <td class='seek'  style="width:20%;"><a id='lblTgg_rj'>廠商名稱</a></td>
-                    <td>
-                    <input class="txt" id="txtTgg" type="text" style="width:215px; font-size:medium;" />
-                    </td>
-                </tr>
-                <tr class='seek_tr'>
-                    <td class='seek'  style="width:20%;"><a id='lblInmount_rj'>台數</a></td>
-                    <td>
-                    <input class="txt" id="txtInmount" type="text" style="width:215px; font-size:medium;text-align: right;" />
-                    </td>
-                </tr>
-                <tr class='seek_tr'>
-                    <td class='seek'  style="width:20%;"><a id='lblMount3_rj'>米數</a></td>
-                    <td>
-                    <input class="txt" id="txtMount3" type="text" style="width:215px; font-size:medium;text-align: right;" />
-                    </td>
-                </tr>
-                <tr class='seek_tr'>
-                    <td class='seek'  style="width:20%;"><a id='lblMount4_rj'>噸數</a></td>
-                    <td>
-                    <input class="txt" id="txtMount4" type="text" style="width:215px; font-size:medium;text-align: right;" />
-                    </td>
-                </tr>
-                <tr class='seek_tr'>
-                    <td class='seek'  style="width:20%;"><a id='lblTolls_rj'>公升</a></td>
-                    <td>
-                    <input class="txt" id="txtTolls" type="text" style="width:215px; font-size:medium;text-align: right;" />
-                    </td>
-                </tr>
-                <tr class='seek_tr'>
-                    <td class='seek'  style="width:20%;"><a id='lblReserve_rj'>油費</a></td>
-                    <td>
-                    <input class="txt" id="txtReserve" type="text" style="width:215px; font-size:medium;text-align: right;" />
-                    </td>
-                </tr>
-                <tr class='seek_tr'>
-                    <td class='seek'  style="width:20%;"><a id='lblMiles_rj'>里程數</a></td>
-                    <td>
-                    <input class="txt" id="txtMiles" type="text" style="width:215px; font-size:medium;text-align: right;" />
-                    </td>
-                </tr>
-                <tr class='seek_tr'>
-                    <td class='seek'  style="width:20%;"><a id='lblMemo_rj'>備註</a></td>
-                    <td>
-                    <input class="txt" id="txtMemo" type="text" style="width:215px; font-size:medium;" />
                     </td>
                 </tr>
             </table>
