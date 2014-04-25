@@ -460,7 +460,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td style="padding: 2px;text-align: center;border-width: 0px;background-color: pink;color: blue;"><a>出車登錄日期</a></td>
+                    <td style="padding: 2px;text-align: center;border-width: 0px;background-color: pink;color: blue;"><a>交運日期</a></td>
                     <td colspan="3" style="padding: 2px;text-align: center;border-width: 0px;background-color: pink;">
                     <input type="text" id="textBBdate" style="float:left;width:40%;"/>
                     <span style="float:left;width:5%;">~</span>
