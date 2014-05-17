@@ -36,8 +36,8 @@
             brwCount2 = 20;
             aPop = new Array(['txtCustno', 'lblCust', 'cust', 'noa,comp,nick', 'txtCustno,txtComp,txtNick', 'cust_b.aspx']
             , ['txtCno', 'lblAcomp', 'acomp', 'noa,acomp', 'txtCno,txtAcomp', 'acomp_b.aspx']
-            , ['txtStraddrno', '', 'straddr_rj', 'noa,addr', 'txtStraddrno,txtStraddr', 'straddr_rj_b.aspx']
-            ,  ['txtEndaddrno', '', 'endaddr_rj', 'noa,addr', 'txtEndaddrno,txtEndaddr', 'endaddr_rj_b.aspx']
+            , ['txtStraddrno', '', 'straddr_rj', 'noa', 'txtStraddrno', 'straddr_rj_b.aspx']
+            ,  ['txtEndaddrno', '', 'endaddr_rj', 'noa', 'txtEndaddrno', 'endaddr_rj_b.aspx']
             , ['txtBoatno', 'lblBoat', 'boat', 'noa,boat', 'txtBoatno,txtBoat', 'boat_b.aspx']);
             $(document).ready(function() {
                 q_bbsShow = -1;
@@ -670,11 +670,11 @@
                         </td>
                         <td><span> </span><a id="lblStraddr" class="lbl btn"> </a></td>
                         <td colspan="3">
-                        <input id="txtStraddrno" type="text"  class="txt" style="float:left;width:25%;"/>
-                        <input id="txtStraddr" type="text"  class="txt" style="float:left;width:20%;"/>
+                        <input id="txtStraddrno" type="text"  class="txt" style="float:left;width:45%;"/>
+                        <input id="txtStraddr" type="text"  class="txt" style="display:none;"/>
                         <span style="float:left; display:block; width:3%;">~</span>
-                        <input id="txtEndaddrno" type="text"  class="txt" style="float:left;width:25%;"/>
-                        <input id="txtEndaddr" type="text"  class="txt" style="float:left;width:20%;"/>
+                        <input id="txtEndaddrno" type="text"  class="txt" style="float:left;width:45%;"/>
+                        <input id="txtEndaddr" type="text"  class="txt" style="display:none;"/>
                         </td>
                         <td class="tdZ"></td>
                     </tr>

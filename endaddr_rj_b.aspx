@@ -10,7 +10,8 @@
         <script src="../script/qbox.js" type="text/javascript"></script>
         <link href="../qbox.css" rel="stylesheet" type="text/css" />
         <script type="text/javascript">
-            var q_name = 'endaddr_rj', t_content = 'noa,addr', bbsKey = ['noa'], as;
+            //菱揚
+            var q_name = 'endaddr_rj', t_content = 'noa', bbsKey = ['noa'], as;
             var isBott = false;
             /// 是否已按過 最後一頁
             var txtfield = [], afield, t_data, t_htm, t_bbsTag = 'tbbs';
@@ -40,18 +41,14 @@
             <table id="tbbs"  border="2"  cellpadding='0' cellspacing='0' style='width:98%' >
                 <tr>
                     <th align="center" ></th>
-                    <th align="center" style='color:Blue;' ><a id='lblAddrno'></a></th>
-                    <th align="center" style='color:Blue;' ><a id='lblAddr'></a></th>
+                    <th align="center" style='color:Blue;' ><a id='lblAddrno'></a></th>                  
                 </tr>
                 <tr>
                     <td style="width:2%;">
                     <input name="sel"  id="radSel.*" type="radio" />
                     </td>
-                    <td style="width:20%;">
+                    <td style="width:80%;">
                     <input class="txt" id="txtNoa.*" type="text" style="width:98%;"  readonly="readonly" />
-                    </td>
-                    <td style="width:45%;">
-                    <input class="txt" id="txtAddr.*" type="text" style="width:98%;"  readonly="readonly" />
                     </td>
                 </tr>
             </table>

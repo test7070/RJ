@@ -14,6 +14,7 @@
         <script src="css/jquery/ui/jquery.ui.widget.js"></script>
         <script src="css/jquery/ui/jquery.ui.datepicker_tw.js"></script>
         <script type="text/javascript">
+            //菱揚
             this.errorHandler = null;
             function onPageError(error) {
                 alert("An error occurred:\r\n" + error.Message);
@@ -31,8 +32,8 @@
             q_desc = 1;
             //q_xchg = 1;
             brwCount2 = 5;
-            aPop = new Array(['txtStraddrno', 'lblStraddr_tb', 'straddr_rj', 'noa,addr', 'txtStraddrno,txtStraddr', 'straddr_rj_b.aspx'],
-                             ['txtEndaddrno', 'lblEndaddr_tb', 'endaddr_rj', 'noa,addr', 'txtEndaddrno,txtEndaddr', 'endaddr_rj_b.aspx']
+            aPop = new Array(['txtStraddrno', 'lblStraddr_tb', 'straddr_rj', 'noa', 'txtStraddrno', 'straddr_rj_b.aspx'],
+                             ['txtEndaddrno', 'lblEndaddr_tb', 'endaddr_rj', 'noa', 'txtEndaddrno', 'endaddr_rj_b.aspx']
                 ,['txtUccno','lblUcc','ucc','noa,product','txtUccno,txtProduct','ucc_b.aspx']
                 ,['txtCustno', 'lblCust', 'cust', 'noa,comp,nick', 'txtCustno,txtComp,txtNick', 'cust_b.aspx']
                 ,['txtTggno', 'lblTgg_rj', 'tgg', 'noa,comp', 'txtTggno,txtTgg', 'tgg_b.aspx']
@@ -456,6 +457,9 @@
             }
             function btnOk() {
                 Lock(1,{opacity:0});
+                $('#txtStraddr').val($('#txtStraddrno').val());    
+                $('#txtEndaddr').val($('#txtEndaddrno').val());
+                
                 if($('#combDriverunit').is(":visible")){
                     $('#txtUnit2').val($('#combDriverunit').find(":selected").text());
                 }
@@ -796,16 +800,16 @@
                     </tr>
                     <tr>
                         <td><span> </span><a id="lblStraddr_tb" class="lbl btn"> </a></td>
-                        <td colspan="3">
-                            <input id="txtStraddrno"  type="text" style="float:left;width:30%;"/>
-                            <input id="txtStraddr"  type="text" style="float:left;width:70%;"/>
+                        <td colspan="2">
+                            <input id="txtStraddrno"  type="text" class="txt c1"/>
+                            <input id="txtStraddr"  type="text" style="display:none;"/>
                         </td>
                     </tr>
                     <tr>
                         <td><span> </span><a id="lblEndaddr_tb" class="lbl btn"> </a></td>
-                        <td colspan="3">
-                            <input id="txtEndaddrno"  type="text" style="float:left;width:30%;"/>
-                            <input id="txtEndaddr"  type="text" style="float:left;width:70%;"/>
+                        <td colspan="2">
+                            <input id="txtEndaddrno"  type="text" class="txt c1"/>
+                            <input id="txtEndaddr"  type="text" style="display:none;"/>
                         </td>
                     </tr>
                     <tr>

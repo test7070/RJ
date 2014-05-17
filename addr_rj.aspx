@@ -14,6 +14,7 @@
         <script src="css/jquery/ui/jquery.ui.widget.js"></script>
         <script src="css/jquery/ui/jquery.ui.datepicker_tw.js"></script>
         <script type="text/javascript">
+            //菱揚
             this.errorHandler = null;
             function onPageError(error) {
                 alert("An error occurred:\r\n" + error.Message);
@@ -33,8 +34,8 @@
             brwNowPage = 0;
             brwKey = 'Noa';
 
-            aPop = new Array(['txtStraddrno', 'lblStraddr', 'straddr_rj', 'noa,addr', 'txtStraddrno,txtStraddr', 'straddr_rj_b.aspx'],
-                             ['txtEndaddrno', 'lblEndaddr', 'endaddr_rj', 'noa,addr', 'txtEndaddrno,txtEndaddr', 'endaddr_rj_b.aspx'],
+            aPop = new Array(['txtStraddrno', 'lblStraddr', 'straddr_rj', 'noa', 'txtStraddrno', 'straddr_rj_b.aspx'],
+                             ['txtEndaddrno', 'lblEndaddr', 'endaddr_rj', 'noa', 'txtEndaddrno', 'endaddr_rj_b.aspx'],
                              ['txtProductno', 'lblProductno', 'ucc', 'noa,product', 'txtProductno,txtProduct', 'ucc_b.aspx'],
                              ['txtSalesno_', '', 'sss', 'noa,namea', 'txtSalesno_,txtSales_', 'sss_b.aspx'],
                              ['txtCustno', 'lblCustno', 'cust', 'noa,comp,nick', 'txtCustno,txtCust', 'cust_b.aspx']);
@@ -58,10 +59,7 @@
                 q_getFormat();
                 q_mask(bbmMask);
                 bbsMask = [['txtDatea', r_picd]];
-                
-                
-                
-                
+ 
                  //上方插入空白行
                 $('#lblTop_row').mousedown(function(e) {
                     if(e.button==0){
@@ -174,7 +172,9 @@
             }
             function btnOk() {
                 Lock(1,{opacity:0});
-                $('#txtNoa').val($.trim($('#txtNoa').val()));       
+                $('#txtNoa').val($.trim($('#txtNoa').val())); 
+                $('#txtStraddr').val($('#txtStraddrno').val());    
+                $('#txtEndaddr').val($('#txtEndaddrno').val());      
                 if(q_cur==1){
                     t_where="where=^^ noa='"+$('#txtNoa').val()+"'^^";
                     q_gt('addr', t_where, 0, 0, 0, "checkAddrno_btnOk", r_accy);
@@ -475,15 +475,15 @@
                     <tr>
                         <td><span> </span><a id='lblStraddr' class="lbl btn"> </a></td>
                         <td colspan="3">
-                            <input id="txtStraddrno" type="text" style="float:left; width:40%;"/>
-                            <input id="txtStraddr" type="text" style="float:left; width:60%;"/>
+                            <input id="txtStraddrno" type="text" class="txt c1"/>
+                            <input id="txtStraddr" type="text" style="display:none;"/>
                         </td>
                     </tr>
                     <tr>
                         <td><span> </span><a id='lblEndaddr' class="lbl btn"> </a></td>
                         <td colspan="3">
-                            <input id="txtEndaddrno" type="text" style="float:left; width:40%;"/>
-                            <input id="txtEndaddr" type="text" style="float:left; width:60%;"/>
+                            <input id="txtEndaddrno" type="text" class="txt c1"/>
+                            <input id="txtEndaddr" type="text" style="display:none;"/>
                         </td>
                     </tr>
                     <tr>
