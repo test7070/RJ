@@ -149,21 +149,44 @@
                         }
                         q_box("z_addr2.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";;" + r_accy,'z_addr2', "95%", "95%", q_getMsg("popPrint"));
                         break;
-                    case 'checkAddrno_btnOk':
-                        var as = _q_appendData("addr", "", true);
-                        if (as[0] != undefined){
-                            alert('已存在 '+as[0].noa+' '+as[0].addr);
-                            Unlock();
-                            return;
-                        }else{
-                            wrServer($('#txtNoa').val());
-                        }
-                        break;
                     case q_name:
                         if (q_cur == 4)
                             q_Seek_gtPost();
                         break;
-                }
+                    default:
+                        try{
+                            t_array = JSON.parse(t_name);
+                            switch(t_array.type){
+                                case 'isDuplicate':
+                                    var as = _q_appendData("addr", "", true);
+                                    if (as[0] != undefined){
+                                        alert('【'+t_array.straddrno+'】【'+t_array.endaddrno+'】【'+t_array.productno+'】已存在。');
+                                        Unlock(1);
+                                        return;
+                                    }else{
+                                        q_gt('addr', "where=^^ noa='"+t_array.noa+"' ^^", 0, 0, 0, JSON.stringify({
+                                            type : 'checkNoa',
+                                            noa : t_array.noa,
+                                            straddrno : t_array.straddrno,
+                                            endaddrno : t_array.endaddrno,
+                                            productno : t_array.productno
+                                        }), r_accy);
+                                    }
+                                case 'checkNoa':
+                                    var as = _q_appendData("addr", "", true);
+                                    if (as[0] != undefined){
+                                        alert('已存在 '+as[0].noa+' '+as[0].addr);
+                                        Unlock(1);
+                                        return;
+                                    }else{
+                                        wrServer($('#txtNoa').val());
+                                    }
+                            }
+                        }catch(e){
+                            //alert(e.message);
+                        }
+                        break;
+                    }
             }
             function q_stPost() {
                 if (!(q_cur == 1 || q_cur == 2))
@@ -172,12 +195,32 @@
             }
             function btnOk() {
                 Lock(1,{opacity:0});
-                $('#txtNoa').val($.trim($('#txtNoa').val())); 
-                $('#txtStraddr').val($('#txtStraddrno').val());    
-                $('#txtEndaddr').val($('#txtEndaddrno').val());      
+                var t_noa = $.trim($('#txtNoa').val());
+                var t_straddrno = $.trim($('#txtStraddrno').val());
+                var t_endaddrno = $.trim($('#txtEndaddrno').val());
+                var t_productno = $.trim($('#txtProductno').val());
+                
+                if(t_noa.length==0){
+                    alert('請輸入編號。');
+                    Unlock(1);
+                    return;
+                }
+                $('#txtNoa').val(t_noa); 
+                $('#txtStraddrno').val(t_straddrno); 
+                $('#txtStraddr').val(t_straddrno);
+                $('#txtEndaddrno').val(t_endaddrno);     
+                $('#txtEndaddr').val(t_endaddrno);      
                 if(q_cur==1){
-                    t_where="where=^^ noa='"+$('#txtNoa').val()+"'^^";
-                    q_gt('addr', t_where, 0, 0, 0, "checkAddrno_btnOk", r_accy);
+                    json = JSON.stringify({
+                        type : 'isDuplicate',
+                        noa : t_noa,
+                        straddrno : t_straddrno,
+                        endaddrno : t_endaddrno,
+                        productno : t_productno
+                    });
+                    t_where="where=^^ straddrno='"+t_straddrno+"' and endaddrno='"+t_endaddrno+"' and productno='"+t_productno+"'^^";
+                    alert(json);
+                    q_gt('addr', t_where, 0, 0, 0, json, r_accy);
                 }else{
                     wrServer($('#txtNoa').val());
                 }
@@ -186,7 +229,6 @@
             function _btnSeek() {
                 if (q_cur > 0 && q_cur < 4)
                     return;
-
                 q_box('addr_rj_s.aspx', q_name + '_s', "550px", "450px", q_getMsg("popSeek"));
             }
 

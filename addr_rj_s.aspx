@@ -72,7 +72,7 @@
                     <input class="txt" id="txtNoa" type="text" style="width:215px; font-size:medium;" />
                     </td>
                 </tr>
-                <tr class='seek_tr'>
+                <tr class='seek_tr' style="display:none;">
                     <td class='seek'  style="width:20%;"><a id='lblStraddrno'> </a></td>
                     <td>
                     <input class="txt" id="txtStraddrno" type="text" style="width:215px; font-size:medium;" />
@@ -84,7 +84,7 @@
                     <input class="txt" id="txtStraddr" type="text" style="width:215px; font-size:medium;" />
                     </td>
                 </tr>
-                <tr class='seek_tr'>
+                <tr class='seek_tr' style="display:none;">
                     <td class='seek'  style="width:20%;"><a id='lblEndaddrno'> </a></td>
                     <td>
                     <input class="txt" id="txtEndaddrno" type="text" style="width:215px; font-size:medium;" />
