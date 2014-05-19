@@ -728,7 +728,6 @@
                 <table class="tview" id="tview">
                     <tr>
                         <td align="center" style="width:20px; color:black;"><a id="vewChk"> </a></td>
-                        <td align="center" style="width:80px; color:black;"><a id="vewDatea"> </a></td>
                         <td align="center" style="width:80px; color:black;"><a id="vewTrandate"> </a></td>
                         <td align="center" style="width:80px; color:black;"><a id="vewCarno"> </a></td>
                         <td align="center" style="width:80px; color:black;"><a id="vewDriver"> </a></td>
@@ -742,11 +741,11 @@
                         <td align="center" style="width:60px; color:black;">噸數</td> 
                         <td align="center" style="width:60px; color:black;">公升</td> 
                         <td align="center" style="width:60px; color:black;">油費</td>  
-                        <td align="center" style="width:60px; color:black;">里程數</td>                        
+                        <td align="center" style="width:60px; color:black;">里程數</td>   
+                        <td align="center" style="width:80px; color:black;"><a id="vewDatea"> </a></td>                     
                     </tr>
                     <tr>
                         <td ><input id="chkBrow.*" type="checkbox"/></td>
-                        <td id="datea" style="text-align: center;">~datea</td>
                         <td id="trandate" style="text-align: center;">~trandate</td>
                         <td id="carno" style="text-align: center;">~carno</td>
                         <td id="driver" style="text-align: center;">~driver</td>
@@ -761,6 +760,7 @@
                         <td id="tolls,3" style="text-align: right;">~tolls,3</td>
                         <td id="reserve,0" style="text-align: right;">~reserve,0</td>
                         <td id="miles,0" style="text-align: right;">~miles,0</td>
+                        <td id="datea" style="text-align: center;">~datea</td>
                     </tr>
                 </table>
             </div>
