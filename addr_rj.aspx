@@ -172,6 +172,7 @@
                                             productno : t_array.productno
                                         }), r_accy);
                                     }
+                                    break;
                                 case 'checkNoa':
                                     var as = _q_appendData("addr", "", true);
                                     if (as[0] != undefined){
@@ -181,6 +182,7 @@
                                     }else{
                                         wrServer($('#txtNoa').val());
                                     }
+                                    break;
                             }
                         }catch(e){
                             //alert(e.message);
@@ -219,7 +221,6 @@
                         productno : t_productno
                     });
                     t_where="where=^^ straddrno='"+t_straddrno+"' and endaddrno='"+t_endaddrno+"' and productno='"+t_productno+"'^^";
-                    alert(json);
                     q_gt('addr', t_where, 0, 0, 0, json, r_accy);
                 }else{
                     wrServer($('#txtNoa').val());
