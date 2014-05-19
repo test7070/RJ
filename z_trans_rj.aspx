@@ -15,7 +15,9 @@
         <script src="css/jquery/ui/jquery.ui.widget.js"></script>
         <script src="css/jquery/ui/jquery.ui.datepicker_tw.js"></script>
         <script type="text/javascript">
-            aPop = new Array(['txtXcarno', 'lblXcarno', 'car2', 'a.noa,driverno,driver', 'txtXcarno', 'car2_b.aspx']);
+            aPop = new Array(['txtXcarno', 'lblXcarno', 'car2', 'a.noa,driverno,driver', 'txtXcarno', 'car2_b.aspx'],
+                             ['txtXstraddrno', 'lblXstraddrno', 'straddr_rj', 'noa', 'txtXstraddrno', 'straddr_rj_b.aspx'],
+                             ['txtXendaddrno', 'lblXendaddrno', 'endaddr_rj', 'noa', 'txtXendaddrno', 'endaddr_rj_b.aspx']);
 
             function z_tran() {
             }
@@ -132,6 +134,12 @@
                     }, {/*10-[15]交運月份*/
                         type : '6',
                         name : 'ymon'
+                    }, {/*11-[16]起點*/
+                        type : '6',
+                        name : 'xstraddrno'
+                    }, {/*12-[17]迄點*/
+                        type : '6',
+                        name : 'xendaddrno'
                     }]
                 });
                 q_popAssign();
@@ -172,6 +180,7 @@
                     } else
                         alert('請輸入交運月份。');
                 });
+                $('#Xcarno').css('width','98%');
             }
             function q_funcPost(t_func, result) {
                 switch(t_func) {
