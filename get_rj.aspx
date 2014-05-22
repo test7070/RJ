@@ -33,18 +33,9 @@
             brwNowPage = 0;
             brwKey = 'Datea';
             brwCount = 5;
-            /*aPop = new Array(
-                //['txtPost', 'lblPost', 'addr', 'post,addr', 'txtPost', 'addr_b.aspx'],
-                ['txtPost', 'lblPost', 'addr2', 'noa,post', 'txtPost,txtAddr', 'addr2_b.aspx'],
-                ['txtTranstartno', 'lblTranstart', 'addr2', 'noa,post','txtTranstartno,txtTranstart', 'addr2_b.aspx'],
-                ['txtStationno', 'lblStation', 'station', 'noa,station', 'txtStationno,txtStation', 'station_b.aspx'],
-                ['txtStoreno', 'lblStore', 'store', 'noa,store', 'txtStoreno,txtStore', 'store_b.aspx'],
-                ['txtUno_', 'btnUno_', 'view_uccc', 'noa', 'txtUno_', 'uccc_seek_b.aspx?;;;1=0', '95%', '60%'],
-                ['txtProductno_', 'btnProductno_', 'ucaucc', 'noa,product,unit', 'txtProductno_,txtProduct_,txtUnit_', 'ucaucc_b.aspx'],
-                ['txtCustno', 'lblCustno', 'cust', 'noa,comp', 'txtCustno,txtComp', 'cust_b.aspx'],
-                ['txtRackno', 'lblRackno', 'rack', 'noa,rack,storeno,store', 'txtRackno', 'rack_b.aspx'],
-                ['txtCardealno', 'lblCardeal', 'cardeal', 'noa,comp', 'txtCardealno,txtCardeal', 'cardeal_b.aspx']
-            );*/
+            aPop = new Array(
+                ['txtProductno_', 'btnProductno_', 'ucc', 'noa,product', 'txtProductno_,txtProduct_', 'ucc_b.aspx']
+            );
 
             $(document).ready(function() {
                 bbmKey = ['noa'];
@@ -441,8 +432,8 @@
                         <input type="text" id="txtProductno.*" style="width:40%;"/>
                         <input type="text" id="txtProduct.*" style="width:40%;"/>
                     </td>
-                    <td><input type="text" id="txtWeight.*" style="width:95%;"/></td> 
-                    <td><input type="text" id="txtMount.*" style="width:95%;"/></td> 
+                    <td><input type="text" id="txtWeight.*" style="width:95%;float:right;"/></td> 
+                    <td><input type="text" id="txtMount.*" style="width:95%;float:right;"/></td> 
                     <td><input type="text" id="txtMemo.*" style="width:95%;"/></td>                 
                 </tr>
             </table>
