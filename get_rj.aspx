@@ -56,7 +56,7 @@
                 q_getFormat();
                 bbmMask = [['txtDatea', r_picd]];
                 q_mask(bbmMask);
-                
+                $('#txtDatea').datepicker();
             }
             
             function q_popPost(s1) {
@@ -149,17 +149,17 @@
                     $('#btnPlus').click();
                 }
                 $('#txtProductno_0').val('AGG1');
-                $('#txtProduct_0').val('一分石');
+                $('#txtProduct_0').val('砂');
                 $('#txtProductno_1').val('AGG2');
-                $('#txtProduct_1').val('二分石');
+                $('#txtProduct_1').val('大陸砂');
                 $('#txtProductno_2').val('AGG3');
-                $('#txtProduct_2').val('二分石');
+                $('#txtProduct_2').val('砂');
                 $('#txtProductno_3').val('AGG4');
-                $('#txtProduct_3').val('砂/石');            
+                $('#txtProduct_3').val('一分石');            
                 $('#txtProductno_4').val('AGG5');
-                $('#txtProduct_4').val('粗砂');
+                $('#txtProduct_4').val('二分石');
                 $('#txtProductno_5').val('AGG6');
-                $('#txtProduct_5').val('大陸砂');
+                $('#txtProduct_5').val('一分石');
             }
 
             function btnModi() {
@@ -261,7 +261,7 @@
             }
             .dview {
                 float: left;
-                width: 40%; 
+                width: 30%; 
                 border-width: 0px; 
             }
             .tview {
@@ -417,9 +417,9 @@
                     </td>
                     <td align="center" style="width:20px;"></td>
                     <td align="center" style="width:200px;">品名</td>
-                    <td align="center" style="width:100px;">噸數</td>
-                    <td align="center" style="width:100px;">米數</td>
-                    <td align="center" style="width:200px;">備註</td>
+                    <td align="center" style="width:100px;">公斤</td>
+                    <td align="center" style="width:100px;display:none;">米數</td>
+                    <td align="center" style="width:200px;display:none;">備註</td>
                 </tr>
                 <tr style='background:#cad3ff;'>
                     <td align="center">
@@ -433,8 +433,8 @@
                         <input type="text" id="txtProduct.*" style="width:40%;"/>
                     </td>
                     <td><input type="text" id="txtWeight.*" style="width:95%;float:right;"/></td> 
-                    <td><input type="text" id="txtMount.*" style="width:95%;float:right;"/></td> 
-                    <td><input type="text" id="txtMemo.*" style="width:95%;"/></td>                 
+                    <td style="display:none;"><input type="text" id="txtMount.*" style="width:95%;float:right;"/></td> 
+                    <td style="display:none;"><input type="text" id="txtMemo.*" style="width:95%;"/></td>                 
                 </tr>
             </table>
         </div>
