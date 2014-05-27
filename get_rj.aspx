@@ -432,7 +432,7 @@
                         <input type="text" id="txtProductno.*" style="width:40%;"/>
                         <input type="text" id="txtProduct.*" style="width:40%;"/>
                     </td>
-                    <td><input type="text" id="txtWeight.*" style="width:95%;float:right;"/></td> 
+                    <td><input type="text" id="txtWeight.*" style="width:95%;text-align:right;"/></td> 
                     <td style="display:none;"><input type="text" id="txtMount.*" style="width:95%;float:right;"/></td> 
                     <td style="display:none;"><input type="text" id="txtMemo.*" style="width:95%;"/></td>                 
                 </tr>
