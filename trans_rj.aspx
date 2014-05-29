@@ -731,8 +731,6 @@
                         <td align="center" style="width:80px; color:black;"><a id="vewTrandate"> </a></td>
                         <td align="center" style="width:80px; color:black;"><a id="vewCarno"> </a></td>
                         <td align="center" style="width:80px; color:black;"><a id="vewDriver"> </a></td>
-                        <td align="center" style="width:80px; color:black;"><a id="vewNick"> </a></td>
-                        <td align="center" style="width:80px; color:black;">廠商</td>
                         <td align="center" style="width:120px; color:black;"><a id="vewStraddr_tb"> </a></td>
                         <td align="center" style="width:120px; color:black;"><a id="vewEndaddr_tb"> </a></td>
                         <td align="center" style="width:100px; color:black;">品名</td>
@@ -742,6 +740,8 @@
                         <td align="center" style="width:60px; color:black;">公升</td> 
                         <td align="center" style="width:60px; color:black;">油費</td>  
                         <td align="center" style="width:60px; color:black;">里程數</td>   
+                        <td align="center" style="width:80px; color:black;"><a id="vewNick"> </a></td>
+                        <td align="center" style="width:80px; color:black;">廠商</td>
                         <td align="center" style="width:80px; color:black;"><a id="vewDatea"> </a></td>                     
                     </tr>
                     <tr>
@@ -749,8 +749,6 @@
                         <td id="trandate" style="text-align: center;">~trandate</td>
                         <td id="carno" style="text-align: center;">~carno</td>
                         <td id="driver" style="text-align: center;">~driver</td>
-                        <td id="nick" style="text-align: center;">~nick</td>
-                        <td id="tgg,4" style="text-align: center;">~tgg,4</td>
                         <td id="straddr" style="text-align: center;">~straddr</td>
                         <td id="endaddr" style="text-align: center;">~endaddr</td>
                         <td id="product" style="text-align: center;">~product</td>
@@ -760,6 +758,8 @@
                         <td id="tolls,3" style="text-align: right;">~tolls,3</td>
                         <td id="reserve,0" style="text-align: right;">~reserve,0</td>
                         <td id="miles,0" style="text-align: right;">~miles,0</td>
+                        <td id="nick" style="text-align: center;">~nick</td>
+                        <td id="tgg,4" style="text-align: center;">~tgg,4</td>
                         <td id="datea" style="text-align: center;">~datea</td>
                     </tr>
                 </table>
