@@ -140,6 +140,12 @@
                     }, {/*12-[17]迄點*/
                         type : '6',
                         name : 'xendaddrno'
+                    }, {/*13-[18][19]司機*/
+                        type : '2',
+                        name : 'xproduct',
+                        dbf : 'ucc',
+                        index : 'noa,product',
+                        src : 'ucc_b.aspx'
                     }]
                 });
                 q_popAssign();
