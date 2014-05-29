@@ -118,6 +118,8 @@
                     if (e.which == 13)
                         $('#textEEdate').focus();
                 });
+                
+                document.title = "薪資作業";
             }
             function q_funcPost(t_func, result) {
                 switch(t_func) {
