@@ -23,7 +23,7 @@
             var q_name = "get";
             var q_readonly = ['txtNoa', 'txtWorker', 'txtWorker2'];
             var q_readonlys = [];
-            var bbmNum = [];
+            var bbmNum = [['txtPrice', 10, 3, 1]];
             var bbsNum = [['txtWeight', 10, 3]];
             var bbmMask = [];
             var bbsMask = [];
@@ -379,6 +379,10 @@
                         <td><input id="txtNoa"  type="text" class="txt c1"/></td>
                         <td><span> </span><a id="lblDatea" class="lbl"> </a></td>
                         <td><input id="txtDatea"  type="text" class="txt c1"/></td>
+                    </tr>
+                    <tr>
+                        <td><span> </span><a class="lbl">成品單價</a></td>
+                        <td><input id="txtPrice"  type="text" class="txt c1 num"/></td>
                     </tr>
                     <tr>
                         <td><span> </span><a id="lblMemo" class="lbl"> </a></td>
