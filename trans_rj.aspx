@@ -35,7 +35,7 @@
             aPop = new Array(['txtStraddrno', 'lblStraddr_tb', 'straddr_rj', 'noa', 'txtStraddrno', 'straddr_rj_b.aspx'],
                              ['txtEndaddrno', 'lblEndaddr_tb', 'endaddr_rj', 'noa', 'txtEndaddrno', 'endaddr_rj_b.aspx']
                 ,['txtUccno','lblUcc','ucc','noa,product','txtUccno,txtProduct','ucc_b.aspx']
-                ,['txtCustno', 'lblCust', 'cust', 'noa,comp,nick', 'txtCustno,txtComp,txtNick', 'cust_b.aspx']
+                ,['txtCustno', 'lblCust_rj', 'cust', 'noa,comp,nick', 'txtCustno,txtComp,txtNick', 'cust_b.aspx']
                 ,['txtTggno', 'lblTgg_rj', 'tgg', 'noa,comp', 'txtTggno,txtTgg', 'tgg_b.aspx']
                 ,['txtDriverno', 'lblDriver', 'driver', 'noa,namea', 'txtDriverno,txtDriver', 'driver_b.aspx']
                 ,['txtCarno', 'lblCarno', 'car2', 'a.noa,driver,driverno', 'txtCarno,txtDriver,txtDriverno', 'car2_b.aspx']
