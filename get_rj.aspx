@@ -24,7 +24,7 @@
             var q_readonly = ['txtNoa', 'txtWorker', 'txtWorker2'];
             var q_readonlys = [];
             var bbmNum = [];
-            var bbsNum = [['txtWeight', 10, 3], ['txtMount', 10, 2]];
+            var bbsNum = [['txtWeight', 10, 3]];
             var bbmMask = [];
             var bbsMask = [];
             q_sqlCount = 6;
@@ -69,18 +69,6 @@
             function q_boxClose(s2) {
                 var ret;
                 switch (b_pop) {
-                    case 'ordes':
-                        if (q_cur > 0 && q_cur < 4) {
-                            b_ret = getb_ret();
-                            if (!b_ret || b_ret.length == 0){
-                                b_pop = '';
-                                return;
-                            }
-                            var i, j = 0;
-                            ret = q_gridAddRow(bbsHtm, 'tbbs', 'txtProductno,txtProduct,txtSpec,txtSize,txtDime,txtWidth,txtLengthb,txtUnit,txtOrdeno,txtNo2', b_ret.length, b_ret, 'productno,product,spec,size,dime,width,lengthb,unit,noa,no2', 'txtProductno,txtProduct,txtSpec');
-                            bbsAssign();
-                        }
-                        break;
                     case q_name + '_s':
                         q_boxClose2(s2);
                         break;
@@ -131,14 +119,10 @@
                         $('#txtWeight_'+j).change(function(e){
                             sum();
                         });
-                        $('#txtMount_'+j).change(function(e){
-                            sum();
-                        });
                     }
                 }
                 _bbsAssign();
             }
-
             function btnIns() {
                 _btnIns();
                 $('#txtNoa').val('AUTO');
@@ -415,11 +399,9 @@
                     <td  align="center" style="width:30px;">
                     <input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  />
                     </td>
-                    <td align="center" style="width:20px;"></td>
+                    <td align="center" style="width:20px;"> </td>
                     <td align="center" style="width:200px;">品名</td>
                     <td align="center" style="width:100px;">公斤</td>
-                    <td align="center" style="width:100px;display:none;">米數</td>
-                    <td align="center" style="width:200px;display:none;">備註</td>
                 </tr>
                 <tr style='background:#cad3ff;'>
                     <td align="center">
@@ -432,9 +414,7 @@
                         <input type="text" id="txtProductno.*" style="width:40%;"/>
                         <input type="text" id="txtProduct.*" style="width:40%;"/>
                     </td>
-                    <td><input type="text" id="txtWeight.*" style="width:95%;text-align:right;"/></td> 
-                    <td style="display:none;"><input type="text" id="txtMount.*" style="width:95%;float:right;"/></td> 
-                    <td style="display:none;"><input type="text" id="txtMemo.*" style="width:95%;"/></td>                 
+                    <td><input type="text" id="txtWeight.*" style="width:95%;text-align:right;"/></td>                 
                 </tr>
             </table>
         </div>
