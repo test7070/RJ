@@ -57,6 +57,10 @@
                 bbmMask = [['txtDatea', r_picd]];
                 q_mask(bbmMask);
                 $('#txtDatea').datepicker();
+                $('#txtDatea').change(function(e){
+                    t_where = "datea<'"+$(this).val()+"'";
+                    q_gt('view_get', "where=^^"+t_where+"^^ order=^^datea desc,noa desc^^", 0, 1, 0, 'getPrice');
+                });
             }
             
             function q_popPost(s1) {
@@ -77,6 +81,12 @@
             }
             function q_gtPost(t_name) {
                 switch (t_name) {
+                    case 'getPrice':
+                        var as = _q_appendData("view_get", "", true);
+                        if (as[0] != undefined) {
+                            $('#txtPrice').val(as[0].price);
+                        }
+                        break;
                     case q_name:
                         if (q_cur == 4)
                             q_Seek_gtPost();
@@ -127,7 +137,7 @@
                 _btnIns();
                 $('#txtNoa').val('AUTO');
                 $('#txtDatea').val(q_date());
-                $('#txtDatea').focus();
+                $('#txtDatea').focus().change();
                 
                 while(q_bbsCount<=5){
                     $('#btnPlus').click();
