@@ -22,7 +22,7 @@
             isEditTotal = false;
             q_tables = 's';
             var q_name = "addr";
-            var q_readonly = [];
+            var q_readonly = ['txtNoa'];
             var q_readonlys = [];
             var bbmNum = [];
             var bbsNum = [['txtCustprice', 10, 3], ['txtTggprice', 10, 3], ['txtDriverprice', 10, 3], ['txtDriverprice2', 10, 3]];
@@ -149,6 +149,23 @@
                         }
                         q_box("z_addr2.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";;" + r_accy,'z_addr2', "95%", "95%", q_getMsg("popPrint"));
                         break;
+                    case 'getNoa':
+                        var as = _q_appendData("addr", "", true);
+                        if (as[0] != undefined){      
+                            var num = as[0].noa.substring(1,4);
+                            var string = "0123476789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                            var n = string.indexOf(num.substring(0,1));
+                            var value = n*100+parseInt(num.substring(1,3))+1;
+                            n = string.substring(Math.floor(value/100),Math.floor(value/100)+1);
+                            var m = (value%100<10?'0':'')+(value%100);
+                            //alert((value%100)+'\n'+n+'\n'+m);
+                            $('#txtNoa').val('A'+n+m);
+                            wrServer('A'+n+m);
+                        }else{
+                            $('#txtNoa').val('A001');
+                            wrServer('A001');
+                        }    
+                        break;
                     case q_name:
                         if (q_cur == 4)
                             q_Seek_gtPost();
@@ -164,13 +181,16 @@
                                         Unlock(1);
                                         return;
                                     }else{
-                                        q_gt('addr', "where=^^ noa='"+t_array.noa+"' ^^", 0, 0, 0, JSON.stringify({
+                                       // q_gtnoa(q_name,'A');
+                                        /*q_gt('addr', "where=^^ noa='"+t_array.noa+"' ^^", 0, 0, 0, JSON.stringify({
                                             type : 'checkNoa',
                                             noa : t_array.noa,
                                             straddrno : t_array.straddrno,
                                             endaddrno : t_array.endaddrno,
                                             productno : t_array.productno
-                                        }), r_accy);
+                                        }), r_accy);*/
+                                       
+                                       q_gt('addr', "order=^^noa desc^^", 1, 0, 0, 'getNoa', r_accy);
                                     }
                                     break;
                                 case 'checkNoa':
@@ -201,13 +221,7 @@
                 var t_straddrno = $.trim($('#txtStraddrno').val());
                 var t_endaddrno = $.trim($('#txtEndaddrno').val());
                 var t_productno = $.trim($('#txtProductno').val());
-                
-                if(t_noa.length==0){
-                    alert('請輸入編號。');
-                    Unlock(1);
-                    return;
-                }
-                $('#txtNoa').val(t_noa); 
+                          
                 $('#txtStraddrno').val(t_straddrno); 
                 $('#txtStraddr').val(t_straddrno);
                 $('#txtEndaddrno').val(t_endaddrno);     
@@ -266,7 +280,7 @@
                     return;
                 _btnModi();
                 $('#txtNoa').attr('readonly', 'readonly').css('color','green').css('background','rgb(237,237,237)');
-                $('#txtAddr').focus();
+                $('#txtNoa').focus();
             }
 
             function btnPrint() {
@@ -512,10 +526,6 @@
                         <td colspan="2"><input id="txtNoa" type="text" class="txt c1" /></td>
                     </tr>
                     <tr>
-                        <td><span> </span><a id='lblAddr' class="lbl"> </a></td>
-                        <td colspan="3"><input id="txtAddr" type="text" class="txt c1" /></td>
-                    </tr>
-                    <tr>
                         <td><span> </span><a id='lblStraddr' class="lbl btn"> </a></td>
                         <td colspan="3">
                             <input id="txtStraddrno" type="text" class="txt c1"/>
@@ -554,12 +564,12 @@
                     <input class="btn"  id="btnPlus" type="button" value='+' style="font-weight: bold;"  />
                     </td>
                     <td align="center" style="width:80px;"><a id='lblDatea_s'> </a></td>
-                    <td align="center" style="width:80px;"><a id='lblDriverunit_tb'> </a><br>計價方式</td>
-                    <td align="center" style="width:80px;"><a id='lblDriverprice_tb'> </a></td>
-                    <td align="center" style="width:80px;"><a id='lblDriverunit2_tb'> </a><br>計價方式</td>
-                    <td align="center" style="width:80px;"><a id='lblDriverprice2_tb'> </a></td>
                     <td align="center" style="width:80px;"><a id='lblCustunit_tb'> </a><br>計價方式</td>
                     <td align="center" style="width:80px;"><a id='lblCustprice_tb'> </a></td>
+                    <td align="center" style="width:80px;"><a id='lblDriverunit2_tb'> </a><br>計價方式</td>
+                    <td align="center" style="width:80px;"><a id='lblDriverprice2_tb'> </a></td>
+                    <td align="center" style="width:80px;"><a id='lblDriverunit_tb'> </a><br>計價方式</td>
+                    <td align="center" style="width:80px;"><a id='lblDriverprice_tb'> </a></td>
                     <td align="center" style="width:80px;"><a id='lblTggunit_tb'> </a><br>計價方式</td>
                     <td align="center" style="width:80px;"><a id='lblTggprice_tb'> </a></td>
                     <td align="center" style="width:150px;"><a id='lblMemo_s'> </a></td>
@@ -571,11 +581,11 @@
                     </td>
                     <td><input type="text" id="txtDatea.*" style="width:95%;"/></td>
                     <td><select id="cmbDriverunit.*" style="width:95%;"> </select></td>
-                    <td><input type="text" id="txtDriverprice.*" style="width:95%;text-align:right;"/></td>
+                    <td><select id="cmbCustunit.*" style="width:95%;"> </select></td>
                     <td><select id="cmbDriverunit2.*" style="width:95%;"> </select></td>
                     <td><input type="text" id="txtDriverprice2.*" style="width:95%;text-align:right;"/></td>
-                    <td><select id="cmbCustunit.*" style="width:95%;"> </select></td>
                     <td><input type="text" id="txtCustprice.*" style="width:95%;text-align:right;"/></td>
+                    <td><input type="text" id="txtDriverprice.*" style="width:95%;text-align:right;"/></td>
                     <td><select id="cmbTggunit.*" style="width:95%;"> </select></td>
                     <td><input type="text" id="txtTggprice.*" style="width:95%;text-align:right;"/></td>
                     <td><input type="text" id="txtMemo.*" style="width:95%;"/></td>
