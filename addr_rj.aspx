@@ -580,11 +580,11 @@
                     <input id="txtNoq.*" type="text" style="display: none;" />
                     </td>
                     <td><input type="text" id="txtDatea.*" style="width:95%;"/></td>
-                    <td><select id="cmbDriverunit.*" style="width:95%;"> </select></td>
                     <td><select id="cmbCustunit.*" style="width:95%;"> </select></td>
+                    <td><input type="text" id="txtCustprice.*" style="width:95%;text-align:right;"/></td>
                     <td><select id="cmbDriverunit2.*" style="width:95%;"> </select></td>
                     <td><input type="text" id="txtDriverprice2.*" style="width:95%;text-align:right;"/></td>
-                    <td><input type="text" id="txtCustprice.*" style="width:95%;text-align:right;"/></td>
+                    <td><select id="cmbDriverunit.*" style="width:95%;"> </select></td>
                     <td><input type="text" id="txtDriverprice.*" style="width:95%;text-align:right;"/></td>
                     <td><select id="cmbTggunit.*" style="width:95%;"> </select></td>
                     <td><input type="text" id="txtTggprice.*" style="width:95%;text-align:right;"/></td>
