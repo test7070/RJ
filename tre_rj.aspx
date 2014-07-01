@@ -41,7 +41,7 @@
                 isLoad : false, carchgno : new Array()
             };
             $(document).ready(function() {
-                bbmKey = ['noa'];
+                bbmKey = ['noa']; 
                 bbsKey = ['noa', 'noq'];
                 q_brwCount();
                 q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
