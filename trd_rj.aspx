@@ -40,7 +40,6 @@
             ,  ['txtEndaddrno', '', 'endaddr_rj', 'noa', 'txtEndaddrno', 'endaddr_rj_b.aspx']
             , ['txtBoatno', 'lblBoat', 'boat', 'noa,boat', 'txtBoatno,txtBoat', 'boat_b.aspx']);
             $(document).ready(function() {
-                q_bbsShow = -1;
                 bbmKey = ['noa'];
                 bbsKey = ['noa', 'noq'];
                 q_brwCount();
