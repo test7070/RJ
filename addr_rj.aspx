@@ -25,7 +25,7 @@
             var q_readonly = ['txtNoa'];
             var q_readonlys = [];
             var bbmNum = [];
-            var bbsNum = [['txtCustprice', 10, 3], ['txtTggprice', 10, 3], ['txtDriverprice', 10, 3], ['txtDriverprice2', 10, 3]];
+            var bbsNum = [['txtCustprice', 10, 3], ['txtTggprice', 10, 3], ['txtDriverprice', 10, 3], ['txtDriverprice2', 10, 3],[txtCommission,10,3]];
             var bbmMask = [];
             var bbsMask = [];
             q_sqlCount = 6;
@@ -572,6 +572,7 @@
                     <td align="center" style="width:80px;"><a id='lblDriverprice_tb'> </a></td>
                     <td align="center" style="width:80px;"><a id='lblTggunit_tb'> </a><br>計價方式</td>
                     <td align="center" style="width:80px;"><a id='lblTggprice_tb'> </a></td>
+                    <td align="center" style="width:80px;">噸數</td>
                     <td align="center" style="width:150px;"><a id='lblMemo_s'> </a></td>
                 </tr>
                 <tr  style='background:#cad3ff;'>
@@ -588,6 +589,7 @@
                     <td><input type="text" id="txtDriverprice.*" style="width:95%;text-align:right;"/></td>
                     <td><select id="cmbTggunit.*" style="width:95%;"> </select></td>
                     <td><input type="text" id="txtTggprice.*" style="width:95%;text-align:right;"/></td>
+                    <td><input type="text" id="txtCommission.*" style="width:95%;text-align:right;"/></td>
                     <td><input type="text" id="txtMemo.*" style="width:95%;"/></td>
                 </tr>
             </table>
