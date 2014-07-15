@@ -25,7 +25,7 @@
             var q_readonly = ['txtNoa'];
             var q_readonlys = [];
             var bbmNum = [];
-            var bbsNum = [['txtCustprice', 10, 3], ['txtTggprice', 10, 3], ['txtDriverprice', 10, 3], ['txtDriverprice2', 10, 3],[txtCommission,10,3]];
+            var bbsNum = [['txtCustprice', 10, 3], ['txtTggprice', 10, 3], ['txtDriverprice', 10, 3], ['txtDriverprice2', 10, 3],['txtCommission',10,3]];
             var bbmMask = [];
             var bbsMask = [];
             q_sqlCount = 6;
