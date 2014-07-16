@@ -93,6 +93,7 @@
                     q_box("carchg_b.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";" + t_where + ";;" + t_carchgno + ";", 'carchg', "95%", "650px", q_getMsg('popCarchg'));
                 });
                 //---------------------------------------------------------------
+                $('#textDatea').datepicker();
                 $('#textBBdate').datepicker();
                 $('#textEEdate').datepicker();
                 $('#btnTrans').click(function(e) {
