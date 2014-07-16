@@ -572,7 +572,7 @@
                     <td align="center" style="width:80px;"><a id='lblDriverprice_tb'> </a></td>
                     <td align="center" style="width:80px;"><a id='lblTggunit_tb'> </a><br>計價方式</td>
                     <td align="center" style="width:80px;"><a id='lblTggprice_tb'> </a></td>
-                    <td align="center" style="width:80px;">噸數</td>
+                    <td align="center" style="width:80px;">米/噸</td>
                     <td align="center" style="width:150px;"><a id='lblMemo_s'> </a></td>
                 </tr>
                 <tr  style='background:#cad3ff;'>
