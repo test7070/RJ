@@ -264,6 +264,7 @@
                             row_b_seq=b_seq;
                             row_bbsbbt='bbs';
                         });
+                        $('#txtDatea_'+j).datepicker();
                     }
 
                 }
