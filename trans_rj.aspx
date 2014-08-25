@@ -301,10 +301,9 @@
                         $('#cmbCalctype').val(trans.calctype[0].noa);
                     }
                     $('#txtDatea').val(q_date);
-                    $('#txtTrandate').focus();
                     trans.calctypeChange();
                     trans.refresh();
-                    $('#txtDatea').focus();
+                    $('#txtTrandate').focus();
                 });   
              //   q_xchgForm();
             }
