@@ -58,8 +58,6 @@
                 q_getFormat();
                 bbmMask = [['txtDatea', r_picd], ['txtMon', r_picm], ['txtBtrandate', r_picd], ['txtEtrandate', r_picd], ['txtVccadate', r_picd]];
                 q_mask(bbmMask);
-                $('#txtBtrandate').datepicker();
-                $('#txtEtrandate').datepicker();
                 $('#lblAccno').click(function() {
                     if ($('#txtYear1').val().length > 0)
                         q_pop('txtAccno', "accc.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";accc3='" + $('#txtAccno').val() + "';" + $('#txtYear1').val() + '_' + r_cno, 'accc', 'accc3', 'accc2', "95%", "95%", q_getMsg('popAccc'), true);
@@ -429,10 +427,16 @@
                     $('#btnTrans').removeAttr('disabled');
                     $('#btnCustchg').removeAttr('disabled');
                     $('#btnVcca').removeAttr('disabled');
+                    $('#txtBtrandate').datepicker();
+                	$('#txtEtrandate').datepicker();
+                	$('#txtDatea').datepicker();
                 } else {
                     $('#btnTrans').attr('disabled', 'disabled');
                     $('#btnCustchg').attr('disabled', 'disabled');
                     $('#btnVcca').attr('disabled', 'disabled');
+                    $('#txtBtrandate').datepicker('destroy');
+                	$('#txtEtrandate').datepicker('destroy');
+                	$('#txtDatea').datepicker('destroy');
                 }
             }
             function btnMinus(id) {

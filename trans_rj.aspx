@@ -532,11 +532,15 @@
                     $('#combDriverunit').removeAttr('disabled');
                     $('#combDriverunit2').removeAttr('disabled');
                     $('#btnCopy').attr('disabled','disabled');
+                    $('#txtDatea').datepicker();
+                    $('#txtTrandate').datepicker();
                 }
                 else{
                     $('#combDriverunit').attr('disabled','disabled');
                     $('#combDriverunit2').attr('disabled','disabled');
                     $('#btnCopy').removeAttr('disabled');
+                    $('#txtDatea').datepicker('destroy');
+                    $('#txtTrandate').datepicker('destroy');
                 }
             }
 
