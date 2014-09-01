@@ -32,7 +32,11 @@
             brwNowPage = 0;
             brwKey = 'Datea';
             q_desc = 1;
-            aPop = new Array(['txtCarno', 'lblCarno', 'car2', 'a.noa,driverno,driver', 'txtCarno,txtDriverno,txtDriver', 'car2_b.aspx'], ['txtTggno', 'lblTgg', 'tgg', 'noa,comp', 'txtTggno,txtTggcomp', 'tgg_b.aspx'], ['txtDriverno', 'lblDriver', 'driver', 'noa,namea', 'txtDriverno,txtDriver', 'driver_b.aspx'], ['txtBdriverno', '', 'driver', 'noa,namea', 'txtBdriverno', 'driver_b.aspx'], ['txtEdriverno', '', 'driver', 'noa,namea', 'txtEdriverno', 'driver_b.aspx']);
+            aPop = new Array(['txtCarno', 'lblCarno', 'car2', 'a.noa,driverno,driver', 'txtCarno,txtDriverno,txtDriver', 'car2_b.aspx']
+            , ['txtTggno', 'lblTgg', 'tgg', 'noa,comp', 'txtTggno,txtTggcomp', 'tgg_b.aspx']
+            , ['txtDriverno', 'lblDriver', 'driver', 'noa,namea', 'txtDriverno,txtDriver', 'driver_b.aspx']
+            , ['textBdriverno', 'btnBdriverno', 'driver', 'noa,namea', 'textBdriverno', 'driver_b.aspx']
+            , ['textEdriverno', 'btnEdriverno', 'driver', 'noa,namea', 'textEdriverno', 'driver_b.aspx']);
             q_xchg = 1;
             brwCount2 = 20;
             function tre() {
@@ -61,6 +65,22 @@
                 q_getFormat();
                 bbmMask = [['textDatea', r_picd], ['textBBdate', r_picd], ['textEEdate', r_picd], ['txtDatea', r_picd], ['txtDate2', r_picd], ['txtBdate', r_picd], ['txtEdate', r_picd], ['txtPaydate', r_picd]];
                 q_mask(bbmMask);
+                $('#textBdriverno').bind('contextmenu', function(e) {
+                    /*滑鼠右鍵*/
+                    e.preventDefault();
+                    $('#btnBdriverno').click();
+                }).focusin(function(e){
+                	if($('#btnTrans').is(":visible"))
+                		q_cur=2;           
+                });
+                $('#textEdriverno').bind('contextmenu', function(e) {
+                    /*滑鼠右鍵*/
+                    e.preventDefault();
+                    $('#btnEdriverno').click();
+                }).focusin(function(e){
+                	if($('#btnTrans').is(":visible"))
+                		q_cur=2;           
+                });      
                 $('#lblAccno').click(function() {
                     q_pop('txtAccno', "accc.aspx?" + r_userno + ";" + r_name + ";" + q_time + ";accc3='" + $('#txtAccno').val() + "';" + $('#txtYear1').val() + '_' + r_cno, 'accc', 'accc3', 'accc2', "92%", "1054px", q_getMsg('popAccc'), true);
                 });
@@ -106,11 +126,13 @@
                     var t_datea = $('#textDatea').val();
                     var t_bdate = $('#textBBdate').val();
                     var t_edate = $('#textEEdate').val();
+                    var t_bdriverno = $('#textBdriverno').val();
+                    var t_edriverno = $('#textEdriverno').val();
                     if (t_datea.length > 0 && t_bdate.length > 0 && t_edate.length > 0) {
                         Lock(1, {
                             opacity : 0
                         });
-                        q_func('qtxt.query.tre', 'tre.txt,tre_rj,' + encodeURI(r_userno) + ';' + encodeURI(r_name) + ';' + encodeURI(q_getPara('sys.key_tre')) + ';' + encodeURI(t_datea) + ';' + encodeURI(t_bdate) + ';' + encodeURI(t_edate));
+                        q_func('qtxt.query.tre', 'tre.txt,tre_rj,' + encodeURI(r_userno) + ';' + encodeURI(r_name) + ';' + encodeURI(q_getPara('sys.key_tre')) + ';' + encodeURI(t_datea) + ';' + encodeURI(t_bdate) + ';' + encodeURI(t_edate) + ';' + encodeURI(t_bdriverno)+ ';' + encodeURI(t_edriverno));
                     } else
                         alert('請輸入日期。');
                 });
@@ -120,6 +142,18 @@
                 });
                 
                 document.title = "薪資作業";
+            }
+            function q_popPost(id) {
+                switch (id) {
+                	case 'textBdriverno':
+                		if(!$('#btnTrans').is(":visible"))
+                			q_cur=0;  
+        			case 'textEdriverno':
+                		if(!$('#btnTrans').is(":visible"))
+                			q_cur=0;  
+                    default:
+                        break;
+                }
             }
             function q_funcPost(t_func, result) {
                 switch(t_func) {
@@ -467,6 +501,16 @@
                     <input type="text" id="textBBdate" style="float:left;width:40%;"/>
                     <span style="float:left;width:5%;">~</span>
                     <input type="text" id="textEEdate" style="float:left;width:40%;"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 2px;text-align: center;border-width: 0px;background-color: pink;color: blue;"><a>司機編號</a></td>
+                    <td colspan="3" style="padding: 2px;text-align: center;border-width: 0px;background-color: pink;">
+                    <input type="text" id="textBdriverno" style="float:left;width:40%;"/>
+                    <span style="float:left;width:5%;">~</span>
+                    <input type="text" id="textEdriverno" style="float:left;width:40%;"/>
+                    <input type="button" id="btnBdriverno" style="display:none;" />
+                    <input type="button" id="btnEdriverno" style="display:none;" />
                     </td>
                 </tr>
                 <tr>
