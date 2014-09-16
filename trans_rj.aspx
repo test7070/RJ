@@ -205,6 +205,21 @@
                 $('#btnIns').val($('#btnIns').val() + "(F8)");
                 $('#btnOk').val($('#btnOk').val() + "(F9)");
                 
+                $('body').bind('keydown', function (event) {   ////  focus  於  refresh() 指定
+			        if (!event)
+			            return;
+			        try {
+			            var code = (event.keyCode ? event.keyCode : event.which);
+			            var y = -1, next, s1, s2;
+			
+			            if (q_cur == 0 || q_cur == 4)
+			                if (code == 118) { $('#btnCopy').click(); return; }   /// F7
+			        }
+			        catch (e) {
+			            errout(e, '_q_brwAssign()');
+			        }
+			    });
+                
                 bbmMask = [['txtDatea', r_picd],['txtTrandate', r_picd]];
                 q_mask(bbmMask);
                 $("#cmbCalctype").focus(function() {
@@ -725,7 +740,7 @@
     ondrop="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();"
     >
         <!--#include file="../inc/toolbar.inc"-->
-        <input type="button" id="btnCopy" value="複製" style="width:100px;">
+        <input type="button" id="btnCopy" value="複製(F7)" style="width:100px;">
         <div id="dmain">
             <div class="dview" id="dview">
                 <table class="tview" id="tview">
