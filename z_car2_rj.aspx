@@ -26,10 +26,17 @@
             function q_gfPost() {
                 $('#q_report').q_report({
                     fileName : 'z_car2_rj',
-                    options : [{/*[1]*/
+                    options : [{//[1] 
                         type : '0',
                         name : 'xcartype',
                         value : q_getPara('car2.cartype')
+                    },{//[2]
+                        type : '6',
+                        name : 'xcarno'
+                    },{//[3] 
+                        type : '8',
+                        name : 'xcartype',
+                        value : q_getPara('car2.cartype').split(',')
                     }]
                 });
                 q_popAssign();
