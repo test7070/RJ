@@ -37,10 +37,17 @@
                         type : '8',
                         name : 'xcartype',
                         value : q_getPara('car2.cartype').split(',')
+                    }, {/*[4][5]驗車日期*/
+                        type : '1',
+                        name : 'xcheckdate'
                     }]
                 });
                 q_popAssign();
                 q_langShow();
+                $('#txtXcheckdate1').mask('999/99/99');
+                $('#txtXcheckdate1').datepicker();
+                $('#txtXcheckdate2').mask('999/99/99');
+                $('#txtXcheckdate2').datepicker();
             }
 
             function q_boxClose(t_name) {
