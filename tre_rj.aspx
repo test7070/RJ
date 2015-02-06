@@ -23,7 +23,7 @@
             var q_readonly = ['txtAccno', 'txtNoa', 'txtMoney', 'txtTotal', 'txtCarchgno', 'txtWorker2', 'txtWorker', 'txtRc2ano', 'txtPaydate', 'txtPlusmoney', 'txtMinusmoney', 'txtAccno', 'txtAccno2', 'txtYear2', 'txtYear1'];
             var q_readonlys = ['txtOrdeno', 'txtTranno', 'txtTrannoq', 'txtTranaccy','txtMount','txtPrice','txtMoney'];
             var bbmNum = [['txtMoney', 10, 0], ['txtTotal', 10, 0], ['txtPlusmoney', 10, 0], ['txtMinusmoney', 10, 0]];
-            var bbsNum = [['txtMount', 10, 3], ['txtPrice', 10, 3], ['txtMoney', 10, 0]];
+            var bbsNum = [['txtMount', 10, 3],['Overweightcost',10,3],['Othercost',10,3], ['txtPrice', 10, 3], ['txtMoney', 10, 0]];
             var bbmMask = [];
             var bbsMask = [];
             q_sqlCount = 6;
@@ -462,7 +462,7 @@
                 font-size: medium;
             }
             .dbbs {
-                width: 2400px;
+                width: 1500px;
             }
             .tbbs a {
                 font-size: medium;
@@ -676,8 +676,10 @@
                     <td align="center" style="width:200px;"><a id='lblStraddr_tb'> </a></td>
                     <td align="center" style="width:200px;"><a id='lblEndaddr_tb'> </a></td>
                     <td align="center" style="width:200px;"><a id='lblProduct_s'> </a></td>
+                    <td align="center" style="width:100px;"><a>台數</a></td>
+                    <td align="center" style="width:100px;"><a>米數</a></td>
+                    <td align="center" style="width:100px;"><a>噸數</a></td>
                     <td align="center" style="width:80px;">計價方式</td>
-                    <td align="center" style="width:100px;"><a id='lblMount_s'> </a></td>
                     <td align="center" style="width:100px;"><a id='lblPrice_s'> </a></td>
                     <td align="center" style="width:100px;"><a id='lblMoney_s'> </a></td>
                     <td align="center" style="width:100px;"><a id='lblMemo_s'> </a></td>
@@ -707,13 +709,19 @@
                     <input type="text" id="txtProduct.*" style="width:95%;" />
                     </td>
                     <td>
-                    <input type="text" id="txtUnit.*" style="width:95%;" />
-                    </td>
-                    <td>
                     <input type="text" id="txtMount.*" style="width:95%;text-align: right;" />
                     </td>
                     <td>
+                    <input type="text" id="txtOverweightcost.*" style="width:95%;text-align: right;" />
+                    </td>
+                    <td>
+                    <input type="text" id="txtOthercost.*" style="width:95%;text-align: right;" />
+                    </td>
+                    <td>
                     <input type="text" id="txtPrice.*" style="width:95%;text-align: right;" />
+                    </td>
+                    <td>
+                    <input type="text" id="txtUnit.*" style="width:95%;" />
                     </td>
                     <td>
                     <input type="text" id="txtMoney.*" style="width:95%;text-align: right;"/>
