@@ -718,10 +718,10 @@
                     <input type="text" id="txtOthercost.*" style="width:95%;text-align: right;" />
                     </td>
                     <td>
-                    <input type="text" id="txtPrice.*" style="width:95%;text-align: right;" />
+                    <input type="text" id="txtUnit.*" style="width:95%;" />
                     </td>
                     <td>
-                    <input type="text" id="txtUnit.*" style="width:95%;" />
+                    <input type="text" id="txtPrice.*" style="width:95%;text-align: right;" />
                     </td>
                     <td>
                     <input type="text" id="txtMoney.*" style="width:95%;text-align: right;"/>
