@@ -1,0 +1,65 @@
+z_ummtran_rj01:--z_ummtran_rj01 
+    declare @t_bdate nvarchar(20) = case when '#non'=[1] then '' else [1] end
+    declare @t_edate nvarchar(20) = case when '#non'=[2] then char(255) else [2] end
+    declare @t_bcustno nvarchar(20) = case when '#non'=[3] then '' else [3] end
+    declare @t_ecustno nvarchar(20) = case when '#non'=[4] then char(255) else [4] end
+    
+    declare @tmp table(
+		gno nvarchar(10),
+        trandate nvarchar(10),
+        tranaccy nvarchar(10),
+        tranno nvarchar(20),
+        
+        custno nvarchar(20),
+        cust nvarchar(50),
+        nick nvarchar(20),
+        carno nvarchar(20),
+        driverno nvarchar(20),
+        driver nvarchar(30),
+        productno nvarchar(20),
+        product nvarchar(40),
+        straddrno nvarchar(20),
+        straddr nvarchar(50),
+        endaddrno nvarchar(20),
+        endaddr nvarchar(50),
+        inmount float,
+        mount3 float,
+        mount4 float,
+        
+        mount float,
+        unit nvarchar(20),
+        price float,
+        tranmoney float,
+        memo nvarchar(max)
+    )
+
+    insert into @tmp(gno,trandate,tranaccy,tranno,custno,cust,nick
+		,straddrno,straddr,endaddrno,endaddr,inmount,mount3,mount4
+		,productno,product,carno,driverno,driver)
+    select '1',a.trandate,a.accy,a.noa,a.custno,a.custno,a.nick
+		,a.straddrno,a.straddr,a.endaddrno,a.endaddr,a.inmount,a.mount3,a.mount4
+    	,a.uccno,a.product,a.carno,a.driverno,a.driver
+    from view_trans a
+    left join view_trds b on a.noa=b.tranno 
+    where b.noa is null  
+    and isnull(a.trandate,'') between @t_bdate and @t_edate
+    and isnull(a.custno,'') between @t_bcustno and @t_ecustno
+    
+    update @tmp set unit=b.custunit,price=b.custprice
+		,mount = case ISNULL(b.custunit,'') when '台數' then a.inmount 
+            when '米數' then a.mount3 when '噸數' then a.mount4 else 0 end
+        ,tranmoney = round(case ISNULL(b.custunit,'') when '台數' then a.inmount 
+            when '米數' then a.mount3 when '噸數' then a.mount4 else 0 end*isnull(b.custprice,0),0)
+    from @tmp a
+    outer apply (select top 1 x.custunit,x.custprice 
+        from addrs x
+        left join addr y on x.noa=y.noa 
+        where a.productno=y.productno and a.straddrno=y.straddrno and a.endaddrno=y.endaddrno and datea<=a.trandate order by datea desc) b
+	
+	insert into @tmp(gno,inmount,mount3,mount4,tranmoney)
+	select '2',SUM(ISNULL(inmount,0)),SUM(ISNULL(mount3,0)),SUM(ISNULL(mount4,0)),SUM(ISNULL(tranmoney,0)) from @tmp
+    
+    select * 
+    ,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,tranmoney),1)),4,12)) mm
+    ,'trans_rj?noa=$tranno?'+tranaccy ghref
+    from @tmp order by gno,trandate,tranno;

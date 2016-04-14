@@ -1,0 +1,65 @@
+z_addr_rj01:--z_addr_rj01
+	SET QUOTED_IDENTIFIER OFF
+	declare @cmd nvarchar(max)		
+	declare @t_bcustno nvarchar(20) = case when '#non'=[2] then '' else [2] end
+	declare @t_ecustno nvarchar(20) = case when '#non'=[3] then char(255) else [3] end
+	declare @t_bstraddrno nvarchar(20) = case when '#non'=[4] then '' else [4] end
+	declare @t_estraddrno nvarchar(20) = case when '#non'=[5] then char(255) else [5] end
+	declare @t_bendaddrno nvarchar(20) = case when '#non'=[6] then '' else [6] end
+	declare @t_eendaddrno nvarchar(20) = case when '#non'=[7] then char(255) else [7] end
+	declare @t_bproductno nvarchar(20) = case when '#non'=[8] then '' else [8] end
+	declare @t_eproductno nvarchar(20) = case when '#non'=[9] then char(255) else [9] end
+	----------------------------------------------------------------------------------------------------------
+	declare @tmp table(
+		recno int,
+		gno nvarchar(20),
+		noa nvarchar(20),
+		straddrno nvarchar(20),
+		straddr nvarchar(50),
+		endaddrno nvarchar(20),
+		endaddr nvarchar(50),
+		productno nvarchar(20),
+		product nvarchar(50),
+		custno nvarchar(20),
+		cust nvarchar(50),
+		nick nvarchar(20),
+		
+		datea nvarchar(20),
+		custunit nvarchar(20),
+		custprice float,
+		driverunit nvarchar(20),
+		driverprice float,
+		driverunit2 nvarchar(20),
+		driverprice2 float,
+		commission decimal(10,3)
+	)
+	insert into @tmp(recno,gno,noa,straddrno,straddr,endaddrno,endaddr,productno,product,custno,cust,nick
+		,datea,custunit,custprice,driverunit,driverprice,driverunit2,driverprice2,commission)
+	select ROW_NUMBER()over(order by a.straddrno,a.endaddrno,a.productno),'1'
+		,a.noa,a.straddrno,a.straddr,a.endaddrno,a.endaddr,a.productno,a.product,a.custno,a.cust,a.nick
+		,b.datea,b.custunit,b.custprice,b.driverunit,b.driverprice,b.driverunit2,b.driverprice2,b.commission
+	from addr a
+	outer apply (select top 1 * from addrs where a.noa=noa order by isnull(datea,'') desc) b
+	where isnull(a.straddrno,'') between @t_bstraddrno and @t_estraddrno
+	and isnull(a.endaddrno,'') between @t_bendaddrno and @t_eendaddrno
+	and isnull(a.productno,'') between @t_bproductno and @t_eproductno
+	and isnull(a.custno,'') between @t_bcustno and @t_ecustno
+	order by a.straddrno,a.endaddrno,a.productno
+	
+	select "addr_rj?noa=\'"+noa+"\' and "+cast(recno as nvarchar)+"=$rr?" ghref 
+	,* 
+	,recno rr
+	,straddr a01
+	,endaddr a02
+	,product a03
+	,case len(isnull(nick,'')) when 0 then cust else nick end a04
+	,datea a05
+	,custunit a06
+	,case isnull(custprice,0) when 0 then '' else reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,custprice),1)),4,12)) end a07
+	,driverunit2 a08
+	,case isnull(driverprice2,0) when 0 then '' else reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,driverprice2),1)),4,12)) end a09
+	,driverunit a10
+	,case isnull(driverprice,0) when 0 then '' else reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,driverprice),1)),4,12)) end a11
+	,case isnull(commission,0) when 0 then '' else cast(commission as nvarchar) end a12
+	from @tmp
+	order by rr;

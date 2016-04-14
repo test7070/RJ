@@ -1,0 +1,140 @@
+z_car2_rj01:--z_car2_rj01
+	declare @t_cartype nvarchar(max)='[1]'
+	declare @t_carno nvarchar(max)=case when '#non'=[2] then '' else [2] end
+	declare @t_xcartype nvarchar(max)=case when '#non'=[3] then '' else [3] end
+	declare @t_bcheckdate nvarchar(max)=case when '#non'=[4] then '' else [4] end
+	declare @t_echeckdate nvarchar(max)=case when '#non'=[5] then char(255) else [5] end
+	declare @n int
+	declare @string nvarchar(max)
+	--------------------------------------------------------------------------------------------------------
+	declare @cartype table(
+		noa nvarchar(20),
+		cartype nvarchar(20)
+	)
+	while len(@t_cartype)>0
+	begin
+		if CHARINDEX(',',@t_cartype)>0
+		begin
+			set @string = SUBSTRING(@t_cartype,0,CHARINDEX(',',@t_cartype))
+			set @t_cartype = RIGHT(@t_cartype,LEN(@t_cartype)-len(@string)-1)
+		end
+		else
+		begin
+			set @string = @t_cartype
+			set @t_cartype = ''
+		end
+		
+		insert into @cartype(noa,cartype)values(LEFT(@string,CHARINDEX('@',@string)-1),Right(@string,len(@string)-CHARINDEX('@',@string)))
+	end
+	------------------------------------------------------------------------------------------
+	declare @tmp table(
+		carno nvarchar(20), --車牌	
+		cardealno nvarchar(20),--車行
+		cardeal nvarchar(20),
+		cartype nvarchar(20),--車別
+		carkindno nvarchar(20),--車種
+		carkind nvarchar(10),
+		carmode nvarchar(20),--車身式樣
+		carspecno nvarchar(20),--車種樣式
+		carspec nvarchar(20),
+		driverno nvarchar(20),--司機
+		driver nvarchar(20),
+		carownerno nvarchar(20),--車主
+		carowner nvarchar(50),
+		indate nvarchar(10),--遷入日期
+		invoicemoney float,--發票金額
+		inplace nvarchar(20),--車輛來源
+		outdate nvarchar(10),--遷出日期
+		outmoney float,--遷出金額
+		outplace nvarchar(20),--遷出地點
+		enddate nvarchar(10),--報廢日期
+		wastedate nvarchar(10),--繳銷日期
+		suspdate nvarchar(10),--報停日期
+		passdate nvarchar(10),--發照日期
+		limitdate nvarchar(10),--有效期限
+		reissuedate nvarchar(10),--補照日期
+		caryear nvarchar(10),--出廠年份
+		caryeartw nvarchar(10),--年份(中式)
+		checkdate nvarchar(10),--驗車日期
+		carbrandno nvarchar(10),--廠牌
+		carstyleno nvarchar(20),--車輛型式
+		checktype nvarchar(20),--驗車方式
+		lengthb float,--車長
+		width float,--車寬
+		height float,--車高
+		wheelbase float,--軸距
+		axlenum float,--軸數
+		wheelnum float,--輪數
+		weight1 float,--車重
+		weight2 float,--載重
+		ton float,--總重
+		weight3 float,--總聯結重量
+		cylinder float,--汽缸數
+		cc float,--CC數
+		engineno float,--引擎號碼
+		memo nvarchar(max)--備註		
+	)
+
+
+	select '0' gno
+		,a.carno a01
+		,b.nick a02--車行
+		,c.cartype a03--車別
+		,d.kind a04--車種
+		,a.carmode a05--車身式樣
+		,e.spec a06--車種樣式
+		,a.driverno a07--司機
+		,f.namea a08
+		,a.carownerno a09--車主
+		,g.namea a10
+		,g.tel1 aa09a
+		,g.tel2 aa09b
+		,g.fax aa09c
+		,g.mobile aa09d
+		,g.addr_home aa09e
+		,g.addr_conn aa09g
+		,a.indate a11--遷入日期
+		,a.invoicemoney a12--發票金額
+		,a.inplace a13--車輛來源
+		,a.outdate a14--遷出日期
+		,a.outmoney a15--遷出金額
+		,a.outplace a16--遷出地點
+		,a.enddate a17--報廢日期
+		,a.wastedate a18--繳銷日期
+		,a.suspdate a19--報停日期
+		,a.passdate a20--發照日期
+		,a.limitdate a21--有效期限
+		,a.reissuedate a22--補照日期
+		,a.caryear a23--出廠年份
+		,a.caryeartw a24--年份(中式)
+		,a.checkdate a25--驗車日期
+		,a.carbrandno a26--廠牌
+		,h.brand aa26a
+		,a.carstyleno a27--車輛型式
+		,a.checktype a28--驗車方式
+		,a.lengthb a29--車長
+		,a.width a30--車寬
+		,a.height a31--車高
+		,a.wheelbase a32--軸距
+		,a.axlenum a33--軸數
+		,a.wheelnum a34--輪數
+		,a.weight1 a35--車重
+		,a.weight2 a36--載重
+		,a.ton a37--總重
+		,a.weight3 a38--總聯結重量
+		,a.cylinder a39--汽缸數
+		,a.cc a40--CC數
+		,a.engineno a41--引擎號碼
+		,replace(a.memo,'chr(10)',char(13)) a42--備註
+	from car2 a
+	left join cardeal b on a.cardealno=b.noa
+	left join @cartype c on a.cartype = c.noa
+	left join carkind d on a.carkindno=d.noa
+	left join carspec e on a.carspecno=e.noa
+	left join driver f on a.driverno=f.noa
+	left join carowner g on a.carownerno=g.noa
+	left join carbrand h on a.carbrandno=h.noa
+	where (len(@t_xcartype)=0 or c.noa is not null)
+	and (len(@t_carno)=0 or CHARINDEX(','+a.carno+',',','+@t_carno+',')>0)
+	and isnull(a.checkdate,'') between @t_bcheckdate and @t_echeckdate 
+	order by isnull(c.cartype,''),a.carno;

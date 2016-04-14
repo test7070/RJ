@@ -1,0 +1,72 @@
+z_get_rjp01:--z_get_rjp01
+	declare @t_bdate nvarchar(20)= case when '#non'=[1] then '' else [1] end
+	declare @t_edate nvarchar(20)= case when '#non'=[2] then '' else [2] end
+	
+	declare @tmp table(
+		gno nvarchar(10),
+		datea nvarchar(20),
+		agg1 float,
+		agg2 float,
+		agg3 float,
+		agg4 float,
+		agg5 float,
+		agg6 float,
+		price float
+	)
+	-----------------------------------------------------------------------------
+	begin try
+		declare @bdate date = cast(cast(left(@t_bdate,3) as int)+1911 as nvarchar)+right(@t_bdate,6)
+		declare @edate date = cast(cast(left(@t_edate,3) as int)+1911 as nvarchar)+right(@t_edate,6)
+		declare @n int = 0
+		while @bdate<=@edate and @n<90 --最多一次列出90天
+		begin
+			insert into @tmp(gno,datea)values('1', right('000'+cast(YEAR(@bdate)-1911 as nvarchar),3)+'/'+RIGHT('00'+CAST(month(@bdate) as nvarchar),2)+'/'+RIGHT('00'+CAST(day(@bdate) as nvarchar),2) )
+			set @bdate = dateadd(dd,1,@bdate)
+			set @n = @n + 1
+		end
+	end try
+	begin catch
+		insert into @tmp(gno,datea)values('1','日期異常。')
+	end catch
+	
+	--公斤/X = 米
+	--X = {一分石、二分石 1500,砂、大陸砂 1600}
+
+	update @tmp set agg1=agg1_weight
+		,agg2=agg2_weight
+		,agg3=agg3_weight
+		,agg4=agg4_weight
+		,agg5=agg5_weight
+		,agg6=agg6_weight
+		,price = isnull(c.price,0)
+	from @tmp a
+	left join(
+		select b.datea
+			,SUM(case a.productno when 'AGG1' then ISNULL(a.[weight],0) else 0 end) agg1_weight
+			,SUM(case a.productno when 'AGG1' then ISNULL(a.mount,0) else 0 end) agg1_mount
+			,SUM(case a.productno when 'AGG2' then ISNULL(a.[weight],0) else 0 end) agg2_weight
+			,SUM(case a.productno when 'AGG2' then ISNULL(a.mount,0) else 0 end) agg2_mount
+			,SUM(case a.productno when 'AGG3' then ISNULL(a.[weight],0) else 0 end) agg3_weight
+			,SUM(case a.productno when 'AGG3' then ISNULL(a.mount,0) else 0 end) agg3_mount
+			,SUM(case a.productno when 'AGG4' then ISNULL(a.[weight],0) else 0 end) agg4_weight
+			,SUM(case a.productno when 'AGG4' then ISNULL(a.mount,0) else 0 end) agg4_mount
+			,SUM(case a.productno when 'AGG5' then ISNULL(a.[weight],0) else 0 end) agg5_weight
+			,SUM(case a.productno when 'AGG5' then ISNULL(a.mount,0) else 0 end) agg5_mount
+			,SUM(case a.productno when 'AGG6' then ISNULL(a.[weight],0) else 0 end) agg6_weight
+			,SUM(case a.productno when 'AGG6' then ISNULL(a.mount,0) else 0 end) agg6_mount
+		from view_gets a
+		left join view_get b on a.noa=b.noa
+		where b.datea between @t_bdate and @t_edate
+		group by b.datea) b on a.datea=b.datea
+	left join (
+		select datea,row_number()over(partition by datea order by noa) recno,price 
+		from view_get 
+		where isnull(price,0)!=0 and datea between @t_bdate and @t_edate) c on a.datea=c.datea and c.recno=1
+	
+	insert into @tmp(gno,datea,agg1,agg2,agg3,agg4,agg5,agg6)
+	select '2',CHAR(255),SUM(ISNULL(agg1,0)),SUM(ISNULL(agg2,0)),SUM(ISNULL(agg3,0)),SUM(ISNULL(agg4,0)),SUM(ISNULL(agg5,0)),SUM(ISNULL(agg6,0))
+	from @tmp
+	
+	select * 
+	,'get_rj?datea=$datea?'+left(datea,3) ghref 
+	from @tmp order by datea;

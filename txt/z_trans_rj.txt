@@ -1,0 +1,881 @@
+z_trans_rj07:--z_trans_rj07
+	declare @t_btrandate nvarchar(10) = case when '#non'=[3] then '' else [3] end
+	declare @t_etrandate nvarchar(10) = case when '#non'=[4] then char(255) else [4] end
+	declare @t_carno nvarchar(max) = case when '#non'=[11] then '' else [11] end
+	-----------------------------------------------------------------
+	declare @tmp table(
+		gno nvarchar(10),
+		trandate nvarchar(20),
+		carno nvarchar(20),
+		tolls float,
+		reserve float
+	)
+	insert into @tmp(gno,trandate,carno,tolls,reserve)
+	select '1',trandate,carno,SUM(ISNULL(a.tolls,0)),SUM(ISNULL(a.reserve,0)) 
+	from view_trans a
+	where not(ISNULL(a.tolls,0)=0 and ISNULL(a.reserve,0)=0)
+	and trandate between @t_btrandate and @t_etrandate
+	and (len(@t_carno)=0 or CHARINDEX(','+a.carno+',',','+@t_carno+',')>0)
+	group by trandate,carno
+	order by carno,trandate
+	
+	insert into @tmp(gno,trandate,carno,tolls,reserve)
+	select '2',CHAR(255),carno,SUM(tolls),SUM(reserve)
+	from @tmp where gno='1' group by carno
+	
+	insert into @tmp(gno,trandate,carno,tolls,reserve)
+	select '3',CHAR(255),CHAR(255),SUM(tolls),SUM(reserve)
+	from @tmp where gno='1'
+	
+	select *
+		,dbo.getComma(tolls,3) a01 
+		,dbo.getComma(reserve,0) a02
+	from @tmp 
+	order by carno,trandate;
+	
+z_trans_rj06:--z_trans_rj06
+	declare @t_mon nvarchar(20) = case when '#non'=[15] then '' else [15] end
+	-------------------------------------------------------------------------------
+	declare @d1 date
+	declare @n int
+	begin try
+		set @d1 = cast(cast(left(@t_mon,3) as int)+1911 as nvarchar)+'/'+right(@t_mon,2)+'/25'
+		set @d1 = DATEADD(DD,10,@d1)
+		set @d1 = cast(CAST(YEAR(@d1) as nvarchar)+'/'+CAST(Month(@d1) as nvarchar)+'/01' as DATE)
+		set @d1 = DATEADD(DD,-1,@d1)
+		set @n = day(@d1)
+	end try
+	begin catch
+		--return
+	end catch
+	--------------------------------------------------------------------------------
+	declare @tmpa table(
+		datea nvarchar(10),
+		product nvarchar(20),
+		inmount float,
+		mount3 float,
+		mount4 float
+	)		
+	insert into @tmpa
+	select a.trandate,b.product
+		,sum(isnull(a.inmount,0))
+		,sum(case when isnull(d.commission,0)!=0 and isnull(a.mount3,0)=0 then  round(isnull(a.mount4,0)/isnull(d.commission,0),3) else isnull(a.mount3,0) end)
+		,sum(isnull( a.mount4,0))
+	from view_trans a
+	left join ucc b on a.uccno=b.noa
+	left join addr c on a.straddrno=c.straddrno and a.endaddrno = c.endaddrno and a.uccno=c.productno
+	outer apply(select top 1 isnull(commission,0) commission from addrs where c.noa=noa and datea<=a.trandate order by datea) d
+	where a.endaddr='國順'
+	and left(a.trandate,6) = @t_mon
+	and (b.product='大陸砂' or b.product='粗砂' or b.product='一分石' or b.product='二分石' or b.product='成品')
+	group by a.trandate,b.product
+	-------------------------------------------
+	declare @tmpb table(
+		datea nvarchar(10),
+		productno nvarchar(20),
+		[weight] float,
+		mount float
+	)
+	insert into @tmpb
+	select b.datea,a.productno,isnull(a.[weight],0),isnull(a.mount,0)
+	from view_gets a
+	left join view_get b on a.noa = b.noa
+	where left(b.datea,6) = @t_mon
+	-------------------------------------------
+	declare @tmp table(
+		gno nvarchar(10),
+		pno nvarchar(10),
+		datea nvarchar(10),
+		
+		--product1 nvarchar(20),--大陸砂
+		ma1 float,--台數
+		ma2 decimal(10,2),--米數
+		
+		--product2 nvarchar(20),--粗砂
+		mb1 float,--台數
+		mb2 decimal(10,2),--米數
+		
+		--product3 nvarchar(20),--一分石
+		mc1 float,--台數
+		mc2 decimal(10,2),--米數
+		
+		--product4 nvarchar(20),--二分石
+		md1 float,--台數
+		md2 decimal(10,2),--米數
+		
+		tot1 float,--台數
+		tot2 decimal(10,2),--米數
+		tot3 decimal(10,2),--成品米數
+		
+		na1 decimal(10,2),--比例數 1.213
+		na2 decimal(10,2),--比例數 1.23
+		
+		aa1 float, --AGG1+3 砂         公斤
+		aa2 float, --AGG2   大陸砂     公斤 
+		aa3 float, --AGG4+6 一分石     公斤 
+		aa4 float, --AGG5   二分石     公斤
+		
+		bb1 decimal(10,2),--砂石米數  (AGG1+AGG2+AGG3)/1600+(AGG4+AGG5+AGG6)/1500
+		bb2 decimal(10,2),--砂米數    (AGG1+AGG2+AGG3)/1600
+		bb3 decimal(10,2),--石米數    (AGG4+AGG5+AGG6)/1500
+		
+		mm1 int, --金額
+		mm2 int, --稅
+		mm3 int,  --合計
+		memo nvarchar(max)
+	)
+	while @n>0
+	begin
+		insert into @tmp(gno,pno,datea)values('1',RIGHT('00'+CAST(@n as nvarchar),2),RIGHT('00'+CAST(@n as nvarchar),2))
+		set @n = @n - 1
+	end
+	update @tmp set ma1 = b.inmount ,ma2 =  b.mount3 	
+	from @tmp a
+	left join @tmpa b on RIGHT(b.datea,2)=a.datea
+	where b.product='大陸砂'
+	
+	update @tmp set mb1 = b.inmount ,mb2 =  b.mount3 	
+	from @tmp a
+	left join @tmpa b on RIGHT(b.datea,2)=a.datea
+	where b.product='粗砂'
+	
+	update @tmp set mc1 = b.inmount ,mc2 =  b.mount3 	
+	from @tmp a
+	left join @tmpa b on RIGHT(b.datea,2)=a.datea
+	where b.product='一分石'
+	
+	update @tmp set md1 = b.inmount ,md2 =  b.mount3 	
+	from @tmp a
+	left join @tmpa b on RIGHT(b.datea,2)=a.datea
+	where b.product='二分石'
+	
+	update @tmp set tot3 =  b.mount3 	
+	from @tmp a
+	left join @tmpa b on RIGHT(b.datea,2)=a.datea
+	where b.product='成品'
+
+	update @tmp set tot1=isnull(ma1,0)+isnull(mb1,0)+isnull(mc1,0)+isnull(md1,0)
+		,tot2=isnull(ma2,0)+isnull(mb2,0)+isnull(mc2,0)+isnull(md2,0)
+
+	update @tmp set na1 = round(tot3*1.213,2),na2 = round(tot3*1.23,2),mm1 = round(tot3*ISNULL(b.price,0),0)
+	from @tmp a
+	left join (select * 
+		from (select ROW_NUMBER()over(partition by datea order by noa)recno,datea,price from view_get where LEFT(datea,6)=@t_mon)a 
+		where a.recno=1) b on @t_mon+'/'+a.datea=b.datea
+	
+	update @tmp set mm2 = round(mm1*0.05,0)
+	update @tmp set mm3 = mm1+mm2
+	--------------------------------------------------------------
+	update @tmp set aa1 = isnull(b.[weight],0)
+	from @tmp a
+	left join (select datea,SUM(isnull([weight],0)) [weight] from @tmpb where productno='AGG1' or productno='AGG3' group by datea) b on RIGHT(b.datea,2)=a.datea
+
+	update @tmp set aa2 = isnull(b.[weight],0)
+	from @tmp a
+	left join (select datea,SUM(isnull([weight],0)) [weight] from @tmpb where productno='AGG2' group by datea) b on RIGHT(b.datea,2)=a.datea
+	
+	update @tmp set aa3 = isnull(b.[weight],0)
+	from @tmp a
+	left join (select datea,SUM(isnull([weight],0)) [weight] from @tmpb where productno='AGG4' or productno='AGG6' group by datea) b on RIGHT(b.datea,2)=a.datea
+	
+	update @tmp set aa4 = isnull(b.[weight],0)
+	from @tmp a
+	left join (select datea,SUM(isnull([weight],0)) [weight] from @tmpb where productno='AGG5' group by datea) b on RIGHT(b.datea,2)=a.datea
+	
+	---------------------------------
+	update @tmp set bb1 = ROUND((isnull(aa1,0)+isnull(aa2,0))/1600+(isnull(aa3,0)+isnull(aa4,0))/1500 ,2)
+	update @tmp set bb2 = ROUND((isnull(aa1,0)+isnull(aa2,0))/1600 ,2)
+	update @tmp set bb3 = ROUND((isnull(aa3,0)+isnull(aa4,0))/1500 ,2)	
+	--------------------------------------------------------------------------------------	
+	insert into @tmp(gno,pno,ma1,ma2,mb1,mb2,mc1,mc2,md1,md2,tot1,tot2,tot3,na1,na2,mm1,mm2,mm3
+		,aa1,aa2,aa3,aa4,bb1,bb2,bb3)
+	select '2','zz',SUM(ma1),SUM(ma2),SUM(mb1),SUM(mb2),SUM(mc1),SUM(mc2),SUM(md1),SUM(md2),SUM(tot1),SUM(tot2),SUM(ISNULL(tot3,0)),SUM(ISNULL(na1,0)),SUM(ISNULL(na2,0)),SUM(ISNULL(mm1,0)),SUM(ISNULL(mm2,0)),SUM(ISNULL(mm3,0))
+		,SUM(ISNULL(aa1,0)),SUM(ISNULL(aa2,0)),SUM(ISNULL(aa3,0)),SUM(ISNULL(aa4,0))
+		,SUM(ISNULL(bb1,0)),SUM(ISNULL(bb2,0)),SUM(ISNULL(bb3,0))
+	from @tmp
+	select * from @tmp order by pno;
+	
+z_trans_rj05:--z_trans_rj05
+	SET QUOTED_IDENTIFIER OFF
+	declare @t_bdate nvarchar(10) = case when '#non'=[1] then '' else [1] end
+	declare @t_edate nvarchar(10) = case when '#non'=[2] then char(255) else [2] end
+	declare @t_btrandate nvarchar(10) = case when '#non'=[3] then '' else [3] end
+	declare @t_etrandate nvarchar(10) = case when '#non'=[4] then char(255) else [4] end
+	declare @t_bcustno nvarchar(20) = case when '#non'=[7] then '' else [7] end
+	declare @t_ecustno nvarchar(20) = case when '#non'=[8] then char(255) else [8] end
+	declare @t_bdriverno nvarchar(20) = case when '#non'=[9] then '' else [9] end
+	declare @t_edriverno nvarchar(20) = case when '#non'=[10] then char(255) else [10] end
+	declare @t_carno nvarchar(max) = case when '#non'=[11] then '' else [11] end
+	declare @t_carteam nvarchar(max)= case when '#non'=[12] then '' else [12] end
+	declare @t_calctype nvarchar(max) = case when '#non'=[14] then '' else [14] end
+	declare @t_straddrno nvarchar(max) = case when '#non'=[16] then '' else [16] end
+	declare @t_endaddrno nvarchar(max) = case when '#non'=[17] then '' else [17] end
+	declare @t_bproductno nvarchar(max) = case when '#non'=[18] then '' else [18] end
+	declare @t_eproductno nvarchar(max) = case when '#non'=[19] then char(255) else [19] end
+	---------------------------------------------------------------------------------------------
+	declare @tmp table(
+		gno nvarchar(10),
+		recno int,
+		accy nvarchar(10),
+		noa nvarchar(20),
+		noq nvarchar(10),
+		datea nvarchar(10),
+		trandate nvarchar(10),
+		custno nvarchar(20),
+		cust nvarchar(50),
+		nick nvarchar(20),
+		tggno nvarchar(20),
+		tgg nvarchar(50),
+		
+		carno nvarchar(20),
+		driverno nvarchar(20),
+		driver nvarchar(20),
+		
+		straddrno nvarchar(20),
+		straddr nvarchar(50),
+		endaddrno nvarchar(20),
+		endaddr nvarchar(50),
+		productno nvarchar(20),
+		product nvarchar(50),
+		
+		inmount decimal(10,0),
+		mount3 decimal(10,3),
+		mount4 decimal(10,3),
+		tolls float,
+		reserve decimal(10,0),
+		miles decimal(10,0),
+		
+		unit nvarchar(20),
+		price decimal(10,3),
+		mount decimal(10,3),
+		[money] decimal(10,0),
+		
+		unit2 nvarchar(20),
+		price2 decimal(10,3),
+		mount2 decimal(10,3),
+		money2 decimal(10,0),
+		
+		tggunit nvarchar(20),
+		tggprice decimal(10,3),
+		tggmount decimal(10,3),
+		tggmoney decimal(10,0)
+	)
+	
+	insert into @tmp(gno,recno,accy,noa,noq,datea,trandate,custno,cust,nick,carno,driverno,driver
+		,straddrno,straddr,endaddrno,endaddr,productno,product
+		,inmount,mount3,mount4,tolls,reserve,miles)
+	select '1',ROW_NUMBER()over(order by a.trandate,a.noa)
+		,a.accy,a.noa,a.noq,a.datea,a.trandate,a.custno,a.comp,b.nick,a.carno,a.driverno,a.driver
+		,a.straddrno,a.straddr,a.endaddrno,a.endaddr,a.uccno,a.product
+		,a.inmount,a.mount3,a.mount4,a.tolls,a.reserve,a.miles
+	from view_trans a
+	left join cust b on a.custno=b.noa
+	where isnull(a.datea,'') between @t_bdate and @t_edate
+	and isnull(a.trandate,'') between @t_btrandate and @t_etrandate
+	and ISNULL(a.custno,'') between @t_bcustno and @t_ecustno
+	and ISNULL(a.driverno,'') between @t_bdriverno and @t_edriverno
+	and (len(ISNULL(@t_carno,''))=0 or CHARINDEX(','+@t_carno+',',','+a.carno+',')>0) 
+	and (len(ISNULL(@t_carteam,''))=0 or CHARINDEX(','+@t_carteam+',',','+a.carteam+',')>0) 
+	and (len(ISNULL(@t_calctype,''))=0 or CHARINDEX(','+@t_calctype+',',','+a.calctype+',')>0) 
+	and (len(@t_straddrno)=0 or a.straddrno=@t_straddrno)
+	and (len(@t_endaddrno)=0 or a.endaddrno=@t_endaddrno)
+	and (isnull(a.uccno,'') between @t_bproductno and @t_eproductno)
+
+	--客戶單價、廠商單價
+	update @tmp set unit = c.custunit,price=c.custprice,tggunit = c.tggunit,tggprice=c.tggprice
+		,mount3=case when ISNULL(c.commission,0)=0 or ISNULL(a.mount3,0)!=0 then a.mount3 else ROUND(isnull(a.mount4,0)/ISNULL(c.commission,0),2) end
+	from @tmp a
+	left join addr b on a.straddrno=b.straddrno and a.endaddrno=b.endaddrno and a.productno=b.productno
+	outer apply(select top 1 * from addrs where noa=b.noa order by datea desc) c
+
+	--司機單價
+	update @tmp set unit2=case ISNULL(d.cartype,'') when '2' then c.driverunit else c.driverunit2 end
+		,price2 =case ISNULL(d.cartype,'') when '2' then c.driverprice else c.driverprice2 end
+	from @tmp a
+	left join addr b on a.straddrno=b.straddrno and a.endaddrno=b.endaddrno and a.productno=b.productno
+	outer apply(select top 1 * from addrs where noa=b.noa order by datea desc) c
+	left join car2 d on a.carno=d.carno 
+	
+	update @tmp set mount = case unit when '台數' then inmount when '米數' then mount3 when '噸數' then mount4 end
+		,[money] = ROUND( case unit when '台數' then inmount when '米數' then mount3 when '噸數' then mount4 end*price*case when len(custno)>0 then 1 else 0 end,0)
+		,mount2 = case unit2 when '台數' then inmount when '米數' then mount3 when '噸數' then mount4 end
+		,money2 = ROUND( case unit2 when '台數' then inmount when '米數' then mount3 when '噸數' then mount4 end*price2,0)
+		,tggmoney = ROUND( case tggunit when '台數' then inmount when '米數' then mount3 when '噸數' then mount4 end*tggprice*case when len(tggno)>0 then 1 else 0 end,0)
+		
+	update @tmp set mount3 = ROUND(ISNULL(mount3,0),2),mount4 = ROUND(ISNULL(mount4,0),2)
+	
+	insert into @tmp(gno,inmount,mount3,mount4,mount,mount2,[money],tggmoney,money2,tolls,reserve)
+	select '2',SUM(ISNULL(inmount,0)),SUM(ISNULL(mount3,0)),SUM(ISNULL(mount4,0)) 
+		,SUM(ISNULL(mount2,0)) ,SUM(ISNULL(mount3,0))
+		,SUM(ISNULL([money],0)),SUM(ISNULL([tggmoney],0))
+		,SUM(ISNULL([money2],0)),SUM(ISNULL([tolls],0)),SUM(ISNULL([reserve],0))    
+	from @tmp
+	
+	select  "trans_rj?noa=\'"+noa+"\' and "+cast(recno as nvarchar)+"=$rr?"+accy ghref 
+	,* 
+	,recno rr
+	,trandate a01
+	,datea a02
+	,'<a style="font-family:'+ "'Times New Roman','標楷體', serif"+char(59)+'">'+carno+'</a>' a03
+	,driver a04
+	,nick a05
+	,straddr a06
+	,endaddr a07
+	,product a08
+	,inmount a09
+	,cast(mount3 as decimal(20,2)) a10
+	,cast(mount4 as decimal(20,2)) a11
+	,reserve a12
+	,miles a13
+	,tolls a14
+	,mount b01
+	,unit b02
+	,dbo.getComma(price,3) b03
+	--,dbo.getComma([money],0) b04
+	,mount2 b05
+	,unit2 b06
+	,dbo.getComma(price2,3) b07
+	,dbo.getComma([money2],0) b08
+	
+	,dbo.getComma([money],0) c01
+	,dbo.getComma([tggmoney],0) c02
+	from @tmp order by gno,recno;
+	
+z_trans_rj04:--z_trans_rj04
+	declare @t_bmon nvarchar(10) = case when '#non'=[5] then '' else [5] end
+	declare @t_emon nvarchar(10) = case when '#non'=[6] then char(255) else [6] end
+	declare @t_bcustno nvarchar(20) = case when '#non'=[7] then '' else [7] end
+	declare @t_ecustno nvarchar(20) = case when '#non'=[8] then char(255) else [8] end
+	declare @t_pageline int = 30  --一頁的行數
+	-----------------------------------------------------------------
+	declare @tmp table(
+		gno nvarchar(10),
+		pno nvarchar(10),
+		custno nvarchar(20),
+		comp nvarchar(40),
+		nick nvarchar(20),
+		insures float,
+		money1 float,
+		money2 float,
+		custplus float,
+		custminus float,
+		driverplus float,
+		driverminus float,
+		reserve float,
+		tolls float,
+		etc float,
+		oil float,
+		wmoney float,
+		wmoneycar float,
+		wmoneyplate float,
+		cmoney float,
+		dmoney float,
+		emoney float,
+		ticket float,
+		bonus float,
+		tax float,
+		depreciation float,
+		driverpay float,
+		tax2 float,--稅捐  money1 * 3%
+		profit float
+	)
+	insert into @tmp(gno,pno,custno,comp,nick,insures,money1,money2
+		,custplus,custminus,driverplus,driverminus,reserve,tolls,etc,oil
+		,wmoney,wmoneycar,wmoneyplate,cmoney,dmoney,emoney,ticket,bonus,tax,depreciation,driverpay)
+	select '1','1',ISNULL(a.custno,''),ISNULL(f.comp,''),ISNULL(f.nick,'')
+		,sum(ISNULL(a.insures,0)),sum(ISNULL(a.money1,0)),sum(ISNULL(a.money2,0))
+		,sum(ISNULL(a.custplus,0)),sum(ISNULL(a.custminus,0)),sum(ISNULL(a.driverplus,0)),sum(ISNULL(a.driverminus,0))
+		,sum(ISNULL(a.reserve,0)),sum(ISNULL(a.tolls,0)),sum(ISNULL(a.etc,0)),sum(ISNULL(a.oil,0))
+		,sum(ISNULL(a.wmoney,0)),sum(ISNULL(a.wmoneycar,0)),sum(ISNULL(a.wmoneyplate,0)),sum(ISNULL(a.cmoney,0)),sum(ISNULL(a.dmoney,0)),sum(ISNULL(a.emoney,0))
+		,sum(ISNULL(a.ticket,0)),sum(ISNULL(a.bonus,0)),sum(ISNULL(a.tax,0)),sum(ISNULL(a.depreciation,0))
+		,sum(ISNULL(a.driverpay,0))
+	from trans_sum a
+	left join car2 b on a.carno=b.carno
+	left join carkind c on b.carkindno=c.noa
+	left join (select carno,SUM(isnull(mount,0)) mount,SUM(ISNULL(miles,0)) miles 
+		from oil where LEFT(datea,6) between @t_bmon and @t_emon group by carno) d on a.carno=d.carno
+	left join (select carno,driverno,count(1) mount 
+		from (SELECT DISTINCT isnull(carno,'') carno,isnull(driverno,'') driverno,trandate from trans_sum where mon between @t_bmon and @t_emon) a 
+		group by carno,driverno) e on a.carno=e.carno and a.driverno=e.driverno
+	left join cust f on a.custno=f.noa
+	where a.mon between @t_bmon and @t_emon
+	and isnull(a.custno,'') between @t_bcustno and @t_ecustno
+	group by ISNULL(a.custno,''),ISNULL(f.comp,''),ISNULL(f.nick,'')
+	
+
+	insert into @tmp(gno,pno,insures,money1,money2
+		,custplus,custminus,driverplus,driverminus,reserve,tolls,etc,oil
+		,wmoney,wmoneycar,wmoneyplate,cmoney,dmoney,emoney,ticket,bonus,tax,depreciation,driverpay)
+	select '2','2',sum(insures),SUM(money1),SUM(money2)
+		,SUM(custplus),SUM(custminus),SUM(driverplus),SUM(driverminus),SUM(reserve),SUM(tolls),SUM(etc),SUM(oil)
+		,SUM(wmoney),SUM(wmoneycar),SUM(wmoneyplate),SUM(cmoney),SUM(dmoney),SUM(emoney),SUM(ticket),SUM(bonus),SUM(tax),SUM(depreciation)
+		,SUM(driverpay)
+	from @tmp where pno='1' 
+	
+	update @tmp set tax2 = round(money1*0.03,0)
+		,profit=money1-money2-insures+custplus-custminus-driverplus+driverminus-tolls
+		-etc-oil-wmoney-cmoney-dmoney-emoney-ticket-tax-depreciation-round(money1*0.03,0)
+	update @tmp set gno = '4' where profit<0 and pno='1'
+	
+	select *
+	,nick m06
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,money1),1)),4,12))  m07
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,custplus),1)),4,12))  m08
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,custminus),1)),4,12))  m09
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,money2),1)),4,12))  m10
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,driverplus),1)),4,12))  m11
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,driverminus),1)),4,12))  m12
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,isnull(tolls,0)+ISNULL(etc,0)),1)),4,12))  m13
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,oil),1)),4,12))  m14
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,ISNULL(wmoney,0)),1)),4,12))  m15
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,ISNULL(cmoney,0)),1)),4,12))  m16
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,ISNULL(dmoney,0)),1)),4,12))  m17
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,ISNULL(emoney,0)),1)),4,12))  m18
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,ticket),1)),4,12))  m19
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,tax),1)),4,12))  m20
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,depreciation),1)),4,12))  m21
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,insures),1)),4,12))  m22
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,tax2),1)),4,12))  m23
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,profit),1)),4,12))  m24
+	from @tmp 
+	order by pno,case when len(custno)=0 then CHAR(255) else custno end;
+
+z_trans_rj03:--z_trans_rj03	
+	declare @t_bmon nvarchar(10) = case when '#non'=[5] then '' else [5] end
+	declare @t_emon nvarchar(10) = case when '#non'=[6] then char(255) else [6] end
+	declare @t_bdriverno nvarchar(20) = case when '#non'=[9] then '' else [9] end
+	declare @t_edriverno nvarchar(20) = case when '#non'=[10] then char(255) else [10] end
+	declare @t_carno nvarchar(max) = case when '#non'=[11] then '' else [11] end
+	declare @t_carkind nvarchar(max) = case when '#non'=[13] then '' else [13] end	
+	declare @t_pageline int = 30  --一頁的行數
+	-----------------------------------------------------------------
+	declare @tmp table(
+		gno nvarchar(10),
+		pno nvarchar(10),
+		carkindno nvarchar(20),
+		carkind nvarchar(20),
+		oilmount float,
+		miles float,
+		oilrate float,
+		kl float,
+		carno nvarchar(20),
+		driverno nvarchar(20),
+		driver nvarchar(20),
+		insures float,
+		money1 float,
+		money2 float,
+		custplus float,
+		custminus float,
+		driverplus float,
+		driverminus float,
+		reserve float,
+		tolls float,
+		etc float,
+		oil float,
+		wmoney float,
+		wmoneycar float,
+		wmoneyplate float,
+		cmoney float,
+		dmoney float,
+		emoney float,
+		ticket float,
+		bonus float,
+		tax float,
+		depreciation float,
+		driverpay float,
+		tax2 float,--稅捐  money1 * 3%
+		profit float
+	)
+	insert into @tmp(gno,pno,carkindno,carkind,carno,driverno,driver,insures,money1,money2
+		,custplus,custminus,driverplus,driverminus,reserve,tolls,etc,oil
+		,wmoney,wmoneycar,wmoneyplate,cmoney,dmoney,emoney,ticket,bonus,tax,depreciation
+		,miles,oilmount,driverpay)
+	select '1','1',isnull(b.carkindno,''),ISNULL(c.kind,''),ISNULL(a.carno,''),ISNULL(a.driverno,''),ISNULL(f.namea,'')
+		,sum(ISNULL(a.insures,0)),sum(ISNULL(a.money1,0)),sum(ISNULL(a.money2,0))
+		,sum(ISNULL(a.custplus,0)),sum(ISNULL(a.custminus,0)),sum(ISNULL(a.driverplus,0)),sum(ISNULL(a.driverminus,0))
+		,sum(ISNULL(a.reserve,0)),sum(ISNULL(a.tolls,0)),sum(ISNULL(a.etc,0)),sum(ISNULL(a.oil,0))
+		,sum(ISNULL(a.wmoney,0)),sum(ISNULL(a.wmoneycar,0)),sum(ISNULL(a.wmoneyplate,0)),sum(ISNULL(a.cmoney,0)),sum(ISNULL(a.dmoney,0)),sum(ISNULL(a.emoney,0))
+		,sum(ISNULL(a.ticket,0)),sum(ISNULL(a.bonus,0)),sum(ISNULL(a.tax,0)),sum(ISNULL(a.depreciation,0))
+		,sum(ISNULL(d.miles,0))
+		,sum(ISNULL(d.mount,0))
+		,sum(ISNULL(a.driverpay,0))
+	from trans_sum a
+	left join car2 b on a.carno=b.carno
+	left join carkind c on b.carkindno=c.noa
+	left join (select carno,SUM(isnull(mount,0)) mount,SUM(ISNULL(miles,0)) miles 
+		from oil where LEFT(datea,6) between @t_bmon and @t_emon group by carno) d on a.carno=d.carno
+	left join (select carno,driverno,count(1) mount 
+		from (SELECT DISTINCT isnull(carno,'') carno,isnull(driverno,'') driverno,trandate from trans_sum where mon between @t_bmon and @t_emon) a 
+		group by carno,driverno) e on a.carno=e.carno and a.driverno=e.driverno
+	left join driver f on a.driverno=f.noa
+	where a.mon between @t_bmon and @t_emon
+	and b.cartype = '2' --公司車
+	and isnull(a.driverno,'') between @t_bdriverno and @t_edriverno
+	and (len(@t_carno)=0 or (len(ISNULL(b.carno,''))>0 and CHARINDEX(','+b.carno+',',','+@t_carno+',')>0))
+	and (len(@t_carkind)=0 or (len(ISNULL(b.carkindno,''))>0 and CHARINDEX(','+b.carkindno+',',','+@t_carkind+',')>0))
+	group by isnull(b.carkindno,''),ISNULL(c.kind,''),ISNULL(a.carno,''),ISNULL(a.driverno,''),ISNULL(f.namea,'')
+	
+	update @tmp set oilrate=case when money1!=0 then oil/money1*100 else 0 end
+	,kl=case when oilmount!=0 then miles/oilmount else 0 end
+	
+	insert into @tmp(gno,pno,carkindno,carkind,miles,oilmount,insures,money1,money2
+		,custplus,custminus,driverplus,driverminus,reserve,tolls,etc,oil
+		,wmoney,wmoneycar,wmoneyplate,cmoney,dmoney,emoney,ticket,bonus,tax,depreciation,driverpay)
+	select '2','2',carkindno,carkind,SUM(ISNULL(miles,0)),SUM(isnull(oilmount,0)),sum(insures),SUM(money1),SUM(money2)
+		,SUM(custplus),SUM(custminus),SUM(driverplus),SUM(driverminus),SUM(reserve),SUM(tolls),SUM(etc),SUM(oil)
+		,SUM(wmoney),SUM(wmoneycar),SUM(wmoneyplate),SUM(cmoney),SUM(dmoney),SUM(emoney),SUM(ticket),SUM(bonus),SUM(tax),SUM(depreciation)
+		,SUM(driverpay)
+	from @tmp where pno='1' group by carkindno,carkind
+
+	update @tmp set oilrate=case when money1!=0 then oil/money1*100 else 0 end
+		,kl = case when oilmount!=0 then miles/oilmount else 0 end
+	where pno='2'
+	
+	update @tmp set tax2 = round(money1*0.03,0)
+		,profit=money1-money2-insures+custplus-custminus-driverplus+driverminus-tolls
+		-etc-oil-wmoney-cmoney-dmoney-emoney-ticket-tax-depreciation-round(money1*0.03,0)
+	update @tmp set gno = '4' where profit<0 and pno='1'
+	----------------------------------------------------------------------------------------------------
+	declare @n int
+	declare @carkindno nvarchar(20)
+	declare @carkind nvarchar(20)
+	
+	declare cursor_table cursor for
+	select carkindno,carkind,count(1) from @tmp group by carkindno,carkind
+	open cursor_table
+	fetch next from cursor_table
+	into @carkindno,@carkind,@n
+	while(@@FETCH_STATUS <> -1)
+	begin		
+		while @n%@t_pageline !=0
+		begin
+			insert into @tmp(gno,pno,carkindno,carkind)
+			values('3','3',@carkindno,@carkind)
+			set @n=@n+1
+		end
+		
+		fetch next from cursor_table
+		into @carkindno,@carkind,@n
+	end
+	close cursor_table
+	deallocate cursor_table
+	
+	select *
+	,cast(round(oilrate,0) as nvarchar)+'%' m02
+	,cast(kl as decimal(10,1)) m03
+	,driver m06
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,money1),1)),4,12))  m07
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,custplus),1)),4,12))  m08
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,custminus),1)),4,12))  m09
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,money2),1)),4,12))  m10
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,driverplus),1)),4,12))  m11
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,driverminus),1)),4,12))  m12
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,isnull(tolls,0)+ISNULL(etc,0)),1)),4,12))  m13
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,oil),1)),4,12))  m14
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,ISNULL(wmoney,0)),1)),4,12))  m15
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,ISNULL(cmoney,0)),1)),4,12))  m16
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,ISNULL(dmoney,0)),1)),4,12))  m17
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,ISNULL(emoney,0)),1)),4,12))  m18
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,ticket),1)),4,12))  m19
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,tax),1)),4,12))  m20
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,depreciation),1)),4,12))  m21
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,insures),1)),4,12))  m22
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,tax2),1)),4,12))  m23
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,profit),1)),4,12))  m24
+	from @tmp 
+	order by case when len(carkindno)=0 then CHAR(255) else carkindno end
+		,pno
+		,case when len(carno)=0 then CHAR(255) else carno end
+		,case when len(driverno)=0 then CHAR(255) else driverno end
+		;
+
+z_trans_rj02:--z_trans_rj02	
+	declare @t_bmon nvarchar(10) = case when '#non'=[5] then '' else [5] end
+	declare @t_emon nvarchar(10) = case when '#non'=[6] then char(255) else [6] end
+	declare @t_bdriverno nvarchar(20) = case when '#non'=[9] then '' else [9] end
+	declare @t_edriverno nvarchar(20) = case when '#non'=[10] then char(255) else [10] end
+	declare @t_carno nvarchar(max) = case when '#non'=[11] then '' else [11] end
+	declare @t_carkind nvarchar(max) = case when '#non'=[13] then '' else [13] end	
+	declare @t_pageline int = 30  --一頁的行數
+	-----------------------------------------------------------------
+	declare @tmp table(
+		gno nvarchar(10),
+		pno nvarchar(10),
+		carkindno nvarchar(20),
+		carkind nvarchar(20),
+		oilmount float,
+		miles float,
+		oilrate float,
+		kl float,
+		carno nvarchar(20),
+		insures float,
+		money1 float,
+		money2 float,
+		custplus float,
+		custminus float,
+		driverplus float,
+		driverminus float,
+		reserve float,
+		tolls float,
+		etc float,
+		oil float,
+		wmoney float,
+		wmoneycar float,
+		wmoneyplate float,
+		cmoney float,
+		dmoney float,
+		emoney float,
+		ticket float,
+		bonus float,
+		tax float,
+		depreciation float,
+		driverpay float,
+		tax2 float,--稅捐  money1 * 3%
+		profit float
+	)
+	insert into @tmp(gno,pno,carkindno,carkind,carno,insures,money1,money2
+		,custplus,custminus,driverplus,driverminus,reserve,tolls,etc,oil
+		,wmoney,wmoneycar,wmoneyplate,cmoney,dmoney,emoney,ticket,bonus,tax,depreciation
+		,miles,oilmount,driverpay)
+	select '1','1',isnull(b.carkindno,''),ISNULL(c.kind,''),ISNULL(a.carno,'')
+		,sum(ISNULL(a.insures,0)),sum(ISNULL(a.money1,0)),sum(ISNULL(a.money2,0))
+		,sum(ISNULL(a.custplus,0)),sum(ISNULL(a.custminus,0)),sum(ISNULL(a.driverplus,0)),sum(ISNULL(a.driverminus,0))
+		,sum(ISNULL(a.reserve,0)),sum(ISNULL(a.tolls,0)),sum(ISNULL(a.etc,0)),sum(ISNULL(a.oil,0))
+		,sum(ISNULL(a.wmoney,0)),sum(ISNULL(a.wmoneycar,0)),sum(ISNULL(a.wmoneyplate,0)),sum(ISNULL(a.cmoney,0)),sum(ISNULL(a.dmoney,0)),sum(ISNULL(a.emoney,0))
+		,sum(ISNULL(a.ticket,0)),sum(ISNULL(a.bonus,0)),sum(ISNULL(a.tax,0)),sum(ISNULL(a.depreciation,0))
+		,sum(ISNULL(d.miles,0))
+		,sum(ISNULL(d.mount,0))
+		,sum(ISNULL(a.driverpay,0))
+	from trans_sum a
+	left join car2 b on a.carno=b.carno
+	left join carkind c on b.carkindno=c.noa
+	left join (select carno,SUM(isnull(mount,0)) mount,SUM(ISNULL(miles,0)) miles 
+		from oil where LEFT(datea,6) between @t_bmon and @t_emon group by carno) d on a.carno=d.carno
+	left join (select carno,driverno,count(1) mount 
+		from (SELECT DISTINCT isnull(carno,'') carno,isnull(driverno,'') driverno,trandate from trans_sum where mon between @t_bmon and @t_emon) a 
+		group by carno,driverno) e on a.carno=e.carno and a.driverno=e.driverno
+	where a.mon between @t_bmon and @t_emon
+	and b.cartype = '2' --公司車
+	and isnull(a.driverno,'') between @t_bdriverno and @t_edriverno
+	and (len(@t_carno)=0 or (len(ISNULL(b.carno,''))>0 and CHARINDEX(','+b.carno+',',','+@t_carno+',')>0))
+	and (len(@t_carkind)=0 or (len(ISNULL(b.carkindno,''))>0 and CHARINDEX(','+b.carkindno+',',','+@t_carkind+',')>0))
+	group by isnull(b.carkindno,''),ISNULL(c.kind,''),ISNULL(a.carno,'')
+	
+	update @tmp set oilrate=case when money1!=0 then oil/money1*100 else 0 end
+	,kl=case when oilmount!=0 then miles/oilmount else 0 end
+	
+	insert into @tmp(gno,pno,carkindno,carkind,miles,oilmount,insures,money1,money2
+		,custplus,custminus,driverplus,driverminus,reserve,tolls,etc,oil
+		,wmoney,wmoneycar,wmoneyplate,cmoney,dmoney,emoney,ticket,bonus,tax,depreciation,driverpay)
+	select '2','2',carkindno,carkind,SUM(ISNULL(miles,0)),SUM(isnull(oilmount,0)),sum(insures),SUM(money1),SUM(money2)
+		,SUM(custplus),SUM(custminus),SUM(driverplus),SUM(driverminus),SUM(reserve),SUM(tolls),SUM(etc),SUM(oil)
+		,SUM(wmoney),SUM(wmoneycar),SUM(wmoneyplate),SUM(cmoney),SUM(dmoney),SUM(emoney),SUM(ticket),SUM(bonus),SUM(tax),SUM(depreciation)
+		,SUM(driverpay)
+	from @tmp where pno='1' group by carkindno,carkind
+
+	update @tmp set oilrate=case when money1!=0 then oil/money1*100 else 0 end
+		,kl = case when oilmount!=0 then miles/oilmount else 0 end
+	where pno='2'
+	
+	update @tmp set tax2 = round(money1*0.03,0)
+		,profit=money1-money2-insures+custplus-custminus-driverplus+driverminus-tolls
+		-etc-oil-wmoney-cmoney-dmoney-emoney-ticket-tax-depreciation-round(money1*0.03,0)
+	update @tmp set gno = '4' where profit<0 and pno='1'
+	----------------------------------------------------------------------------------------------------
+	declare @n int
+	declare @carkindno nvarchar(20)
+	declare @carkind nvarchar(20)
+	
+	declare cursor_table cursor for
+	select carkindno,carkind,count(1) from @tmp group by carkindno,carkind
+	open cursor_table
+	fetch next from cursor_table
+	into @carkindno,@carkind,@n
+	while(@@FETCH_STATUS <> -1)
+	begin		
+		while @n%@t_pageline !=0
+		begin
+			insert into @tmp(gno,pno,carkindno,carkind)
+			values('3','3',@carkindno,@carkind)
+			set @n=@n+1
+		end
+		
+		fetch next from cursor_table
+		into @carkindno,@carkind,@n
+	end
+	close cursor_table
+	deallocate cursor_table
+	
+	select *
+	,cast(round(oilrate,0) as nvarchar)+'%' m02
+	,cast(kl as decimal(10,1)) m03
+	,carno m06
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,money1),1)),4,12))  m07
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,custplus),1)),4,12))  m08
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,custminus),1)),4,12))  m09
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,money2),1)),4,12))  m10
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,driverplus),1)),4,12))  m11
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,driverminus),1)),4,12))  m12
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,isnull(tolls,0)+ISNULL(etc,0)),1)),4,12))  m13
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,oil),1)),4,12))  m14
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,ISNULL(wmoney,0)),1)),4,12))  m15
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,ISNULL(cmoney,0)),1)),4,12))  m16
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,ISNULL(dmoney,0)),1)),4,12))  m17
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,ISNULL(emoney,0)),1)),4,12))  m18
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,ticket),1)),4,12))  m19
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,tax),1)),4,12))  m20
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,depreciation),1)),4,12))  m21
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,insures),1)),4,12))  m22
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,tax2),1)),4,12))  m23
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,profit),1)),4,12))  m24
+	from @tmp 
+	order by case when len(carkindno)=0 then CHAR(255) else carkindno end
+		,pno
+		,case when len(carno)=0 then CHAR(255) else carno end
+		;
+z_trans_rj01:--z_trans_rj01	
+	declare @t_bmon nvarchar(10) = case when '#non'=[5] then '' else [5] end
+	declare @t_emon nvarchar(10) = case when '#non'=[6] then char(255) else [6] end
+	declare @t_bdriverno nvarchar(20) = case when '#non'=[9] then '' else [9] end
+	declare @t_edriverno nvarchar(20) = case when '#non'=[10] then char(255) else [10] end
+	declare @t_carno nvarchar(max) = case when '#non'=[11] then '' else [11] end
+	declare @t_carkind nvarchar(max) = case when '#non'=[13] then '' else [13] end	
+	declare @t_pageline int = 30  --一頁的行數
+	-----------------------------------------------------------------
+	declare @tmp table(
+		gno nvarchar(10),
+		pno nvarchar(10),
+		carkindno nvarchar(20),
+		carkind nvarchar(20),
+		oilmount float,
+		miles float,
+		oilrate float,
+		kl float,
+		driverno nvarchar(20),
+		driver nvarchar(20),
+		insures float,
+		money1 float,
+		money2 float,
+		custplus float,
+		custminus float,
+		driverplus float,
+		driverminus float,
+		reserve float,
+		tolls float,
+		etc float,
+		oil float,
+		wmoney float,
+		wmoneycar float,
+		wmoneyplate float,
+		cmoney float,
+		dmoney float,
+		emoney float,
+		ticket float,
+		bonus float,
+		tax float,
+		depreciation float,
+		driverpay float,
+		tax2 float,--稅捐  money1 * 3%
+		profit float
+	)
+	insert into @tmp(gno,pno,carkindno,carkind,driverno,driver,insures,money1,money2
+		,custplus,custminus,driverplus,driverminus,reserve,tolls,etc,oil
+		,wmoney,wmoneycar,wmoneyplate,cmoney,dmoney,emoney,ticket,bonus,tax,depreciation
+		,miles,oilmount,driverpay)
+	select '1','1',isnull(b.carkindno,''),ISNULL(c.kind,''),ISNULL(a.driverno,''),ISNULL(f.namea,'')
+		,sum(ISNULL(a.insures,0)),sum(ISNULL(a.money1,0)),sum(ISNULL(a.money2,0))
+		,sum(ISNULL(a.custplus,0)),sum(ISNULL(a.custminus,0)),sum(ISNULL(a.driverplus,0)),sum(ISNULL(a.driverminus,0))
+		,sum(ISNULL(a.reserve,0)),sum(ISNULL(a.tolls,0)),sum(ISNULL(a.etc,0)),sum(ISNULL(a.oil,0))
+		,sum(ISNULL(a.wmoney,0)),sum(ISNULL(a.wmoneycar,0)),sum(ISNULL(a.wmoneyplate,0)),sum(ISNULL(a.cmoney,0)),sum(ISNULL(a.dmoney,0)),sum(ISNULL(a.emoney,0))
+		,sum(ISNULL(a.ticket,0)),sum(ISNULL(a.bonus,0)),sum(ISNULL(a.tax,0)),sum(ISNULL(a.depreciation,0))
+		,sum(ISNULL(d.miles,0))
+		,sum(ISNULL(d.mount,0))
+		,sum(ISNULL(a.driverpay,0))
+	from trans_sum a
+	left join car2 b on a.carno=b.carno
+	left join carkind c on b.carkindno=c.noa
+	left join (select carno,SUM(isnull(mount,0)) mount,SUM(ISNULL(miles,0)) miles 
+		from oil where LEFT(datea,6) between @t_bmon and @t_emon group by carno) d on a.carno=d.carno
+	left join (select carno,driverno,count(1) mount 
+		from (SELECT DISTINCT isnull(carno,'') carno,isnull(driverno,'') driverno,trandate from trans_sum where mon between @t_bmon and @t_emon) a 
+		group by carno,driverno) e on a.carno=e.carno and a.driverno=e.driverno
+	left join driver f on a.driverno=f.noa
+	where a.mon between @t_bmon and @t_emon
+	and b.cartype = '2' --公司車
+	and isnull(a.driverno,'') between @t_bdriverno and @t_edriverno
+	and (len(@t_carno)=0 or (len(ISNULL(b.carno,''))>0 and CHARINDEX(','+b.carno+',',','+@t_carno+',')>0))
+	and (len(@t_carkind)=0 or (len(ISNULL(b.carkindno,''))>0 and CHARINDEX(','+b.carkindno+',',','+@t_carkind+',')>0))
+	group by isnull(b.carkindno,''),ISNULL(c.kind,''),ISNULL(a.driverno,''),ISNULL(f.namea,'')
+	
+	update @tmp set oilrate=case when money1!=0 then oil/money1*100 else 0 end
+	,kl=case when oilmount!=0 then miles/oilmount else 0 end
+	
+	insert into @tmp(gno,pno,carkindno,carkind,miles,oilmount,insures,money1,money2
+		,custplus,custminus,driverplus,driverminus,reserve,tolls,etc,oil
+		,wmoney,wmoneycar,wmoneyplate,cmoney,dmoney,emoney,ticket,bonus,tax,depreciation,driverpay)
+	select '2','2',carkindno,carkind,SUM(ISNULL(miles,0)),SUM(isnull(oilmount,0)),sum(insures),SUM(money1),SUM(money2)
+		,SUM(custplus),SUM(custminus),SUM(driverplus),SUM(driverminus),SUM(reserve),SUM(tolls),SUM(etc),SUM(oil)
+		,SUM(wmoney),SUM(wmoneycar),SUM(wmoneyplate),SUM(cmoney),SUM(dmoney),SUM(emoney),SUM(ticket),SUM(bonus),SUM(tax),SUM(depreciation)
+		,SUM(driverpay)
+	from @tmp where pno='1' group by carkindno,carkind
+
+	update @tmp set oilrate=case when money1!=0 then oil/money1*100 else 0 end
+		,kl = case when oilmount!=0 then miles/oilmount else 0 end
+	where pno='2'
+	
+	update @tmp set tax2 = round(money1*0.03,0)
+		,profit=money1-money2-insures+custplus-custminus-driverplus+driverminus-tolls
+		-etc-oil-wmoney-cmoney-dmoney-emoney-ticket-tax-depreciation-round(money1*0.03,0)
+	update @tmp set gno = '4' where profit<0 and pno='1'
+	----------------------------------------------------------------------------------------------------
+	declare @n int
+	declare @carkindno nvarchar(20)
+	declare @carkind nvarchar(20)
+	
+	declare cursor_table cursor for
+	select carkindno,carkind,count(1) from @tmp group by carkindno,carkind
+	open cursor_table
+	fetch next from cursor_table
+	into @carkindno,@carkind,@n
+	while(@@FETCH_STATUS <> -1)
+	begin		
+		while @n%@t_pageline !=0
+		begin
+			insert into @tmp(gno,pno,carkindno,carkind)
+			values('3','3',@carkindno,@carkind)
+			set @n=@n+1
+		end
+		
+		fetch next from cursor_table
+		into @carkindno,@carkind,@n
+	end
+	close cursor_table
+	deallocate cursor_table
+	
+	select *
+	,cast(round(oilrate,0) as nvarchar)+'%' m02
+	,cast(kl as decimal(10,1)) m03
+	,driver m06
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,money1),1)),4,12))  m07
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,custplus),1)),4,12))  m08
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,custminus),1)),4,12))  m09
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,money2),1)),4,12))  m10
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,driverplus),1)),4,12))  m11
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,driverminus),1)),4,12))  m12
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,isnull(tolls,0)+ISNULL(etc,0)),1)),4,12))  m13
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,oil),1)),4,12))  m14
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,ISNULL(wmoney,0)),1)),4,12))  m15
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,ISNULL(cmoney,0)),1)),4,12))  m16
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,ISNULL(dmoney,0)),1)),4,12))  m17
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,ISNULL(emoney,0)),1)),4,12))  m18
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,ticket),1)),4,12))  m19
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,tax),1)),4,12))  m20
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,depreciation),1)),4,12))  m21
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,insures),1)),4,12))  m22
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,tax2),1)),4,12))  m23
+	,reverse(substring(reverse(convert(nvarchar(15),CONVERT(money,profit),1)),4,12))  m24
+	from @tmp 
+	order by case when len(carkindno)=0 then CHAR(255) else carkindno end
+		,pno
+		,case when len(driverno)=0 then CHAR(255) else driverno end
+		;
