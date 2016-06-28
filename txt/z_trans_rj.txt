@@ -208,8 +208,8 @@ z_trans_rj05:--z_trans_rj05
 	declare @t_carno nvarchar(max) = case when '#non'=[11] then '' else [11] end
 	declare @t_carteam nvarchar(max)= case when '#non'=[12] then '' else [12] end
 	declare @t_calctype nvarchar(max) = case when '#non'=[14] then '' else [14] end
-	declare @t_straddrno nvarchar(max) = case when '#non'=[16] then '' else [16] end
-	declare @t_endaddrno nvarchar(max) = case when '#non'=[17] then '' else [17] end
+	declare @t_straddrno nvarchar(max) = case when '#non'=N[16] then '' else N[16] end
+	declare @t_endaddrno nvarchar(max) = case when '#non'=N[17] then '' else N[17] end
 	declare @t_bproductno nvarchar(max) = case when '#non'=[18] then '' else [18] end
 	declare @t_eproductno nvarchar(max) = case when '#non'=[19] then char(255) else [19] end
 	---------------------------------------------------------------------------------------------
