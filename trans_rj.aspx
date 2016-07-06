@@ -22,7 +22,7 @@
 
             var q_name = "trans";
             var q_readonly = ['txtNoa','txtOrdeno','txtWorker','txtWorker2'];
-            var bbmNum = [['txtInmount',10,0,1],['txtMount3',10,3,1],['txtMount4',10,3,1],['txtTolls',10,3,1],['txtMiles',10,0,1],['txtReserve',10,0,1]];
+            var bbmNum = [['txtInmount',10,0,1],['txtTolls',10,3,1],['txtMiles',10,0,1],['txtReserve',10,0,1]];
             var bbmMask = [];
             q_sqlCount = 6;
             brwCount = 6;
