@@ -26,25 +26,47 @@ z_trans_rj07:--z_trans_rj07
 	select '2',CHAR(255),carno,SUM(tolls),SUM(reserve)
 	from @tmp where gno='1' group by carno
 	
-	update @tmp set bmile= ISNULL(b.miles,0)
-	from @tmp a
-	outer apply(select top 1 miles from view_trans 
-		where carno=a.carno 
+	insert into @tmp(gno,trandate,carno)
+	select '1',a.trandate,a.carno
+	from(
+		select a.carno,a.trandate
+		from view_trans a
+		where trandate between @t_btrandate and @t_etrandate
+		and (len(@t_carno)=0 or CHARINDEX(','+a.carno+',',','+@t_carno+',')>0)
 		and ISNULL(miles,0)!=0
-		and trandate between @t_btrandate and @t_etrandate
-		order by trandate,noa,noq) b
-	where a.gno='2'
+		group by a.carno,a.trandate) a
+	left join @tmp b on a.carno=b.carno and a.trandate=b.trandate
+	where b.carno is null
 	
-	update @tmp set emile= ISNULL(b.miles,0)
+	update @tmp set miles=b.miles
 	from @tmp a
-	outer apply(select top 1 miles from view_trans 
-		where carno=a.carno 
-		and ISNULL(miles,0)!=0
-		and trandate between @t_btrandate and @t_etrandate
-		order by trandate desc,noa desc,noq desc) b
-	where a.gno='2'
+	left join (
+		select a.carno,a.trandate,miles
+		from view_trans a
+		where trandate between @t_btrandate and @t_etrandate
+		and (len(@t_carno)=0 or CHARINDEX(','+a.carno+',',','+@t_carno+',')>0)
+		and ISNULL(miles,0)!=0) b on a.carno=b.carno and a.trandate=b.trandate
 	
-	update @tmp set miles = emile-bmile
+	
+	--update @tmp set bmile= ISNULL(b.miles,0)
+	--from @tmp a
+	--outer apply(select top 1 miles from view_trans 
+	--	where carno=a.carno 
+	--	and ISNULL(miles,0)!=0
+	--	and trandate between @t_btrandate and @t_etrandate
+	--	order by trandate,noa,noq) b
+	--where a.gno='2'
+	
+	--update @tmp set emile= ISNULL(b.miles,0)
+	--from @tmp a
+	--outer apply(select top 1 miles from view_trans 
+	--	where carno=a.carno 
+	--	and ISNULL(miles,0)!=0
+	--	and trandate between @t_btrandate and @t_etrandate
+	--	order by trandate desc,noa desc,noq desc) b
+	--where a.gno='2'
+	
+	--update @tmp set miles = emile-bmile
 	
 	insert into @tmp(gno,trandate,carno,tolls,reserve)
 	select '3',CHAR(255),CHAR(255),SUM(tolls),SUM(reserve)
@@ -53,7 +75,7 @@ z_trans_rj07:--z_trans_rj07
 	select *
 		,dbo.getComma(tolls,3) a01 
 		,dbo.getComma(reserve,0) a02
-		,dbo.getComma(miles,-1) a03
+		,case when ISNULL(miles,0)=0 then '' else dbo.getComma(miles,-1) end a03
 	from @tmp 
 	order by carno,trandate;
 	
