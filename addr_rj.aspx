@@ -38,7 +38,7 @@
                              ['txtEndaddrno', 'lblEndaddr', 'endaddr_rj', 'noa', 'txtEndaddrno', 'endaddr_rj_b.aspx'],
                              ['txtProductno', 'lblProductno', 'ucc', 'noa,product', 'txtProductno,txtProduct', 'ucc_b.aspx'],
                              ['txtSalesno_', '', 'sss', 'noa,namea', 'txtSalesno_,txtSales_', 'sss_b.aspx'],
-                             ['txtCustno', 'lblCustno', 'cust', 'noa,comp,nick', 'txtCustno,txtCust', 'cust_b.aspx']);
+                             ['txtCustno', 'lblCustno', 'cust', 'noa,comp,nick', 'txtCustno,txtCust,txtNick', 'cust_b.aspx']);
             $(document).ready(function() {
                 bbmKey = ['noa'];
                 bbsKey = ['noa', 'noq'];
@@ -54,12 +54,27 @@
                 }
                 mainForm(0);
             }
-
+			var t_custunit='',t_tggunit='',t_driverunit='',t_driverunit2='';
             function mainPost() {
                 q_getFormat();
                 q_mask(bbmMask);
                 bbsMask = [['txtDatea', r_picd]];
- 
+ 				
+ 				switch(q_getPara('sys.project').toUpperCase()){
+ 					case 'NR':
+ 						q_cmbParse("cmbCustunit", "趟,噸",'s');
+		 				q_cmbParse("cmbTggunit", "趟,噸",'s');
+		 				q_cmbParse("cmbDriverunit", "趟,噸",'s');
+		 				q_cmbParse("cmbDriverunit2", "趟,噸",'s');
+ 						break;
+ 					default:
+ 						q_cmbParse("cmbCustunit", t_custunit,'s');
+		 				q_cmbParse("cmbTggunit", t_tggunit,'s');
+		 				q_cmbParse("cmbDriverunit", t_driverunit,'s');
+		 				q_cmbParse("cmbDriverunit2", t_driverunit2,'s');
+ 						break;
+ 				}
+ 				
                  //上方插入空白行
                 $('#lblTop_row').mousedown(function(e) {
                     if(e.button==0){
