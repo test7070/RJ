@@ -61,17 +61,21 @@
                 bbsMask = [['txtDatea', r_picd]];
  				
  				switch(q_getPara('sys.project').toUpperCase()){
- 					case 'NR':
+ 					/*case 'NR':
  						q_cmbParse("cmbCustunit", "趟,噸",'s');
 		 				q_cmbParse("cmbTggunit", "趟,噸",'s');
 		 				q_cmbParse("cmbDriverunit", "趟,噸",'s');
 		 				q_cmbParse("cmbDriverunit2", "趟,噸",'s');
- 						break;
+ 						break;*/
  					default:
- 						q_cmbParse("cmbCustunit", t_custunit,'s');
-		 				q_cmbParse("cmbTggunit", t_tggunit,'s');
-		 				q_cmbParse("cmbDriverunit", t_driverunit,'s');
-		 				q_cmbParse("cmbDriverunit2", t_driverunit2,'s');
+ 						if(t_custunit.length>0)
+ 							q_cmbParse("cmbCustunit", t_custunit,'s');
+		 				if(t_tggunit.length>0)
+		 					q_cmbParse("cmbTggunit", t_tggunit,'s');
+		 				if(t_driverunit.length>0)
+		 					q_cmbParse("cmbDriverunit", t_driverunit,'s');
+		 				if(t_driverunit2.length>0)
+		 					q_cmbParse("cmbDriverunit2", t_driverunit2,'s');
  						break;
  				}
  				
@@ -115,44 +119,40 @@
                     case 'custunit':
                         var as = _q_appendData("custunit", "", true);
                          if(as[0] != undefined){
-                            var t_item=" ";
+                            t_custunit=" ";
                             for ( i = 0; i < as.length; i++) {
-                                t_item = t_item + (t_item.length > 0 ? ',' : '') + as[i].noa;
+                                t_custunit += (t_custunit.length > 0 ? ',' : '') + as[i].noa;
                             }
-                            q_cmbParse("cmbCustunit", t_item,'s');
                         }
                         q_gt('tggunit','', 0, 0, 0, "tggunit", r_accy);
                         break;
                     case 'tggunit':
                         var as = _q_appendData("tggunit", "", true);
                          if(as[0] != undefined){
-                            var t_item=" ";
+                            t_tggunit=" ";
                             for ( i = 0; i < as.length; i++) {
-                                t_item = t_item + (t_item.length > 0 ? ',' : '') + as[i].noa;
+                                t_tggunit += (t_tggunit.length > 0 ? ',' : '') + as[i].noa;
                             }
-                            q_cmbParse("cmbTggunit", t_item,'s');
                         }
                         q_gt('driverunit','', 0, 0, 0, "driverunit", r_accy);
                         break;
                     case 'driverunit':
                         var as = _q_appendData("driverunit", "", true);
                          if(as[0] != undefined){
-                            var t_item=" ";
+                            t_driverunit=" ";
                             for ( i = 0; i < as.length; i++) {
-                                t_item = t_item + (t_item.length > 0 ? ',' : '') + as[i].noa;
+                                t_driverunit += (t_driverunit.length > 0 ? ',' : '') + as[i].noa;
                             }
-                            q_cmbParse("cmbDriverunit", t_item,'s');
                         }
                         q_gt('driverunit2','', 0, 0, 0, "driverunit2", r_accy);
                         break;
                     case 'driverunit2':
                         var as = _q_appendData("driverunit2", "", true);
                          if(as[0] != undefined){
-                            var t_item=" ";
+                            t_driverunit2=" ";
                             for ( i = 0; i < as.length; i++) {
-                                t_item = t_item + (t_item.length > 0 ? ',' : '') + as[i].noa;
+                                t_driverunit2 += (t_driverunit2.length > 0 ? ',' : '') + as[i].noa;
                             }
-                            q_cmbParse("cmbDriverunit2", t_item,'s');
                         }
                         q_gt(q_name, q_content, q_sqlCount, 1, 0, '', r_accy);
                         break;
@@ -192,7 +192,7 @@
                                 case 'isDuplicate':
                                     var as = _q_appendData("addr", "", true);
                                     if (as[0] != undefined){
-                                        alert('【'+t_array.straddrno+'】【'+t_array.endaddrno+'】【'+t_array.productno+'】已存在。');
+                                        alert('【'+t_array.straddrno+'】【'+t_array.endaddrno+'】【'+t_array.productno+'】【'+t_array.custno+'】已存在。');
                                         Unlock(1);
                                         return;
                                     }else{
@@ -236,6 +236,7 @@
                 var t_straddrno = $.trim($('#txtStraddrno').val());
                 var t_endaddrno = $.trim($('#txtEndaddrno').val());
                 var t_productno = $.trim($('#txtProductno').val());
+                var t_custno = $.trim($('#txtCustno').val());
                           
                 $('#txtStraddrno').val(t_straddrno); 
                 $('#txtStraddr').val(t_straddrno);
@@ -247,9 +248,10 @@
                         noa : t_noa,
                         straddrno : t_straddrno,
                         endaddrno : t_endaddrno,
-                        productno : t_productno
+                        productno : t_productno,
+                        custno : t_custno
                     });
-                    t_where="where=^^ straddrno='"+t_straddrno+"' and endaddrno='"+t_endaddrno+"' and productno='"+t_productno+"'^^";
+                    t_where="where=^^ straddrno='"+t_straddrno+"' and endaddrno='"+t_endaddrno+"' and productno='"+t_productno+"' and custno='"+t_custno+"'^^";
                     q_gt('addr', t_where, 0, 0, 0, json, r_accy);
                 }else{
                     wrServer($('#txtNoa').val());
