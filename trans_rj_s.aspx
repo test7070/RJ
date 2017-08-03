@@ -105,6 +105,14 @@
                 t_where = ' where=^^' + t_where + '^^ ';
                 return t_where;
             }
+            function q_boxClose(s2) {
+                var ret;
+                switch (b_pop) {
+                    case q_name + '_s':
+                        q_boxClose2(s2);
+                        break;
+                }
+            }
         </script>
         <style type="text/css">
             .seek_tr {
