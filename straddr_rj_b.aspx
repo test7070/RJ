@@ -11,7 +11,7 @@
         <link href="../qbox.css" rel="stylesheet" type="text/css" />
         <script type="text/javascript">
             //菱揚
-            var q_name = 'straddr_rj', t_content = 'noa', bbsKey = ['noa'], as;
+            var q_name = 'straddr_rj', t_content = '', bbsKey = ['tt'], as;
             var isBott = false;
             /// 是否已按過 最後一頁
             var txtfield = [], afield, t_data, t_htm, t_bbsTag = 'tbbs';
