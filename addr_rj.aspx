@@ -205,7 +205,7 @@
                                             productno : t_array.productno
                                         }), r_accy);*/
                                        
-                                       q_gt('addr', "order=^^noa desc^^", 1, 0, 0, 'getNoa', r_accy);
+                                       q_gt('addr', "where=^^ noa like 'A[0-9,A-Z][0-9][0-9]'^^  order=^^noa desc^^", 1, 0, 0, 'getNoa', r_accy);
                                     }
                                     break;
                                 case 'checkNoa':
